@@ -1,3 +1,14 @@
+
+"""
+Change return program to convert between an amount of money to quantities
+of common denominations of currency and coins.
+This is the product of a collaborative effort between Corey Adkins,
+Andrew Champion and Eric Chase
+
+Input:  Amount of money, in dollars
+Output:  Amount of each demonition
+"""
+
 # 1. Setup
 FRANKLIN = 10000
 GRANT = 5000

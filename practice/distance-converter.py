@@ -1,5 +1,11 @@
 """
+Distance conversion program, that converts a quantity between two different
+units.  Alternatively, it converts between gallons and liters.
+This is the product of a collaboration between Andrew Champion, Jason Lingel
+and Eric Chase
 
+Inputs:  Quantity with units, and units to convert to
+Output:  Quantity in the desired units
 """
 MILE_METER = 1609.344
 KM_METER = 1000
