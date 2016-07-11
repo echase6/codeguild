@@ -11,15 +11,15 @@ total over 21.  These are 'soft rules'.
 """
 # Set up
 point_total = 0
-card = ["",""]
+card = ['','']
 
 # Gather inputs
 # Could not figure out how to keep inputs on same line as in the example
 print('I will give you advise on what to do after your first two cards.')
 print('Valid entries are: A, 2, 3, 4, 5, 6, 7, 8, 9, 10, J, Q, K')
-print('What\'s your first card? ', end = ' ')
+print('What\'s your first card? ',end = '')
 card[0] = input()
-print('What\'s your second card? ', end = ' ')
+print('What\'s your second card? ',end = '')
 card[1] = input()
 
 # Transform
@@ -34,11 +34,11 @@ if point_total == 22:  # i.e., two aces, thus one is worth 1 point
         point_total -= 10
 
 if point_total < 17:
-    advise_string = "Hit"
-elif point_total <21:
-    advise_string = "Stay"
+    advise_string = 'Hit'
+elif point_total < 21:
+    advise_string = 'Stay'
 else:
-    advise_string = "Blackjack!"
+    advise_string = 'Blackjack!'
 
 # Output
 print(point_total, advise_string)
