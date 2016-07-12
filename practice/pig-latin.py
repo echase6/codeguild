@@ -1,10 +1,13 @@
 """
-Program to translate a single word into Pig Latin
+Program to translate a single word into Pig Latin, correctly handling
+   punctuation and capitalization and handling multiple consonants.
+   (Super Advanced Assignment)
 This is an individual project by Eric Chase, 7/11/16
 
 Input: a single words
 Output:  a word converted into Pig Latin
 """
+
 # setup
 VOWELS = ['a', 'e', 'i', 'o', 'u']
 
@@ -12,18 +15,20 @@ VOWELS = ['a', 'e', 'i', 'o', 'u']
 english_input = input("What word would you like translated into Pig Latin: ")
 
 # transform
-# First, break into three parts: beginning punctuation, word, and ending punctuation
-bi = 0                      # bi ends up being the index where the beginning punctuation ends
-letter = english_input[bi]
-while not letter.isalpha():
-    bi += 1
-    letter = english_input[bi]
 
-ei = len(english_input) - 1  # ei ends up being the index where the ending punctuation begins
-letter = english_input[ei]
-while not letter.isalpha():
+# First, break into three parts: beginning punct., word, and ending punct.
+
+bi = 0                      # bi will be where the beginning punctuation ends
+character = english_input[bi]
+while not character.isalpha():
+    bi += 1
+    character = english_input[bi]
+
+ei = len(english_input) - 1  # ei will be where the ending punctuation begins
+character = english_input[ei]
+while not character.isalpha():
     ei -= 1
-    letter = english_input[ei]
+    character = english_input[ei]
 
 beginning_punct = english_input[:bi]
 ending_punct = english_input[ei + 1:]
@@ -47,4 +52,5 @@ if capitalized:
     pig_latin = pig_latin[0].upper() + pig_latin[1:]
 
 # Output
-print('{} in Pig Latin is {}{}{}'.format(english_input, beginning_punct, pig_latin, ending_punct))
+print('{} in Pig Latin is {}{}{}'.format(english_input, beginning_punct,
+                                         pig_latin, ending_punct))
