@@ -30,7 +30,6 @@ def get_madlib_words(descriptors):
         madlib_words = madlib_words + [new_word]
     return madlib_words
 
-
 def subst_words(string, words):
     """ Substitute in words into the string, one at a time. """
     out_str = string
