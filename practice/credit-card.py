@@ -1,4 +1,11 @@
-""" Credit Card validator """
+""" Credit Card validator
+
+This is the product of a collaborative effort between Kaite Nichols,
+Stephen Muller, Jason Lingel and Eric Chase.
+
+
+
+"""
 
 def get_card_num():
     """ Get card number from user. """
@@ -24,9 +31,8 @@ def make_digit_list(input_string):
     [1, 2, 3, 4]
 
     """
-
     new_string = input_string[:-1]
-    return list(map(int, new_string))
+    return [int(digit) for digit in new_string]
 
 
 def reverse_digits(digit_list):
@@ -37,16 +43,14 @@ def reverse_digits(digit_list):
     """
     return list(reversed(digit_list))
 
+
 def double_odd_digits(digit_list):
     """ Double the digits in the odd indices
 
     >>> double_odd_digits([1, 2, 3, 4])
     [2, 2, 6, 4]
     """
-    for index, digit in enumerate(digit_list):
-        if index % 2 == 0:
-            digit_list[index] *= 2
-    return digit_list
+    return [d * 2 if i % 2 == 0 else d for i, d in enumerate(digit_list)]
 
 
 def subtract_nine(digit_list):
@@ -55,10 +59,7 @@ def subtract_nine(digit_list):
     >>> subtract_nine([18, 2, 10, 0])
     [9, 2, 1, 0]
     """
-    for index, digit in enumerate(digit_list):
-        if digit > 9:
-            digit_list[index] -= 9
-    return digit_list
+    return [d - 9 if d > 9 else d for d in digit_list]
 
 
 def calc_check_sum(digit_list):
@@ -73,8 +74,6 @@ def calc_check_sum(digit_list):
 
 def notify_user(check_digit, check_sum):
     """ Test value and print whether it matches. """
-
-
     if check_digit == check_sum:
         print('Valid!')
     else:
