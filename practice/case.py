@@ -9,9 +9,8 @@ def get_input_word():
     return input('What is your word? ')
 
 
-def get_input_case():
-    """ Get input case. """
-    return input('What is it\'s case, snake or camel? ')
+def detect_input_case(word):
+    """ Detect input case based on word """
 
 
 def convert_to_snake(word, in_case):
@@ -21,6 +20,10 @@ def convert_to_snake(word, in_case):
     'snake_case'
     >>> convert_to_snake('CamelCase', 'camel')
     'camel_case'
+    >>> convert_to_snake('kebob-case', 'kebob')
+    'kebob_case'
+    >>> convert_to_snake('CONSTANT_CASE', 'constant')
+    'constant_case'
     """
     out_word = []
     if in_case == 'snake':
@@ -29,6 +32,10 @@ def convert_to_snake(word, in_case):
         out_word = word[0].lower()
         out_word += ''.join([d.replace(d, '_' + d.lower())
                              if d.isupper() else d for d in word[1:]])
+    elif in_case == 'kebob':
+        out_word = word.replace('-', '_')
+    elif in_case == 'constant':
+        out_word = word.lower()
     else:
         print('Invalid case.')
     return out_word
@@ -39,21 +46,32 @@ def convert_from_snake(word, out_case):
 
     >>> convert_from_snake('snake_case', 'camel')
     'SnakeCase'
+    >>> convert_from_snake('snake_case', 'snake')
+    'snake_case'
+    >>> convert_from_snake('snake_case', 'kebob')
+    'snake-case'
+    >>> convert_from_snake('snake_case', 'constant')
+    'SNAKE_CASE'
     """
     if out_case == 'snake':
         out_word = word
     elif out_case == 'camel':
         out_word = ''.join([w.capitalize() for w in word.split('_')])
+    elif out_case == 'kebob':
+        out_word = word.replace('_', '-')
+    elif out_case == 'constant':
+        out_word = word.upper()
     return out_word
 
 
 def main():
     input_word = get_input_word()
     input_case = get_input_case()
-    for output_case in ['snake', 'camel']:
+    for output_case in ['snake', 'camel', 'kebob', 'constant']:
         snake_word = convert_to_snake(input_word, input_case)
         converted_word = convert_from_snake(snake_word, output_case)
         print('{} in {} is {}'.format(input_word, output_case, converted_word))
 
 
-main()
+if __name__ == '__main__':
+    main()
