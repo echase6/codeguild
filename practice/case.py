@@ -1,8 +1,10 @@
-""" Case conversion
+""" Case conversion between various cases
 This is an individual project by Eric Chase, 7/13/16
 
-"""
+Inputs:  word and desired output Case
+Output:  word converted to snake, camel, kebob and constant cases
 
+"""
 
 def get_input_word():
     """ Get user word, requested to be changed. """
@@ -10,7 +12,26 @@ def get_input_word():
 
 
 def detect_input_case(word):
-    """ Detect input case based on word """
+    """ Detect input case based on word
+
+    >>> detect_input_case('snake_case')
+    'snake'
+    >>> detect_input_case('CamelCase')
+    'camel'
+    >>> detect_input_case('kebob-case')
+    'kebob'
+    >>> detect_input_case('CONSTANT_CASE')
+    'constant'
+    """
+    if '-' in word:
+        return 'kebob'
+    elif '_' in word:
+        if word[0].isupper():
+            return 'constant'
+        else:
+            return 'snake'
+    else:
+        return 'camel'
 
 
 def convert_to_snake(word, in_case):
@@ -34,10 +55,8 @@ def convert_to_snake(word, in_case):
                              if d.isupper() else d for d in word[1:]])
     elif in_case == 'kebob':
         out_word = word.replace('-', '_')
-    elif in_case == 'constant':
+    else:  # i.e., 'constant'
         out_word = word.lower()
-    else:
-        print('Invalid case.')
     return out_word
 
 
@@ -59,16 +78,16 @@ def convert_from_snake(word, out_case):
         out_word = ''.join([w.capitalize() for w in word.split('_')])
     elif out_case == 'kebob':
         out_word = word.replace('_', '-')
-    elif out_case == 'constant':
+    else:  # i.e., 'constant'
         out_word = word.upper()
     return out_word
 
 
 def main():
     input_word = get_input_word()
-    input_case = get_input_case()
+    input_case = detect_input_case(input_word)
+    snake_word = convert_to_snake(input_word, input_case)
     for output_case in ['snake', 'camel', 'kebob', 'constant']:
-        snake_word = convert_to_snake(input_word, input_case)
         converted_word = convert_from_snake(snake_word, output_case)
         print('{} in {} is {}'.format(input_word, output_case, converted_word))
 
