@@ -2,13 +2,16 @@
 
 def get_card_num():
     """ Get card number from user. """
-    return input('What is your credit card number? ')
+    valid_input = input('What is your credit card number? ')
+    if valid_input == '':
+        valid_input = '4556737586899855'
+    return valid_input
 
 
 def get_check_digit(input_string):
     """ Return the check digit.
 
-    >>>get_check_digit("456789")
+    >>> get_check_digit("456789")
     9
     """
     check_digit = input_string[-1]
@@ -17,18 +20,19 @@ def get_check_digit(input_string):
 def make_digit_list(input_string):
     """ Return list of digits with the last digit removed.
 
-    >>>make_digit_list("12345")
+    >>> make_digit_list("12345")
     [1, 2, 3, 4]
 
     """
-    new_list = input_string[:-1].split()
-    return [int(char) for char in new_list]
+
+    new_string = input_string[:-1]
+    return list(map(int, new_string))
 
 
 def reverse_digits(digit_list):
     """ Reverse the digits in a list
 
-    >>>reverse_digits([1, 2, 3, 4])
+    >>> reverse_digits([1, 2, 3, 4])
     [4, 3, 2, 1]
     """
     return list(reversed(digit_list))
@@ -36,7 +40,7 @@ def reverse_digits(digit_list):
 def double_odd_digits(digit_list):
     """ Double the digits in the odd indices
 
-    >>>double_odd_digits([1, 2, 3, 4])
+    >>> double_odd_digits([1, 2, 3, 4])
     [2, 2, 6, 4]
     """
     for index, digit in enumerate(digit_list):
@@ -48,7 +52,7 @@ def double_odd_digits(digit_list):
 def subtract_nine(digit_list):
     """ Subtract 9 from all digits greater than 9.
 
-    >>>subtracted_nine_digits([18, 2, 10, 0])
+    >>> subtract_nine([18, 2, 10, 0])
     [9, 2, 1, 0]
     """
     for index, digit in enumerate(digit_list):
@@ -60,7 +64,7 @@ def subtract_nine(digit_list):
 def calc_check_sum(digit_list):
     """ Calculate the 1's digit of the check sum.
 
-    >>>calc_check_sum([9, 2, 1, 0])
+    >>> calc_check_sum([9, 2, 1, 0])
     2
 
     """
