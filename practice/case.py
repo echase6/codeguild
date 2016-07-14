@@ -1,7 +1,9 @@
-""" Case conversion between various cases
-This is an individual project by Eric Chase, 7/13/16
+"""Case conversion between various cases
 
-Inputs:  word and desired output Case
+Handles snake_case, CONSTANT_CASE, kebob-case, CamelCase
+Automatically detects case, assuming perfectly-typed
+
+Inputs:  word
 Output:  word converted to snake, camel, kebob and constant cases
 
 """
@@ -10,12 +12,12 @@ CASES = ['snake', 'camel', 'kebob', 'constant']
 
 
 def get_input_word():
-    """ Get user word, requested to be changed. """
+    """Get user word, requested to be changed."""
     return input('What is your word? ')
 
 
 def detect_input_case(word):
-    """ Detect input case based on word
+    """Detect input case based on word
 
     >>> detect_input_case('snake_case')
     'snake'
@@ -38,7 +40,7 @@ def detect_input_case(word):
 
 
 def convert_to_snake(word, in_case):
-    """ Convert word to snake case from input case.
+    """Convert word to snake case from input case.
 
     >>> convert_to_snake('snake_case', 'snake')
     'snake_case'
@@ -53,9 +55,9 @@ def convert_to_snake(word, in_case):
     if in_case == 'snake':
         out_word = word
     elif in_case == 'camel':
-        out_word = word[0].lower()
-        out_word += ''.join([d.replace(d, '_' + d.lower()) if d.isupper() else d
-                             for d in word[1:]])
+        word = word[0].lower() + word[1:]
+        out_word = ''.join([d.replace(d, '_' + d.lower()) if d.isupper() else d
+                            for d in word])
     elif in_case == 'kebob':
         out_word = word.replace('-', '_')
     else:  # i.e., 'constant'
@@ -64,7 +66,7 @@ def convert_to_snake(word, in_case):
 
 
 def convert_from_snake(word, out_case):
-    """ Convert word to desired case, from snake case
+    """Convert word to desired case, from snake case
 
     >>> convert_from_snake('snake_case', 'camel')
     'SnakeCase'
@@ -87,7 +89,7 @@ def convert_from_snake(word, out_case):
 
 
 def show_conversions(input_word, snake_word):
-    """ Display word converted into all CASES
+    """Display word converted into all CASES
 
     >>> show_conversions('snake_case', 'snake_case')
     snake_case in snake is snake_case
