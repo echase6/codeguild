@@ -6,6 +6,9 @@ Output:  word converted to snake, camel, kebob and constant cases
 
 """
 
+CASES = ['snake', 'camel', 'kebob', 'constant']
+
+
 def get_input_word():
     """ Get user word, requested to be changed. """
     return input('What is your word? ')
@@ -51,8 +54,8 @@ def convert_to_snake(word, in_case):
         out_word = word
     elif in_case == 'camel':
         out_word = word[0].lower()
-        out_word += ''.join([d.replace(d, '_' + d.lower())
-                             if d.isupper() else d for d in word[1:]])
+        out_word += ''.join([d.replace(d, '_' + d.lower()) if d.isupper() else d
+                             for d in word[1:]])
     elif in_case == 'kebob':
         out_word = word.replace('-', '_')
     else:  # i.e., 'constant'
@@ -83,13 +86,26 @@ def convert_from_snake(word, out_case):
     return out_word
 
 
+def show_conversions(input_word, snake_word):
+    """ Display word converted into all CASES
+
+    >>> show_conversions('snake_case', 'snake_case')
+    snake_case in snake is snake_case
+    snake_case in camel is SnakeCase
+    snake_case in kebob is snake-case
+    snake_case in constant is SNAKE_CASE
+    """
+    for output_case in CASES:
+        converted_word = convert_from_snake(snake_word, output_case)
+        print('{} in {} is {}'.format(input_word, output_case, converted_word))
+    return
+
+
 def main():
     input_word = get_input_word()
     input_case = detect_input_case(input_word)
     snake_word = convert_to_snake(input_word, input_case)
-    for output_case in ['snake', 'camel', 'kebob', 'constant']:
-        converted_word = convert_from_snake(snake_word, output_case)
-        print('{} in {} is {}'.format(input_word, output_case, converted_word))
+    show_conversions(input_word, snake_word)
 
 
 if __name__ == '__main__':
