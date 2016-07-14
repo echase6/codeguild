@@ -2,7 +2,9 @@
 
 Reads a file, and prints a pretty table.
 """
+# get user file name
 
+filename = input('Please give me a text file so I can make you a pretty chart. ')
 
 def get_table_lines(filename):
     """Read file into list of lines."""
@@ -58,7 +60,7 @@ def output_table(widths, cell_contents):
 
 
 def main():
-    row_contents = get_table_lines('fruits_cars_states.txt')
+    row_contents = get_table_lines(filename)
     cell_contents = split_into_cells(row_contents)
     column_widths = get_column_widths(cell_contents)
     output_table(column_widths, cell_contents)
