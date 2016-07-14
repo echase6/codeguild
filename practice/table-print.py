@@ -36,17 +36,24 @@ def get_column_widths(cells):
     return max_widths
 
 
+def make_output_line(widths, row):
+    """Create output string for one row"""
+    line_string = '|'
+    for col, cell in enumerate(row):
+        line_string += cell.ljust(widths[col], ' ') + '|'
+    return line_string
+
+
 def output_table(widths, cell_contents):
     """Prints the table, including top and bottom borders."""
     border = '|'
     for length in widths:
         border += '-' * length + '|'
     print(border)
-    for row in cell_contents:
-        line_string = '|'
-        for col, cell in enumerate(row):
-            line_string += cell.ljust(widths[col], ' ') + '|'
-        print(line_string)
+    print(make_output_line(widths, cell_contents[0]))
+    print(border)
+    for row in cell_contents[1:]:
+        print(make_output_line(widths, row))
     print(border)
 
 
