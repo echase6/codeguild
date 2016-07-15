@@ -2,29 +2,28 @@
 
 Reads a file, and prints a pretty table.
 """
-# get user file name
+import csv
+import sys
 
-filename = input('Please give me a text file so I can make you a pretty chart. ')
 
-def get_table_lines(filename):
+def get_filename():
+    """Grab filename from command line argument."""
+    filename = sys.argv[1]
+    return filename
+
+
+def get_table_line_lists(filename):
     """Read file into list of lines."""
-    with open(filename) as f:
-        lines = f.readlines()
+    lines = []
+    with open(filename, newline = '') as f:
+        reader = csv.reader(f)
+        for row in reader:
+            lines += [row]
     return lines
 
 
-def split_into_cells(lines):
-    """Split the lines into a list of cells.
-
-    >>> split_into_cells(['Apple Gary', 'VW Portland'])
-    [['Apple', 'Gary'], ['VW', 'Portland']]
-    """
-    cells = [x.strip().split(' ') for x in lines]
-    return cells
-
-
 def get_column_widths(cells):
-    """Return list of the maximum width for each column index
+    """Return list of the maximum width for each column index.
 
     >>> get_column_widths([['Apple', 'Gary'], ['VW', 'Portland']])
     [5, 8]
@@ -39,7 +38,7 @@ def get_column_widths(cells):
 
 
 def make_output_line(widths, row):
-    """Create output string for one row"""
+    """Create output string for one row."""
     line_string = '|'
     for col, cell in enumerate(row):
         line_string += cell.ljust(widths[col], ' ') + '|'
@@ -60,10 +59,10 @@ def output_table(widths, cell_contents):
 
 
 def main():
-    row_contents = get_table_lines(filename)
-    cell_contents = split_into_cells(row_contents)
-    column_widths = get_column_widths(cell_contents)
-    output_table(column_widths, cell_contents)
+    filename = get_filename()
+    row_contents = get_table_line_lists(filename)
+    column_widths = get_column_widths(row_contents)
+    output_table(column_widths, row_contents)
 
 
 if __name__ == '__main__':
