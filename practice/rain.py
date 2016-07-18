@@ -3,79 +3,79 @@
 Accesses City of Portland rain total database and returns various information
 about rain totals.
 """
-from operator import itemgetter
 import urllib.request
 import re
 import os.path
 
 
 def get_daily_totals(filename):
-    """Return a list of days and daily amounts, as rows from the file."""
-    totals = []
+    """Return a dict of days and daily amounts, as rows from the file."""
+    totals = {}
     with open(filename) as f:
         for i in range(11):
             _ = f.readline()
         for line in f:
             day_stats = line.split()[0:2]
             if day_stats[1] != '-':  # skip entries if there is missing data
-                totals += [[day_stats[0], int(day_stats[1])]]
+                totals.update({day_stats[0]: int(day_stats[1])})
     return totals
 
 
 def find_wettest_stats(totals):
     """Return wettest day (or year) and the amount on the wettest day (or year).
 
-    >>> find_wettest_stats([['30-MAR-2016', 0], ['29-MAR-2016', 5]])
-    ['29-MAR-2016', 5]
+    >>> find_wettest_stats({'30-MAR-2016': 0, '29-MAR-2016': 5})
+    ('29-MAR-2016', 5)
     """
-    return max(totals, key=itemgetter(1))
+    totals_dict = {totals[k]: k for k in totals}
+    largest = max(totals_dict)
+    return totals_dict[largest], largest
 
 
 def calc_yearly_total_stats(totals):
-    """Return a list of lists of years and sum amounts.
+    """Return a dictionary of years and sum amounts.
 
-    >>> calc_yearly_total_stats([['30-MAR-2016', 1], ['29-MAR-2016', 5],
-    ...                         ['30-MAR-2015', 0], ['29-MAR-2015', 5]])
-    [['2015', 5], ['2016', 6]]
+    >>> calc_yearly_total_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
+    ...                         '30-MAR-2015': 0, '29-MAR-2015': 5})
+    {'2015': 5, '2016': 6}
     """
     years_unique = set()
-    for date, amount in totals:
+    for date in totals:
         year = date.split('-')[2]
         years_unique.add(year)
-    yearly_totals = []
+    yearly_totals = {}
     for year in years_unique:
-        yearly_totals += [[year, sum([amt for date, amt in totals
-                           if date.split('-')[2] == year])]]
-    return sorted(yearly_totals)  # sorted only to make the doctest work
+        yearly_totals.update({year: sum([totals[date] for date in totals
+                              if date.split('-')[2] == year])})
+    return dict(sorted(yearly_totals.items()))
 
 
 def calc_daily_avg_stats(totals):
-    """Return a list of lists of days and average amounts.
+    """Return a dictionary of days and average amounts.
 
-    >>> calc_daily_avg_stats([['30-MAR-2016', 1], ['29-MAR-2016', 5],
-    ...                      ['30-MAR-2015', 3], ['29-MAR-2015', 3]])
-    [['29-MAR', 4.0], ['30-MAR', 2.0]]
+    >>> calc_daily_avg_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
+    ...                      '30-MAR-2015': 3, '29-MAR-2015': 3})
+    {'30-MAR': 2.0, '29-MAR': 4.0}
     """
     days_unique = set()
-    for date, amount in totals:
+    for date in totals:
         day = '-'.join(date.split('-')[0:2])
         days_unique.add(day)
-    daily_avg = []
+    daily_avg = {}
     for day in days_unique:
-        daily_stats = ([amt for date, amt in totals
+        daily_stats = ([totals[date] for date in totals
                         if '-'.join(date.split('-')[0:2]) == day])
-        daily_avg += [[day, (sum(daily_stats) / len(daily_stats))]]
-    return sorted(daily_avg, key=itemgetter(1), reverse=True)
+        daily_avg.update({day: (sum(daily_stats) / len(daily_stats))})
+    return daily_avg
 
 
 def find_avg_amt_on_day(date, averages):
-    """Return the amount associated with a particular day from a list.
+    """Return the amount associated with a particular day from a dict.
 
-    >>> find_avg_amt_on_day('29-MAR', [['30-MAR', 1.0], ['29-MAR', 5.0]])
+    >>> find_avg_amt_on_day('29-MAR', {'30-MAR': 1.0, '29-MAR': 5.0})
     5.0
     """
-    averages_dict = dict(averages)
-    return averages_dict[date]
+    return averages[date]
 
 
 def get_inquiry_date():
@@ -92,7 +92,6 @@ def output_most_rain_stats(day, day_amt, year, year_amt):
     """
     print('Wettest day was {}, amount was {}"'.format(day, day_amt/100))
     print('Wettest year was {}, amount was {}"'.format(year, year_amt/100))
-    return
 
 
 def output_wettest_doy_stats(day, amt):
@@ -102,7 +101,6 @@ def output_wettest_doy_stats(day, amt):
     Wettest day of the year is 29-MAR with 0.25"
     """
     print('Wettest day of the year is {} with {:.2f}"'.format(day, amt/100))
-    return
 
 
 def output_inquiry_stats(date, amt):
@@ -112,7 +110,6 @@ def output_inquiry_stats(date, amt):
     Average rainfall on 29-MAR is 0.25"
     """
     print('Average rainfall on {} is {:.2f}"'.format(date, amt/100))
-    return
 
 
 def read_store_html_source(site_name, file_name):
@@ -122,7 +119,6 @@ def read_store_html_source(site_name, file_name):
             web_text = rain_file.read().decode('utf-8')
         with open(file_name, "w+") as file:
             file.writelines(web_text)
-    return
 
 
 def read_html_file(filename):
@@ -165,14 +161,12 @@ def calc_print_most_rain_stats(daily_totals):
     yearly_totals = calc_yearly_total_stats(daily_totals)
     wtst_year, wtst_year_amt = find_wettest_stats(yearly_totals)
     output_most_rain_stats(wtst_day, wtst_day_amt, wtst_year, wtst_year_amt)
-    return
 
 
 def calc_print_most_rain_doy(daily_totals):
     """Calculate and print the average wettest day of year."""
     wettest_doy, wettest_doy_amt = find_wettest_stats(daily_totals)
     output_wettest_doy_stats(wettest_doy, wettest_doy_amt)
-    return
 
 
 def calc_print_inquiry_rain(daily_averages):
@@ -180,7 +174,6 @@ def calc_print_inquiry_rain(daily_averages):
     inquiry_date = get_inquiry_date()
     avg_amt_on_day = find_avg_amt_on_day(inquiry_date, daily_averages)
     output_inquiry_stats(inquiry_date, avg_amt_on_day)
-    return
 
 
 def main():
@@ -190,7 +183,6 @@ def main():
     calc_print_most_rain_stats(daily_totals)
     calc_print_most_rain_doy(daily_averages)
     calc_print_inquiry_rain(daily_averages)
-    return
 
 
 if __name__ == '__main__':
