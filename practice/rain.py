@@ -6,6 +6,7 @@ about rain totals.
 from operator import itemgetter
 import urllib.request
 import re
+import os.path
 
 
 def get_daily_totals(filename):
@@ -37,12 +38,12 @@ def calc_yearly_total_stats(totals):
     ...                         ['30-MAR-2015', 0], ['29-MAR-2015', 5]])
     [['2015', 5], ['2016', 6]]
     """
-    years = set()
+    years_unique = set()
     for date, amount in totals:
         year = date.split('-')[2]
-        years.add(year)
+        years_unique.add(year)
     yearly_totals = []
-    for year in years:
+    for year in years_unique:
         yearly_totals += [[year, sum([amt for date, amt in totals
                            if date.split('-')[2] == year])]]
     return sorted(yearly_totals)  # sorted only to make the doctest work
@@ -55,12 +56,12 @@ def calc_daily_avg_stats(totals):
     ...                      ['30-MAR-2015', 3], ['29-MAR-2015', 3]])
     [['29-MAR', 4.0], ['30-MAR', 2.0]]
     """
-    days = set()
+    days_unique = set()
     for date, amount in totals:
         day = '-'.join(date.split('-')[0:2])
-        days.add(day)
+        days_unique.add(day)
     daily_avg = []
-    for day in days:
+    for day in days_unique:
         daily_stats = ([amt for date, amt in totals
                         if '-'.join(date.split('-')[0:2]) == day])
         daily_avg += [[day, (sum(daily_stats) / len(daily_stats))]]
@@ -100,7 +101,7 @@ def output_wettest_doy_stats(day, amt):
     >>> output_wettest_doy_stats('29-MAR', 25)
     Wettest day of the year is 29-MAR with 0.25"
     """
-    print('Wettest day of the year is {} with {:.2f}"'.format(day, amt / 100))
+    print('Wettest day of the year is {} with {:.2f}"'.format(day, amt/100))
     return
 
 
@@ -110,19 +111,22 @@ def output_inquiry_stats(date, amt):
     >>> output_inquiry_stats('29-MAR', 25)
     Average rainfall on 29-MAR is 0.25"
     """
-    print('Average rainfall on {} is {:.2f}"'.format(date, amt / 100))
+    print('Average rainfall on {} is {:.2f}"'.format(date, amt/100))
     return
 
 
 def read_store_html_source(site_name, file_name):
-    with urllib.request.urlopen(site_name) as rain_file:
-        web_text = rain_file.read().decode('utf-8')
-    with open(file_name, "w") as file:
-        file.writelines(web_text)
+    """Read and store local copy of html source, if the copy does not exist."""
+    if not os.path.isfile(file_name):
+        with urllib.request.urlopen(site_name) as rain_file:
+            web_text = rain_file.read().decode('utf-8')
+        with open(file_name, "w+") as file:
+            file.writelines(web_text)
     return
 
 
 def read_html_file(filename):
+    """Read and return a list of the names and files of the rain gages."""
     with open(filename) as file:
         file_contents = file.read()
     names = re.findall(r"<td>.* Rain Gage", file_contents)
@@ -134,6 +138,7 @@ def read_html_file(filename):
 
 
 def get_gauge_file_name(names):
+    """Get the user selection of a rain gage, after showing a gage list."""
     for i, name in enumerate(names):
         print(str(i + 1).ljust(2), name[0][0:19].ljust(21), end='')
         if (i + 1) % 3 == 0:
@@ -143,31 +148,48 @@ def get_gauge_file_name(names):
     return names[num-1][1]
 
 
-def load_rain_file(local_data_file_name):
-    rain_website = 'http://or.water.usgs.gov/non-usgs/bes/'
-    rain_website_file = 'rain_website_file.txt'
-    # read_store_html_source(rain_website, rain_website_file)
-    gauge_names_files = read_html_file(rain_website_file)
-    gauge_file_name = get_gauge_file_name(gauge_names_files)
-    read_store_html_source(rain_website + gauge_file_name, 'working.rain')
-    print('{} --> {}'.format(gauge_file_name, local_data_file_name))
-    return
+def load_rain_file():
+    """Load and store the .rain file for the user-selected gage."""
+    web_filename = 'http://or.water.usgs.gov/non-usgs/bes/'
+    website_local_copy_filename = 'rain_website_file.txt'
+    read_store_html_source(web_filename, website_local_copy_filename)
+    gauge_names_files = read_html_file(website_local_copy_filename)
+    gauge_filename = get_gauge_file_name(gauge_names_files)
+    read_store_html_source(web_filename + gauge_filename, gauge_filename)
+    return gauge_filename
 
 
-def main():
-    local_data_file_name = 'working.rain'
-    load_rain_file(local_data_file_name)
-    daily_totals = get_daily_totals(local_data_file_name)
+def calc_print_most_rain_stats(daily_totals):
+    """Calculate and print the wettest day & year, plus amounts."""
     wtst_day, wtst_day_amt = find_wettest_stats(daily_totals)
     yearly_totals = calc_yearly_total_stats(daily_totals)
     wtst_year, wtst_year_amt = find_wettest_stats(yearly_totals)
     output_most_rain_stats(wtst_day, wtst_day_amt, wtst_year, wtst_year_amt)
-    daily_averages = calc_daily_avg_stats(daily_totals)
-    wettest_doy, wettest_doy_amt = find_wettest_stats(daily_averages)
+    return
+
+
+def calc_print_most_rain_doy(daily_totals):
+    """Calculate and print the average wettest day of year."""
+    wettest_doy, wettest_doy_amt = find_wettest_stats(daily_totals)
     output_wettest_doy_stats(wettest_doy, wettest_doy_amt)
+    return
+
+
+def calc_print_inquiry_rain(daily_averages):
+    """Find and print average rain on date user requests."""
     inquiry_date = get_inquiry_date()
     avg_amt_on_day = find_avg_amt_on_day(inquiry_date, daily_averages)
     output_inquiry_stats(inquiry_date, avg_amt_on_day)
+    return
+
+
+def main():
+    gauge_filename = load_rain_file()
+    daily_totals = get_daily_totals(gauge_filename)
+    daily_averages = calc_daily_avg_stats(daily_totals)
+    calc_print_most_rain_stats(daily_totals)
+    calc_print_most_rain_doy(daily_averages)
+    calc_print_inquiry_rain(daily_averages)
     return
 
 
