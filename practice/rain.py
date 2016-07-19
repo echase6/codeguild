@@ -21,23 +21,23 @@ def get_daily_totals(filename):
     return totals
 
 
-def find_wettest_stats(totals):
+def find_wettest_stats(dates_totals):
     """Return wettest day (or year) and the amount on the wettest day (or year).
 
     >>> find_wettest_stats({'30-MAR-2016': 0, '29-MAR-2016': 5})
     ('29-MAR-2016', 5)
     """
-    totals_dict = {totals[k]: k for k in totals}
-    largest = max(totals_dict)
-    return totals_dict[largest], largest
+    totals_dates = {v: k for k, v in dates_totals.items()}
+    largest = max(totals_dates)
+    return totals_dates[largest], largest
 
 
 def calc_yearly_total_stats(totals):
     """Return a dictionary of years and sum amounts.
 
-    >>> calc_yearly_total_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
-    ...                         '30-MAR-2015': 0, '29-MAR-2015': 5})
-    {'2015': 5, '2016': 6}
+    >>> sorted(calc_yearly_total_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
+    ...                         '30-MAR-2015': 0, '29-MAR-2015': 5}).items())
+    [('2015', 5), ('2016', 6)]
     """
     years_unique = set()
     for date in totals:
@@ -53,9 +53,9 @@ def calc_yearly_total_stats(totals):
 def calc_daily_avg_stats(totals):
     """Return a dictionary of days and average amounts.
 
-    >>> calc_daily_avg_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
-    ...                      '30-MAR-2015': 3, '29-MAR-2015': 3})
-    {'30-MAR': 2.0, '29-MAR': 4.0}
+    >>> sorted(calc_daily_avg_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
+    ...                      '30-MAR-2015': 3, '29-MAR-2015': 3}).items())
+    [('29-MAR', 4.0), ('30-MAR', 2.0)]
     """
     days_unique = set()
     for date in totals:
@@ -67,15 +67,6 @@ def calc_daily_avg_stats(totals):
                         if '-'.join(date.split('-')[0:2]) == day])
         daily_avg.update({day: (sum(daily_stats) / len(daily_stats))})
     return daily_avg
-
-
-def find_avg_amt_on_day(date, averages):
-    """Return the amount associated with a particular day from a dict.
-
-    >>> find_avg_amt_on_day('29-MAR', {'30-MAR': 1.0, '29-MAR': 5.0})
-    5.0
-    """
-    return averages[date]
 
 
 def get_inquiry_date():
@@ -115,6 +106,7 @@ def output_inquiry_stats(date, amt):
 def read_store_html_source(site_name, file_name):
     """Read and store local copy of html source, if the copy does not exist."""
     if not os.path.isfile(file_name):
+        print('Loading copy of {}...'.format(file_name))
         with urllib.request.urlopen(site_name) as rain_file:
             web_text = rain_file.read().decode('utf-8')
         with open(file_name, "w+") as file:
@@ -172,7 +164,7 @@ def calc_print_most_rain_doy(daily_totals):
 def calc_print_inquiry_rain(daily_averages):
     """Find and print average rain on date user requests."""
     inquiry_date = get_inquiry_date()
-    avg_amt_on_day = find_avg_amt_on_day(inquiry_date, daily_averages)
+    avg_amt_on_day = daily_averages[inquiry_date]
     output_inquiry_stats(inquiry_date, avg_amt_on_day)
 
 
