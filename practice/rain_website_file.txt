@@ -120,7 +120,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Hayden Island Rain Gage<br>1740 N. Jantzen Beach Ctr.</td>
 <td align=center>7</td>
-<td nowrap align=center>17-Jul-2016, 8:06</td>
+<td nowrap align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="hayden_island.1day.html">  0.00</a></td>
 <td align=center><a href="hayden_island.3day.html">  0.00</a></td>
 <td align=center><a href="hayden_island.5day.html">  0.00</a></td>
@@ -130,7 +130,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Open Meadows School Rain Gage<br>7602 N. Emerald Ave.</td>
 <td align=center>48</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="open_meadows.1day.html">  0.00</a></td>
 <td align=center><a href="open_meadows.3day.html">  0.00</a></td>
 <td align=center><a href="open_meadows.5day.html">  0.00</a></td>
@@ -140,7 +140,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Shipyard Rain Gage<br>8900 N. Sever Road</td>
 <td align=center>82</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="shipyard.1day.html">  0.00</a></td>
 <td align=center><a href="shipyard.3day.html">  0.00</a></td>
 <td align=center><a href="shipyard.5day.html">  0.00</a></td>
@@ -150,7 +150,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Columbia IPS Rain Gage<br>5001 N. Columbia Blvd.</td>
 <td align=center>107</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="columbia_ips.1day.html">  0.00</a></td>
 <td align=center><a href="columbia_ips.3day.html">  0.00</a></td>
 <td align=center><a href="columbia_ips.5day.html">  0.00</a></td>
@@ -160,7 +160,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Albina Rain Gage<br>2920 N. Larrabee Ave.</td>
 <td align=center>117</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="albina.1day.html">  0.00</a></td>
 <td align=center><a href="albina.3day.html">  0.00</a></td>
 <td align=center><a href="albina.5day.html">  0.00</a></td>
@@ -180,7 +180,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Simmons Rain Gage<br>16001 N. Simmons Rd.</td>
 <td align=center>139</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="simmons.1day.html">  0.00</a></td>
 <td align=center><a href="simmons.3day.html">  0.00</a></td>
 <td align=center><a href="simmons.5day.html">  0.00</a></td>
@@ -190,7 +190,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Cascade PCC Rain Gage<br>705 N. Killingsworth St.</td>
 <td align=center>153</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="pcc_cascade.1day.html">  0.00</a></td>
 <td align=center><a href="pcc_cascade.3day.html">  0.00</a></td>
 <td align=center><a href="pcc_cascade.5day.html">  0.00</a></td>
@@ -200,7 +200,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>WPCL Rain Gage<br>6543 N. Burlington Ave.</td>
 <td align=center>160</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="wpcl.1day.html">  0.00</a></td>
 <td align=center><a href="wpcl.3day.html">  0.00</a></td>
 <td align=center><a href="wpcl.5day.html">  0.00</a></td>
@@ -225,7 +225,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Swan Island Rain Gage<br> </td>
 <td align=center>204</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="swan_island_pump.1day.html">  0.00</a></td>
 <td align=center><a href="swan_island_pump.3day.html">  0.00</a></td>
 <td align=center><a href="swan_island_pump.5day.html">  0.00</a></td>
@@ -245,7 +245,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Skyline School Rain Gage<br>11536 NW. Skyline Blvd.</td>
 <td align=center>2</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="skyline_school.1day.html">  0.00</a></td>
 <td align=center><a href="skyline_school.3day.html">  0.00</a></td>
 <td align=center><a href="skyline_school.5day.html">  0.00</a></td>
@@ -255,7 +255,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Sauvie Island School Rain Gage<br>14445 NW. Charlton Rd.</td>
 <td align=center>3</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="sauvies_island.1day.html">  0.00</a></td>
 <td align=center><a href="sauvies_island.3day.html">  0.00</a></td>
 <td align=center><a href="sauvies_island.5day.html">  0.00</a></td>
@@ -265,17 +265,17 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Bonny Slope School Rain Gage<br>10351 NW. Thompson Rd.</td>
 <td align=center>58</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="bonny_slope.1day.html">  0.00</a></td>
 <td align=center><a href="bonny_slope.3day.html">  0.00</a></td>
-<td align=center><a href="bonny_slope.5day.html">  0.01</a></td>
+<td align=center><a href="bonny_slope.5day.html">  0.00</a></td>
 <td align=center>  0.53</td>
 <td align=center> 39.87</td>
 <td align=center><a href="bonny_slope.rain">data table</a></td>
 </tr><tr>
 <td>Yeon Rain Gage<br>3395 NW. Yeon St.</td>
 <td align=center>121</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="yeon.1day.html">  0.00</a></td>
 <td align=center><a href="yeon.3day.html">  0.00</a></td>
 <td align=center><a href="yeon.5day.html">  0.00</a></td>
@@ -295,7 +295,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Metro Learning Center Rain Gage<br>2033 NW. Glisan St.</td>
 <td align=center>173</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="metro_center.1day.html">  0.00</a></td>
 <td align=center><a href="metro_center.3day.html">  0.00</a></td>
 <td align=center><a href="metro_center.5day.html">  0.00</a></td>
@@ -320,7 +320,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Fernwood School Rain Gage<br>3255 NE. Hancock St.</td>
 <td align=center>12</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="fernwood.1day.html">  0.00</a></td>
 <td align=center><a href="fernwood.3day.html">  0.00</a></td>
 <td align=center><a href="fernwood.5day.html">  0.00</a></td>
@@ -330,7 +330,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Vernon School Rain Gage<br>2044 NE. Killingsworth St.</td>
 <td align=center>41</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="vernon.1day.html">  0.00</a></td>
 <td align=center><a href="vernon.3day.html">  0.00</a></td>
 <td align=center><a href="vernon.5day.html">  0.00</a></td>
@@ -345,7 +345,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Airport Way #2 Rain Gage<br>14614 NE. Airport Way</td>
 <td align=center>111</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="airport_way.1day.html">  0.00</a></td>
 <td align=center><a href="airport_way.3day.html">  0.00</a></td>
 <td align=center><a href="airport_way.5day.html">  0.00</a></td>
@@ -355,7 +355,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Mallory Rain Gage<br>8030 NE. Mallory Ave.</td>
 <td align=center>115</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="mallory.1day.html">  0.00</a></td>
 <td align=center><a href="mallory.3day.html">  0.00</a></td>
 <td align=center><a href="mallory.5day.html">  0.00</a></td>
@@ -365,7 +365,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Beaumont School Rain Gage<br>4043 NE. Fremont Ave.</td>
 <td align=center>152</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="beaumont.1day.html">  0.00</a></td>
 <td align=center><a href="beaumont.3day.html">  0.00</a></td>
 <td align=center><a href="beaumont.5day.html">  0.00</a></td>
@@ -375,7 +375,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Post Office Rain Gage<br>7660 NE. Airport Way</td>
 <td align=center>159</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="post_office.1day.html">  0.00</a></td>
 <td align=center><a href="post_office.3day.html">  0.00</a></td>
 <td align=center><a href="post_office.5day.html">  0.00</a></td>
@@ -390,7 +390,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Madison Rain Gage<br>2735 NE. 82nd Ave.</td>
 <td align=center>213</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="madison.1day.html">  0.00</a></td>
 <td align=center><a href="madison.3day.html">  0.00</a></td>
 <td align=center><a href="madison.5day.html">  0.00</a></td>
@@ -400,7 +400,7 @@ not including the PCC Cascade or WPCL rain gages.</td>
 </tr><tr>
 <td>Walmart Eco Roof Rain Gage<br>1123 N. Hayden Meadows Dr.</td>
 <td align=center>220</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="walmart_ecoroof.1day.html">  0.00</a></td>
 <td align=center><a href="walmart_ecoroof.3day.html">  0.00</a></td>
 <td align=center><a href="walmart_ecoroof.5day.html">  0.00</a></td>
@@ -421,7 +421,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Portland Fire Bureau Rain Gage<br>55 SW. Ash St.</td>
 <td align=center>1</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="ankeny.1day.html">  0.00</a></td>
 <td align=center><a href="ankeny.3day.html">  0.00</a></td>
 <td align=center><a href="ankeny.5day.html">  0.00</a></td>
@@ -431,7 +431,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Sylvania PCC Rain Gage<br>SS Bldg, 12000 SW. 49th Ave.</td>
 <td align=center>4</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="pcc_sylvania.1day.html">  0.00</a></td>
 <td align=center><a href="pcc_sylvania.3day.html">  0.00</a></td>
 <td align=center><a href="pcc_sylvania.5day.html">  0.00</a></td>
@@ -441,7 +441,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Collins View Rain Gage<br>(Riverdale High School)<br>9806 SW. Boones Ferry Rd.</td>
 <td align=center>10</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="collins_view.1day.html">  0.00</a></td>
 <td align=center><a href="collins_view.3day.html">  0.00</a></td>
 <td align=center><a href="collins_view.5day.html">  0.00</a></td>
@@ -461,7 +461,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Sylvan School Rain Gage<br>1849 SW. 58th Ave.</td>
 <td align=center>161</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="sylvan.1day.html">  0.00</a></td>
 <td align=center><a href="sylvan.3day.html">  0.00</a></td>
 <td align=center><a href="sylvan.5day.html">  0.00</a></td>
@@ -471,17 +471,17 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Eco Roof Rain Gage<br>SW 12th and Clay</td>
 <td align=center>164</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="twelfth_and_clay.1day.html">  0.00</a></td>
 <td align=center><a href="twelfth_and_clay.3day.html">  0.00</a></td>
-<td align=center><a href="twelfth_and_clay.5day.html">  0.01</a></td>
+<td align=center><a href="twelfth_and_clay.5day.html">  0.00</a></td>
 <td align=center>  0.49</td>
 <td align=center> 53.76</td>
 <td align=center><a href="twelfth_and_clay.rain">data table</a></td>
 </tr><tr>
 <td>Maplewood Elementary School Rain Gage<br>7452 SW. 52nd Ave.</td>
 <td align=center>172</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="maplewood.1day.html">  0.00</a></td>
 <td align=center><a href="maplewood.3day.html">  0.00</a></td>
 <td align=center><a href="maplewood.5day.html">  0.00</a></td>
@@ -491,7 +491,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Children's Museum Rain Gage<br>4015 SW. Canyon Rd.</td>
 <td align=center>192</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="museum.1day.html">  0.00</a></td>
 <td align=center><a href="museum.3day.html">  0.00</a></td>
 <td align=center><a href="museum.5day.html">  0.00</a></td>
@@ -501,7 +501,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>OPB Rain Gage<br>SW. Macadam Ave.</td>
 <td align=center>214</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="opb.1day.html">  0.00</a></td>
 <td align=center><a href="opb.3day.html">  0.00</a></td>
 <td align=center><a href="opb.5day.html">  0.00</a></td>
@@ -521,7 +521,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Mt. Tabor Maintenance Yard Rain Gage<br>6437 SE. Division St.</td>
 <td align=center>6</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="mt_tabor.1day.html">  0.00</a></td>
 <td align=center><a href="mt_tabor.3day.html">  0.00</a></td>
 <td align=center><a href="mt_tabor.5day.html">  0.00</a></td>
@@ -531,7 +531,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Kelly School Rain Gage<br>9030 SE. Cooper St.</td>
 <td align=center>14</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="kelly_school.1day.html">  0.00</a></td>
 <td align=center><a href="kelly_school.3day.html">  0.00</a></td>
 <td align=center><a href="kelly_school.5day.html">  0.00</a></td>
@@ -541,10 +541,10 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Gresham Fire Dept. Rain Gage<br>1333 NW. Eastman Pkwy.</td>
 <td align=center>20</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="gresham.1day.html">  0.00</a></td>
 <td align=center><a href="gresham.3day.html">  0.00</a></td>
-<td align=center><a href="gresham.5day.html">  0.01</a></td>
+<td align=center><a href="gresham.5day.html">  0.00</a></td>
 <td align=center>  0.57</td>
 <td align=center> 58.49</td>
 <td align=center><a href="gresham.rain">data table</a></td>
@@ -556,7 +556,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Harney Rain Gage<br>2033 SE. Harney St.</td>
 <td align=center>64</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="harney_pump.1day.html">  0.00</a></td>
 <td align=center><a href="harney_pump.3day.html">  0.00</a></td>
 <td align=center><a href="harney_pump.5day.html">  0.00</a></td>
@@ -566,7 +566,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Pleasant Valley School Rain Gage<br>17625 SE. Foster Rd.</td>
 <td align=center>145</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="pleasant_valley.1day.html">  0.00</a></td>
 <td align=center><a href="pleasant_valley.3day.html">  0.00</a></td>
 <td align=center><a href="pleasant_valley.5day.html">  0.00</a></td>
@@ -576,7 +576,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Sunnyside School Rain Gage<br>3421 SE. Salmon St.</td>
 <td align=center>171</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="sunnyside.1day.html">  0.00</a></td>
 <td align=center><a href="sunnyside.3day.html">  0.00</a></td>
 <td align=center><a href="sunnyside.5day.html">  0.00</a></td>
@@ -586,7 +586,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Arleta School Rain Gage<br>5109 SE. 66th Ave.</td>
 <td align=center>174</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="arleta.1day.html">  0.00</a></td>
 <td align=center><a href="arleta.3day.html">  0.00</a></td>
 <td align=center><a href="arleta.5day.html">  0.00</a></td>
@@ -596,7 +596,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Glencoe School Rain Gage<br>825 SE. 51st Ave.</td>
 <td align=center>175</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="glencoe.1day.html">  0.00</a></td>
 <td align=center><a href="glencoe.3day.html">  0.00</a></td>
 <td align=center><a href="glencoe.5day.html">  0.00</a></td>
@@ -606,7 +606,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Multnomah Rain Gage<br>501 SE. Hawthorne Blvd.</td>
 <td align=center>181</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="multnomah.1day.html">  0.00</a></td>
 <td align=center><a href="multnomah.3day.html">  0.00</a></td>
 <td align=center><a href="multnomah.5day.html">  0.00</a></td>
@@ -616,7 +616,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Park SE Yard Rain Gage<br>5669 SE. 136th Ave.</td>
 <td align=center>217</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="park_se_yard.1day.html">  0.00</a></td>
 <td align=center><a href="park_se_yard.3day.html">  0.00</a></td>
 <td align=center><a href="park_se_yard.5day.html">  0.00</a></td>
@@ -628,7 +628,7 @@ not including the Maplewood rain gage.</td>
 </tr><tr>
 <td>Cottrell School Rain Gage<br>36225 SE. Proctor Rd., Boring</td>
 <td align=center>146</td>
-<td align=center>17-Jul-2016, 8:06</td>
+<td align=center>19-Jul-2016, 14:06</td>
 <td align=center><a href="cottrell_school.1day.html">  0.00</a></td>
 <td align=center><a href="cottrell_school.3day.html">  0.00</a></td>
 <td align=center><a href="cottrell_school.5day.html">  0.00</a></td>

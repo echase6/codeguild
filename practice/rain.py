@@ -6,6 +6,7 @@ about rain totals.
 import urllib.request
 import re
 import os.path
+import statistics
 
 
 def get_daily_totals(filename):
@@ -39,15 +40,13 @@ def calc_yearly_total_stats(totals):
     ...                         '30-MAR-2015': 0, '29-MAR-2015': 5}).items())
     [('2015', 5), ('2016', 6)]
     """
-    years_unique = set()
-    for date in totals:
-        year = date.split('-')[2]
-        years_unique.add(year)
     yearly_totals = {}
-    for year in years_unique:
-        yearly_totals.update({year: sum([totals[date] for date in totals
-                              if date.split('-')[2] == year])})
-    return dict(sorted(yearly_totals.items()))
+    for date_data, amt in totals.items():
+        year_in_date_data = date_data.split('-')[2]
+        if year_in_date_data not in yearly_totals:
+            yearly_totals.update({year_in_date_data: 0})
+        yearly_totals[year_in_date_data] += amt
+    return yearly_totals
 
 
 def calc_daily_avg_stats(totals):
@@ -57,16 +56,15 @@ def calc_daily_avg_stats(totals):
     ...                      '30-MAR-2015': 3, '29-MAR-2015': 3}).items())
     [('29-MAR', 4.0), ('30-MAR', 2.0)]
     """
-    days_unique = set()
-    for date in totals:
-        day = '-'.join(date.split('-')[0:2])
-        days_unique.add(day)
-    daily_avg = {}
-    for day in days_unique:
-        daily_stats = ([totals[date] for date in totals
-                        if '-'.join(date.split('-')[0:2]) == day])
-        daily_avg.update({day: (sum(daily_stats) / len(daily_stats))})
-    return daily_avg
+    daily_sums = {}
+    for date_data, amt in totals.items():
+        day_in_date_data = '-'.join(date_data.split('-')[0:2])
+        if day_in_date_data not in daily_sums:
+            daily_sums.update({day_in_date_data: [float(amt)]})
+        else:
+            daily_sums[day_in_date_data].append(amt)
+    daily_averages = {k: statistics.mean(v) for k, v in daily_sums.items()}
+    return daily_averages
 
 
 def get_inquiry_date():
@@ -148,7 +146,13 @@ def load_rain_file():
 
 
 def calc_print_most_rain_stats(daily_totals):
-    """Calculate and print the wettest day & year, plus amounts."""
+    """Calculate and print the wettest day & year, plus amounts.
+
+    >>> calc_print_most_rain_stats({'30-MAR-2016': 1, '29-MAR-2016': 15,
+    ...                             '30-MAR-2015': 3, '29-MAR-2015': 2})
+    Wettest day was 29-MAR-2016, amount was 0.15"
+    Wettest year was 2016, amount was 0.16"
+    """
     wtst_day, wtst_day_amt = find_wettest_stats(daily_totals)
     yearly_totals = calc_yearly_total_stats(daily_totals)
     wtst_year, wtst_year_amt = find_wettest_stats(yearly_totals)
@@ -156,14 +160,21 @@ def calc_print_most_rain_stats(daily_totals):
 
 
 def calc_print_most_rain_doy(daily_totals):
-    """Calculate and print the average wettest day of year."""
+    """Calculate and print the average wettest day of year.
+
+    >>> calc_print_most_rain_doy({'30-MAR': 1, '29-MAR': 15})
+    Wettest day of the year is 29-MAR with 0.15"
+    """
     wettest_doy, wettest_doy_amt = find_wettest_stats(daily_totals)
     output_wettest_doy_stats(wettest_doy, wettest_doy_amt)
 
 
-def calc_print_inquiry_rain(daily_averages):
-    """Find and print average rain on date user requests."""
-    inquiry_date = get_inquiry_date()
+def calc_print_inquiry_rain(daily_averages, inquiry_date):
+    """Find and print average rain on date user requests.
+
+    >>> calc_print_inquiry_rain({'30-MAR': 1, '29-MAR': 15}, '29-MAR')
+    Average rainfall on 29-MAR is 0.15"
+    """
     avg_amt_on_day = daily_averages[inquiry_date]
     output_inquiry_stats(inquiry_date, avg_amt_on_day)
 
@@ -174,7 +185,8 @@ def main():
     daily_averages = calc_daily_avg_stats(daily_totals)
     calc_print_most_rain_stats(daily_totals)
     calc_print_most_rain_doy(daily_averages)
-    calc_print_inquiry_rain(daily_averages)
+    inquiry_date = get_inquiry_date()
+    calc_print_inquiry_rain(daily_averages, inquiry_date)
 
 
 if __name__ == '__main__':
