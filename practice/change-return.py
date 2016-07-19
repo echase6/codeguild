@@ -4,59 +4,51 @@ Change return program to convert between an amount of money to quantities
 of common denominations of currency and coins.
 This is the product of a collaborative effort between Corey Adkins,
 Andrew Champion and Eric Chase
+Refactored to use functions 7/12/16
 
 Input:  Amount of money, in dollars
 Output:  Amount of each demonition
 """
 
 # 1. Setup
-FRANKLIN = 10000
-GRANT = 5000
-JACKSON = 2000
-HAMILTON = 1000
-LINCOLN = 500
-WASHINGTON = 100
-QUARTER = 25
-DIME = 10
-NICKEL = 5
+DENOMINATIONS = [
+    ['hundred dollar bill', 10000],
+    ['fifty dollar bill', 5000],
+    ['twenty dollar bill', 2000],
+    ['ten dollar bill', 1000],
+    ['five dollar bill', 500],
+    ['two dollar bill', 200],ls
+    ['one dollar bill', 100],
+    ['quarter', 25],
+    ['dime', 10],
+    ['nickel', 5],
+    ['penny', 1]]
 
-# 2. Input
-print('How much change do you want me to dispense?')
-change_remaining = float(input())
 
+def get_user_input():
+    """ Learn how much change needs to be converted. """
+    dollars = float(input('How much change do you want me to dispense? '))
+    return int(100 * dollars)
 
-# 3. Transform
-change_remaining *= 100
-change_remaining = int(change_remaining)
+def calc_num_change_remaining(i, change_remaining):
+    """ Returns number of each denomination and the remaining change. """
+    num = change_remaining // DENOMINATIONS[i][1]
+    change_remaining -= num * DENOMINATIONS[i][1]
+    return num, change_remaining
 
-num_franklins = change_remaining // FRANKLIN
-change_remaining -= num_franklins * FRANKLIN
-num_grants = change_remaining // GRANT
-change_remaining -= num_grants * GRANT
-num_jacksons = change_remaining // JACKSON
-change_remaining -= num_jacksons * JACKSON
-num_hamiltons = change_remaining // HAMILTON
-change_remaining -= num_hamiltons * HAMILTON
-num_lincolns = change_remaining // LINCOLN
-change_remaining -= num_lincolns * LINCOLN
-num_washingtons = change_remaining // WASHINGTON
-change_remaining -= num_washingtons * WASHINGTON
-num_quarters = change_remaining // QUARTER
-change_remaining -= num_quarters * QUARTER
-num_dimes = change_remaining // DIME
-change_remaining -= num_dimes * DIME
-num_nickels = change_remaining // NICKEL
-change_remaining -= num_nickels * NICKEL
+def output_quantity(i, num):
+    """ Print the quantity of each denomination, accounting for 0 and 1. """
+    if num > 1:
+        print('  {} {}s'.format(num, DENOMINATIONS[i][0]))
+    elif num > 0:
+        print('  {} {}'.format(num, DENOMINATIONS[i][0]))
+    return
 
-#4. Output
-print('I will dispense:')
-print(str(num_franklins) + ' hundred dollar bills')
-print(str(num_grants) + ' fifty dollar bills')
-print(str(num_jacksons) + ' twenty dollar bills')
-print(str(num_hamiltons) + ' ten dollar bills')
-print(str(num_lincolns) + ' five dollar bills')
-print(str(num_washingtons) + ' one dollar bills')
-print(str(num_quarters) + ' quarters')
-print(str(num_dimes) + ' dimes')
-print(str(num_nickels) + ' nickels')
-print(str(change_remaining) + ' pennies')
+def main():
+    change_remaining = get_user_input()
+    print('I will dispense:')
+    for i in range(len(DENOMINATIONS)):
+        num, change_remaining = calc_num_change_remaining(i, change_remaining)
+        output_quantity(i, num)
+
+main()
