@@ -41,7 +41,7 @@ def detect_input_case(word):
         print(word, 'camel')
         return 'camel'
     else:
-        raise Exception(word)
+        raise ValueError(word)
 
 
 def convert_camel_to_snake(word):
