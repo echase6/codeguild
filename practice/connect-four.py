@@ -1,4 +1,12 @@
-"""Play the connect four game."""
+"""Play the connect four game.
+
+This program accomplishes the following:
+  Read moves file from connect-four-moves.txt, which is alternating moves
+  Makes each move on the board and displays the board after each move
+  Alternates the player after each move automatically
+  Analyzes the board for a sequence of four in rows, columns, or diagonally
+  Prints out whomever won, if anyone.
+"""
 
 PLAYERS = ['R', 'Y']
 
@@ -14,7 +22,7 @@ def board_with_move(player_num, move, board):
 
 
 def height_of_tallest_column(board):
-    """Return the height of the tallest column.
+    """Return the height of the tallest column in the board.
 
     >>> height_of_tallest_column([['R', 'Y'], ['Y', 'R', 'Y']])
     3
@@ -23,7 +31,7 @@ def height_of_tallest_column(board):
 
 
 def output_board(board):
-    """Display board
+    """Display the board.
 
     >>> output_board([['R', 'Y'], ['Y', 'R', 'Y'], [], [], [], [], []])
     -Y-----
@@ -42,13 +50,13 @@ def output_board(board):
 
 
 def get_moves():
-    """Add the moves to the board, show result after each board."""
+    """Get moves from a file, add to the board, show board after each move."""
     board = [[], [], [], [], [], [], []]
     player_num = 0
     filename = 'connect-four-moves.txt'
     with open(filename) as f:
         for move in f:
-            move = int(move) - 1
+            move = int(move) - 1  # the file is 1-based
             print('Player {}: Move: {}'.format(PLAYERS[player_num], str(move)))
             board = board_with_move(player_num, move, board)
             output_board(board)
@@ -58,7 +66,7 @@ def get_moves():
 
 
 def make_square_board(board):
-    """Fill the empty items to make the board square.
+    """Fill the empty items to make the board rectangular.
 
     >>> make_square_board([['Y', 'Y', 'Y'], [''], ['R'], ['R'], ['R']])
     [['Y', 'Y', 'Y'], ['', '', ''], ['R', '', ''], ['R', '', ''], ['R', '', '']]
@@ -74,6 +82,9 @@ def check_horizontal(board):
     >>> check_horizontal([['Y', 'Y'], ['R', ''], ['R', ''], ['R', ''],
     ...                   ['R', ''], ['', ''], ['', '']])
     ['R']
+    >>> check_horizontal([['Y', 'Y'], ['R', ''], ['Y', ''], ['R', ''],
+    ...                   ['R', ''], ['', ''], ['', '']])
+    []
 
     """
     matches = []
@@ -92,6 +103,9 @@ def check_vertical(board):
     >>> check_vertical([['Y', 'Y', 'Y', 'Y', 'R' ], ['R', 'R'],
     ...                 ['R'], ['R'], ['R'], [], []])
     ['Y']
+    >>> check_vertical([['Y', 'Y', 'R', 'Y', 'R' ], ['R', 'R'],
+    ...                 ['R'], ['R'], ['R'], [], []])
+    []
 
     """
     matches = []
@@ -105,18 +119,34 @@ def check_vertical(board):
 
 
 def check_4x4_diag(chunk, player):
-    """ check for diagonal in smaller chunk."""
+    """ check for positive diagonal in smaller chunk.
+    >>> check_4x4_diag([['Y', 'Y', 'R', 'Y'], ['R', 'Y', 'Y', ''],
+    ...                 ['R', 'R', 'Y', ''], ['R', 'Y', 'R', 'Y']], 'Y')
+    True
+    >>> check_4x4_diag([['Y', 'Y', 'R', 'Y'], ['R', 'R', 'Y', ''],
+    ...                 ['R', 'R', 'Y', ''], ['R', 'Y', 'R', 'Y']], 'Y')
+    False
+
+    """
     return [chunk[i][i] for i in range(4)] == [player] * 4
 
 
 def check_diagonal(board):
-    """  """
+    """
+
+    >>> check_diagonal([['Y', 'Y', 'Y', '', ''], ['R', 'R', '', '', ''],
+    ...                 ['Y', 'Y', 'R', 'Y', 'R'], ['R', 'R', '', '', ''],
+    ...                 ['Y', 'Y', 'R', 'Y', ''], ['R', 'R', 'Y', 'R', ''],
+    ...                 ['Y', 'Y', 'Y', 'Y', 'R']])
+    ['R']
+    """
     matches = []
     height = len(board[0])
-    for col in range(4):
-        for row in range(height - 3):
+    for col_num in range(4):
+        for row_num in range(height - 3):
             for player in PLAYERS:
-                chunk = board[col: col + 4][row: row + 4]
+                chunk = ([col[row_num: row_num + 4]
+                          for col in board[col_num: col_num + 4]])
                 if check_4x4_diag(chunk, player):
                     matches += player
                 if check_4x4_diag(list(reversed(chunk)), player):
@@ -124,20 +154,39 @@ def check_diagonal(board):
     return matches
 
 
-def output_who_won(board):
-    """Print the winner."""
+def find_who_won(board):
+    """Return the winner(s), if any."""
     winners = set()
     board = make_square_board(board)
     winners.update(check_horizontal(board))
     winners.update(check_vertical(board))
     winners.update(check_diagonal(board))
-    print(winners)
-    return board
+    return winners
+
+
+def output_who_won(winners):
+    """Print the winning results.
+
+    >>> output_who_won({'R', 'Y'})
+    Everybody is a winner!
+    >>> output_who_won({})
+    Nobody won.
+    >>> output_who_won({'Y'})
+    Y is a winner.
+    """
+    if len(winners) == 0:
+        print('Nobody won.')
+    elif len(winners) == len(PLAYERS):
+        print('Everybody is a winner!')
+    else:
+        for winner in winners:
+            print('{} is a winner.'.format(winner))
 
 
 def main():
     board = get_moves()
-    output_who_won(board)
+    winners = find_who_won(board)
+    output_who_won(winners)
 
 
 if __name__ == '__main__':
