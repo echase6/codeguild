@@ -148,9 +148,13 @@ def test_for_game_over(players):
     >>> test_for_game_over([Player('Eric',[], 5, True),
     ...                    Player('Dealer', [], 12, False)])
     False
+    >>> test_for_game_over([Player('Eric',[], 5, False),
+    ...                    Player('Joe', [], 12, False),
+    ...                    Player('Dealer', [], 22, False)])
+    False
     """
-    return(max([player.score for player in players]) >= 21 or
-           all([player.is_staying for player in players]))
+    return(len([p.score for p in players if p.score <= 21]) < 2 or
+           all([p.is_staying for p in players]))
 
 
 def display_who_won(players):
