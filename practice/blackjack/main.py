@@ -8,7 +8,7 @@ from random import shuffle
 
 SUITS = ['S', 'D', 'C', 'H']
 RANKS = ['A', '2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K']
-PLAYER_NAMES = ['Eric', 'Dealer']
+PLAYER_NAMES = ['Eric', 'Joe', 'Dealer']
 
 
 def initialize_players():
@@ -116,8 +116,8 @@ def check_if_skip_player(player):
         if player.score >= 17:
             return True
     else:
-        # response = input('Hit or Stay (h/s)? ')
-        response = 's'
+        prompt_string = '{} hit or stay (h/s)? '.format(player.name)
+        response = input(prompt_string)
         if response[0].lower() == 's':
             return True
     return False
@@ -134,7 +134,6 @@ def play_round(deck, players, round_num):
             player.score = return_score_of_hand(player.hand)
             if player.name == 'Dealer' and player.score >= 17:
                 player.is_staying = True
-    return
 
 
 def test_for_game_over(players):
@@ -188,7 +187,7 @@ def display_hands(players, round_num):
     ...                Player('Dealer',
     ...                      Hand([Card('A', 'C'), Card('10', 'D')]), 5, True)],
     ...                 2) # doctest: +NORMALIZE_WHITESPACE
-    Round: 2
+              Round: 2
     Eric                Dealer
     2-C 3-D             A-C 10-D
     Points: 5           Points: 5
@@ -201,10 +200,11 @@ def display_hands(players, round_num):
         hand_string += ''.join([c.rank + '-' + c.suit + ' '
                                 for c in player.hand.card_list]).ljust(20)
         points_string += 'Points: {}'.format(player.score).ljust(20)
-    print('Round: {}'.format(round_num))
+    print(' '*10 + 'Round: {}'.format(round_num))
     print(name_string)
     print(hand_string)
     print(points_string, '\n')
+
 
 def main():
     game_over = False
