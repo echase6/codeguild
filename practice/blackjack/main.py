@@ -96,17 +96,14 @@ def display_hands(players):
     """
     name_string = ''
     hand_string = ''
-    points_string = ''
     for plyr in players:
         name_string += plyr.name.ljust(20)
         if plyr.name != 'Dealer':
             card_list_out = plyr.hand.card_list
         else:
-            card_list_out = plyr.hand.card_list[:-1]
-
+            card_list_out = plyr.hand.card_list[:-1]  # Hide dealer's last card
         hand_string += ''.join([c.rank + '-' + c.suit + ' '
                                 for c in card_list_out]).ljust(20)
-        points_string += 'Points: {}'.format(plyr.score).ljust(20)
     print(name_string)
     print(hand_string)
 
