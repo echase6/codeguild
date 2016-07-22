@@ -7,18 +7,30 @@ import urllib.request
 import re
 import os.path
 import statistics
+from operator import itemgetter
+from itertools import groupby
 
 
-def get_daily_totals(filename):
-    """Return a dict of days and daily amounts, as rows from the file."""
-    totals = {}
+def get_file_contents(filename):
+    """Extract file contents and return such in a list of strings."""
     with open(filename) as f:
-        for i in range(11):
-            _ = f.readline()
-        for line in f:
-            day_stats = line.split()[0:2]
-            if day_stats[1] != '-':  # skip entries if there is missing data
-                totals.update({day_stats[0]: int(day_stats[1])})
+        contents = f.readlines()
+    return contents
+
+
+def get_daily_totals(contents):
+    r"""Return a dict of days and daily amounts, as rows from the file.
+
+    >>> sorted(get_daily_totals(['1.', '2.', '3.', '4.', '5.', '6.',
+    ...                  '7.', '8.', '9.', '10.', '11.',
+    ...                  '25-MAR-2016    0', '26-MAR-2016      1']).items())
+    [('25-MAR-2016', 0), ('26-MAR-2016', 1)]
+    """
+    totals = {}
+    for line in contents[11:]:  # skip header lines
+        day_stats = line.split()[0:2]
+        if day_stats[1] != '-':  # skip entries if there is missing data
+            totals.update({day_stats[0]: int(day_stats[1])})
     return totals
 
 
@@ -28,24 +40,20 @@ def find_wettest_stats(dates_totals):
     >>> find_wettest_stats({'30-MAR-2016': 0, '29-MAR-2016': 5})
     ('29-MAR-2016', 5)
     """
-    totals_dates = {v: k for k, v in dates_totals.items()}
-    largest = max(totals_dates)
-    return totals_dates[largest], largest
+    return max(dates_totals.items(), key=itemgetter(1))
 
 
 def calc_yearly_total_stats(totals):
     """Return a dictionary of years and sum amounts.
 
-    >>> sorted(calc_yearly_total_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
-    ...                         '30-MAR-2015': 0, '29-MAR-2015': 5}).items())
-    [('2015', 5), ('2016', 6)]
+    >>> sorted(calc_yearly_total_stats({'29-MAR-2015': 1, '30-MAR-2015': 5,
+    ...                         '29-MAR-2016': 0, '30-MAR-2016': 5}).items())
+    [('2015', 6), ('2016', 5)]
     """
-    yearly_totals = {}
-    for date_data, amt in totals.items():
-        year_in_date_data = date_data.split('-')[2]
-        if year_in_date_data not in yearly_totals:
-            yearly_totals.update({year_in_date_data: 0})
-        yearly_totals[year_in_date_data] += amt
+    yearly_data = sorted([[k.split('-')[2], v]
+                          for k, v in totals.items()])
+    yearly_totals = {key: sum([value[1] for value in values])
+                     for key, values in groupby(yearly_data, lambda x: x[0])}
     return yearly_totals
 
 
@@ -54,16 +62,12 @@ def calc_daily_avg_stats(totals):
 
     >>> sorted(calc_daily_avg_stats({'30-MAR-2016': 1, '29-MAR-2016': 5,
     ...                      '30-MAR-2015': 3, '29-MAR-2015': 3}).items())
-    [('29-MAR', 4.0), ('30-MAR', 2.0)]
+    [('29-MAR', 4), ('30-MAR', 2)]
     """
-    daily_sums = {}
-    for date_data, amt in totals.items():
-        day_in_date_data = '-'.join(date_data.split('-')[0:2])
-        if day_in_date_data not in daily_sums:
-            daily_sums.update({day_in_date_data: [float(amt)]})
-        else:
-            daily_sums[day_in_date_data].append(amt)
-    daily_averages = {k: statistics.mean(v) for k, v in daily_sums.items()}
+    daily_data = sorted([['-'.join(k.split('-')[0:2]), v]
+                        for k, v in totals.items()])
+    daily_averages = {key: statistics.mean([value[1] for value in values])
+                      for key, values in groupby(daily_data, lambda x: x[0])}
     return daily_averages
 
 
@@ -84,7 +88,7 @@ def output_most_rain_stats(day, day_amt, year, year_amt):
 
 
 def output_wettest_doy_stats(day, amt):
-    """Print the wettest day of the year amount
+    """Print the wettest day of the year amount.
 
     >>> output_wettest_doy_stats('29-MAR', 25)
     Wettest day of the year is 29-MAR with 0.25"
@@ -93,7 +97,7 @@ def output_wettest_doy_stats(day, amt):
 
 
 def output_inquiry_stats(date, amt):
-    """Print the average amount for a requested day of year
+    """Print the average amount for a requested day of year.
 
     >>> output_inquiry_stats('29-MAR', 25)
     Average rainfall on 29-MAR is 0.25"
@@ -181,7 +185,8 @@ def calc_print_inquiry_rain(daily_averages, inquiry_date):
 
 def main():
     gauge_filename = load_rain_file()
-    daily_totals = get_daily_totals(gauge_filename)
+    contents = get_file_contents(gauge_filename)
+    daily_totals = get_daily_totals(contents)
     daily_averages = calc_daily_avg_stats(daily_totals)
     calc_print_most_rain_stats(daily_totals)
     calc_print_most_rain_doy(daily_averages)
