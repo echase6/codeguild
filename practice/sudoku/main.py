@@ -32,6 +32,14 @@ def add_filled_cells_from_file(board):
     return board
 
 
+def count_filled_cells(board):
+    """Return the number of filled cells."""
+    count = 0
+    for row in board:
+        count += sum([1 for cell in row if len(cell.values) == 1])
+    return count
+
+
 def get_three_char(cells):
     """Return string representation of three cells.
 
@@ -61,13 +69,61 @@ def display_board(board):
         print(border_string)
 
 
+def exclude_cell_row(i, j, cell, board):
+    """Apply exclusionary rule to cell in row."""
+    row = board[i]
+    for col, sub_cell in enumerate(row):
+        if col != j and len(sub_cell.values) == 1:
+            cell.values = cell.values.difference(sub_cell.values)
+            # print(cell.values, sub_cell.values)
+
+
+def exclude_cell_col(i, j, cell, board):
+    """Apply exclusionary rule to cell in column."""
+    board_transpose = [list(x) for x in zip(*board)]
+    exclude_cell_row(j, i, cell, board_transpose)
+
+
+def exclude_cell_box(i_index, j_index, cell, board):
+    """Apply exclusionary rule to cell in box."""
+    box_row = i_index // 3
+    sub_row = i_index % 3
+    box_col = j_index // 3
+    sub_col = j_index % 3
+    for i, row in enumerate(board[box_row*3:box_row*3+3]):
+        for j, sub_cell in enumerate(row[box_col*3:box_col*3+3]):
+            if not(i == sub_row and j == sub_col) and len(sub_cell.values) == 1:
+                cell.values = cell.values.difference(sub_cell.values)
+
+
+def fill_cells_exclude(board):
+    """Use exclusionary rule to fill cells."""
+    for i, row in enumerate(board):
+        for j, cell in enumerate(row):
+            exclude_cell_row(i, j, cell, board)
+            exclude_cell_col(i, j, cell, board)
+            exclude_cell_box(i, j, cell, board)
+
+
+def fill_cells(board):
+    """Fill cells."""
+    fill_cells_exclude(board)
+    # fill_cells_include(board)
+
+
 def main():
     board = make_blank_board()
     board = add_filled_cells_from_file(board)
     display_board(board)
+    count = 0
+    post_iter_count = count_filled_cells(board)
+    while post_iter_count > count:
+        fill_cells(board)
+        count = post_iter_count
+        post_iter_count = count_filled_cells(board)
+        display_board(board)
+        print('Filled {} new cells.'.format(post_iter_count-count))
 
 
 if __name__ == '__main__':
     main()
-
-
