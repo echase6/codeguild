@@ -104,6 +104,44 @@ def exclude_cell_box(i_index, j_index, cell, board):
                 cell.values = cell.values.difference(sub_cell.values)
 
 
+def exclude_cell_pairs_row(i, j, cell, board):
+    """Apply exclusionary rule if two pairs exist in the row."""
+    if len(cell.values) == 2:
+        row = board[i]
+        value_pair = cell.values
+        for col, sub_cell in enumerate(row):
+            if col != j and sub_cell.values == value_pair:
+                for col2, cell2 in enumerate(row):
+                    if col2 != col and col2 != j:
+                        cell2.values = cell2.values.difference(value_pair)
+
+
+def exclude_cell_pairs_col(i, j, cell, board):
+    """Apply exclusionary rule if two pairs exist in the column."""
+    board_transpose = [list(x) for x in zip(*board)]
+    exclude_cell_pairs_row(j, i, cell, board_transpose)
+
+
+def exclude_cell_pairs_box(i_index, j_index, cell, board):
+    """Apply exclusionary rule if two pairs exist in the box."""
+    box_row = i_index // 3
+    sub_row = i_index % 3
+    box_col = j_index // 3
+    sub_col = j_index % 3
+    value_pair = cell.values
+    for i, row in enumerate(board[box_row*3:box_row*3+3]):
+        for j, sub_cell in enumerate(row[box_col*3:box_col*3+3]):
+            if not(sub_row == i and sub_col == j) and sub_cell.values == value_pair:
+                for sub_row2, row2 in enumerate(board[box_row * 3:box_row * 3 + 3]):
+                    for sub_col2, cell2 in enumerate(row2[box_col * 3:box_col * 3 + 3]):
+                        if (not (sub_row == i and
+                                sub_col == j and
+                                sub_row2 == sub_row and
+                                sub_col2 == sub_col)
+                           and cell2.values == value_pair):
+                                cell2.values = cell2.values.difference(value_pair)
+
+
 def fill_cells_exclude(board):
     """Use exclusionary rule to fill cells."""
     for i, row in enumerate(board):
@@ -111,6 +149,9 @@ def fill_cells_exclude(board):
             exclude_cell_row(i, j, cell, board)
             exclude_cell_col(i, j, cell, board)
             exclude_cell_box(i, j, cell, board)
+            exclude_cell_pairs_row(i, j, cell, board)
+            exclude_cell_pairs_col(i, j, cell, board)
+            exclude_cell_pairs_box(i, j, cell, board)
 
 
 def include_row(i, board):
@@ -133,13 +174,30 @@ def include_col(j, board):
     include_row(j, board_transpose)
 
 
+def include_box(i, j, board):
+    """Apply inclusion rule to box."""
+    inclusion_list = {}
+    for box_row, row in enumerate(board[i*3:i*3+3]):
+        for box_col, sub_cell in enumerate(row[j*3:j*3+3]):
+            for value in sub_cell.values:
+                if value not in inclusion_list:
+                    inclusion_list[value] = []
+                inclusion_list[value] += [(box_row, box_col)]
+    for num, qty in inclusion_list.items():
+        if len(qty) == 1:
+            row, col = qty[0]
+            board[i*3+row][j*3+col].values = {num}
+
+
 def fill_cells_include(board):
     """Use inclusion rule to fill cells."""
     for i, row in enumerate(board):
         for j, cell in enumerate(row):
             include_row(i, board)
             include_col(j, board)
-            # include_box(i, j, board)
+    for i in range(len(board) // 3):
+        for j in range(len(board[i]) // 3):
+            include_box(i, j, board)
 
 
 def fill_cells(board):
@@ -154,6 +212,9 @@ def main():
     display_board(board)
     count = pow(9, 3)
     post_iter_count = count_choices_left(board)
+    count_filled = count_filled_cells(board)
+    print('Starting with {} cells filled, {} choices left'
+          .format(count_filled, post_iter_count))
     while post_iter_count < count:
         fill_cells(board)
         count = post_iter_count
@@ -162,7 +223,7 @@ def main():
         display_board(board)
         print('{} cells filled, {} choices left.'
               .format(count_filled, post_iter_count))
-        print(board[0][0])
+        print(board[8][8])
 
 
 if __name__ == '__main__':
