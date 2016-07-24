@@ -40,6 +40,14 @@ def count_filled_cells(board):
     return count
 
 
+def count_choices_left(board):
+    """Return the number of choices left."""
+    count = 0
+    for row in board:
+        count += sum([len(cell.values) for cell in row])
+    return count
+
+
 def get_three_char(cells):
     """Return string representation of three cells.
 
@@ -105,24 +113,56 @@ def fill_cells_exclude(board):
             exclude_cell_box(i, j, cell, board)
 
 
+def include_row(i, board):
+    """Apply inclusion rule to row."""
+    inclusion_list = {}
+    row = board[i]
+    for col, sub_cell in enumerate(row):
+        for value in sub_cell.values:
+            if value not in inclusion_list:
+                inclusion_list[value] = []
+            inclusion_list[value] += [col]
+    for num, qty in inclusion_list.items():
+        if len(qty) == 1:
+            board[i][qty[0]].values = {num}
+
+
+def include_col(j, board):
+    """Apply inclusion rule to column."""
+    board_transpose = [list(x) for x in zip(*board)]
+    include_row(j, board_transpose)
+
+
+def fill_cells_include(board):
+    """Use inclusion rule to fill cells."""
+    for i, row in enumerate(board):
+        for j, cell in enumerate(row):
+            include_row(i, board)
+            include_col(j, board)
+            # include_box(i, j, board)
+
+
 def fill_cells(board):
     """Fill cells."""
     fill_cells_exclude(board)
-    # fill_cells_include(board)
+    fill_cells_include(board)
 
 
 def main():
     board = make_blank_board()
     board = add_filled_cells_from_file(board)
     display_board(board)
-    count = 0
-    post_iter_count = count_filled_cells(board)
-    while post_iter_count > count:
+    count = pow(9, 3)
+    post_iter_count = count_choices_left(board)
+    while post_iter_count < count:
         fill_cells(board)
         count = post_iter_count
-        post_iter_count = count_filled_cells(board)
+        post_iter_count = count_choices_left(board)
+        count_filled = count_filled_cells(board)
         display_board(board)
-        print('Filled {} new cells.'.format(post_iter_count-count))
+        print('{} cells filled, {} choices left.'
+              .format(count_filled, post_iter_count))
+        print(board[0][0])
 
 
 if __name__ == '__main__':
