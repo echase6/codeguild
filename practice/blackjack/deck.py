@@ -57,3 +57,13 @@ def test_is_deck_empty(deck):
     True
     """
     return len(deck.card_list) == 0
+
+
+def draw_card(card_deck):
+    """Draws card from top of deck and returns card.
+
+    >>> draw_card(Deck([Card('2', 'C'), Card('3', 'D')]))
+    Card('3', 'D')
+    """
+    card = card_deck.card_list.pop()
+    return card

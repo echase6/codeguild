@@ -1,26 +1,17 @@
 """Blackjack playing game."""
 
-import hand
-import deck
-import player
-from hand import Hand
-from deck import Deck
-from player import Player
-from card import Card
-
-
-def draw_card(card_deck):
-    """Draws card from top of deck and returns card.
-
-    >>> draw_card(Deck([Card('2', 'C'), Card('3', 'D')]))
-    Card('3', 'D')
-    """
-    card = card_deck.card_list.pop()
-    return card
+from hand import *
+from deck import *
+from player import *
+from card import *
 
 
 def play_round(card_deck, plyr):
-    """Deal the cards to whomever wants them."""
+    """Deal the cards to whomever wants them.
+
+    Dealer:  automatically hits dealer until score is over 17
+    Non-dealer:  hits until they stay or score is over 21
+    """
     if plyr.score == 21:
         return
     not_done = True
@@ -35,8 +26,8 @@ def play_round(card_deck, plyr):
             if response[0].lower() == 's':
                 return
         card = draw_card(card_deck)
-        plyr.hand = hand.add_card_to_hand(card, plyr.hand)
-        plyr.score = hand.return_score_of_hand(plyr.hand)
+        plyr.hand = add_card_to_hand(card, plyr.hand)
+        plyr.score = return_score_of_hand(plyr.hand)
         if plyr.score > 21:
             print('{} busted!'.format(plyr.name))
             not_done = False
@@ -44,14 +35,14 @@ def play_round(card_deck, plyr):
 
 
 def display_who_won(players):
-    """
+    """Displays who won at the end of the game.
 
     >>> display_who_won([Player('Eric', Hand([]), 17),
     ...                  Player('Dealer', Hand([]), 18)])
-    Dealer wins this round.
+    Dealer wins this hand.
     >>> display_who_won([Player('Eric', Hand([]), 17),
     ...                  Player('Dealer', Hand([]), 22)])
-    Eric wins this round.
+    Eric wins this hand.
     >>> display_who_won([Player('Eric', Hand([]), 17),
     ...                  Player('Dealer', Hand([]), 17)])
     Push.
@@ -66,11 +57,12 @@ def display_who_won(players):
     elif len(winners) > 1:
         print('Push.')
     else:
-        print('{} wins this round.'.format(winners[0]))
+        print('{} wins this hand.'.format(winners[0]))
 
 
 def display_player_hand(plyr):
     """Display only one hand, after receiving a card.
+
     >>> display_player_hand(Player('Eric',
     ...                      Hand([Card('2', 'C'), Card('3', 'D')]), 5)
     ...                     )  # doctest: +NORMALIZE_WHITESPACE
@@ -109,14 +101,14 @@ def display_hands(players):
 
 
 def main():
-    card_deck = deck.initialize_deck()
-    deck.shuffle_deck(card_deck)
-    players = player.initialize_players()
-    for i in range(2):
+    card_deck = initialize_deck()
+    shuffle_deck(card_deck)
+    players = initialize_players()
+    for i in range(2):  # Deal the first two cards to everyone.
         for plyr in players:
             card = draw_card(card_deck)
-            plyr.hand = hand.add_card_to_hand(card, plyr.hand)
-            plyr.score = hand.return_score_of_hand(plyr.hand)
+            plyr.hand = add_card_to_hand(card, plyr.hand)
+            plyr.score = return_score_of_hand(plyr.hand)
     display_hands(players)
     for plyr in players:
         play_round(card_deck, plyr)
