@@ -1,55 +1,9 @@
 from cell import Cell
+from board import *
 
 
-INITIAL_SET = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-
-
-def make_blank_board():
-    """Create and un-filled board."""
-    board = []
-    for i in range(9):
-        board += [[Cell((7, 7), INITIAL_SET) for i in range(9)]]
-    return board
-
-
-def add_filled_cells(board):
-    """Add a few filled-in cells."""
-    for i in range(1, 9):
-        board[i][i].values = {i}
-    return board
-
-
-def add_filled_cells_from_file(board):
-    """Load the filled-in cells from a file."""
-    file = 'sudoku.txt'
-    with open(file) as f:
-        contents = f.readlines()
-    for i, line in enumerate(contents):
-        line_char = list(line.strip())
-        for j in range(9):
-            if line_char[j] != '.':
-                board[i][j].values = {int(line_char[j])}
-    return board
-
-
-def count_filled_cells(board):
-    """Return the number of filled cells."""
-    count = 0
-    for row in board:
-        count += sum([1 for cell in row if len(cell.values) == 1])
-    return count
-
-
-def count_choices_left(board):
-    """Return the number of choices left."""
-    count = 0
-    for row in board:
-        count += sum([len(cell.values) for cell in row])
-    return count
-
-
-def get_three_char(cells):
-    """Return string representation of three cells.
+def get_box_char(cells):
+    """Return string representation of one row in a box.
 
 
     """
@@ -60,18 +14,19 @@ def get_three_char(cells):
         else:
             output_string += '.'
         output_string += ' '
-    return output_string[0:5]
+    return output_string[0:ORDER * 2 - 1]
 
 
 def display_board(board):
     """Display the board, with filled-in squares."""
-    border_string = ('+' + '-' * 5) * 3 + '+'
+    border_string = ('+' + '-' * (ORDER*2-1)) * ORDER + '+'
     print(border_string)
-    for i in range(3):
-        for j in range(3):
-            line_string = ('|' + get_three_char(board[i * 3 + j][0:3]) + '|' +
-                           get_three_char(board[i * 3 + j][3:6]) + '|' +
-                           get_three_char(board[i * 3 + j][6:9]) + '|'
+    for i in range(ORDER):
+        for j in range(ORDER):
+            board_row = board[i * ORDER + j]
+            line_string = ('|' + get_box_char(board[i * ORDER + j][0:ORDER]) + '|' +
+                           get_box_char(board[i * ORDER + j][ORDER:ORDER*2]) + '|' +
+                           get_box_char(board[i * ORDER + j][ORDER*2:ORDER*3]) + '|'
                            )
             print(line_string)
         print(border_string)
