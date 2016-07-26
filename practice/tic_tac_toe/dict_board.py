@@ -121,12 +121,12 @@ class DictTTTBoard:
         """Return a pretty-printed picture of the board.
 
         >>> board = DictTTTBoard()
-        >>> board._dict.update({(0, 0): 'X', (0, 1): 'X', (0, 2): 'X',
-        ...                     (2, 0): 'O', (1, 2): 'O'})
+        >>> board._dict.update({(0, 0): 'X', (1, 0): 'X', (2, 0): 'X',
+        ...                     (0, 2): 'O', (2, 1): 'O'})
         >>> board.__str__()  # doctest: +NORMALIZE_WHITESPACE
         X| |O
         X| |
         X|O|
         """
         for i in range(3):
-            print('|'.join([self._dict[(j, i)] for j in range(3)]))
+            print('|'.join([self._dict[(i, j)] for j in range(3)]))
