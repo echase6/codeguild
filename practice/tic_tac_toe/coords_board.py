@@ -41,8 +41,11 @@ class CoordsTTTBoard:
     def calc_winner(self):
         """Return the token string that has a row, column or diagonal."""
         _winner = self._calc_winner_row_col()
-        _winner += self._calc_winner_diag()
-        return _winner
+        if _winner is not None:
+            return _winner
+        _winner = self._calc_winner_diag()
+        if _winner is not None:
+            return _winner
 
     def _calc_winner_row_col(self):
         """Return the token string if it occurs in an entire row.
@@ -100,13 +103,15 @@ class CoordsTTTBoard:
         X| |
         X|O|
         """
-        for i in range(3):
+        out_string = ''
+        for y in range(3):
             cell_list = []
-            for j in range(3):
-                if (i, j, 'X') in self._list:
+            for x in range(3):
+                if (x, y, 'X') in self._list:
                     cell_list += ['X']
-                elif (i, j, 'O') in self._list:
+                elif (x, y, 'O') in self._list:
                     cell_list += ['O']
                 else:
                     cell_list += [' ']
-            print('|'.join(cell_list))
+            out_string += '|'.join(cell_list) + '\n'
+        return out_string

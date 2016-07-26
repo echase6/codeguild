@@ -47,8 +47,11 @@ class DictTTTBoard:
     def calc_winner(self):
         """Return the token string that has a row, column or diagonal."""
         _winner = self._calc_winner_row_col()
-        _winner += self._calc_winner_diag()
-        return _winner
+        if _winner is not None:
+            return _winner
+        _winner = self._calc_winner_diag()
+        if _winner is not None:
+            return _winner
 
     def _calc_winner_row_col(self):
         """Return the token string if it occurs in an entire row.
@@ -90,9 +93,11 @@ class DictTTTBoard:
         >>> board._dict.update({(0, 0): 'X', (1, 0): 'X', (2, 0): 'X',
         ...                     (0, 2): 'O', (2, 1): 'O'})
         >>> board.__str__()  # doctest: +NORMALIZE_WHITESPACE
-        X| |O
-        X| |
-        X|O|
+        X|X|X
+         | |O
+        O| |
         """
-        for i in range(3):
-            print('|'.join([self._dict[(i, j)] for j in range(3)]))
+        out_string = ''
+        for y in range(3):
+            out_string += '|'.join([self._dict[(x, y)] for x in range(3)]) + '\n'
+        return out_string

@@ -40,13 +40,16 @@ class ListTTTBoard:
         >>> a._rows
         [[' ', ' ', ' '], [' ', 'X', ' '], [' ', ' ', ' ']]
         """
-        self._rows[x][y] = token
+        self._rows[y][x] = token
 
     def calc_winner(self):
         """Return the token string that has a row, column or diagonal."""
         _winner = self._calc_winner_row_col()
-        _winner += self._calc_winner_diag()
-        return _winner
+        if _winner is not None:
+            return _winner
+        _winner = self._calc_winner_diag()
+        if _winner is not None:
+            return _winner
 
     def _calc_winner_row_col(self):
         """Return the token string if it occurs in an entire column.
@@ -97,5 +100,7 @@ class ListTTTBoard:
         X| |
         X|O|
         """
+        out_string = ''
         for row in self._rows:
-            print('|'.join(row))
+            out_string += '|'.join(row) + '\n'
+        return out_string
