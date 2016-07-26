@@ -37,29 +37,35 @@ def play_round(card_deck, plyr):
 def find_winners(players):
     """Find out who won and return list of their names.
 
-
+    >>> find_winners([Player('Eric', Hand([]), 17),
+    ...                  Player('Dealer', Hand([]), 18)])
+    ['Dealer']
+    >>> find_winners([Player('Eric', Hand([]), 17),
+    ...                  Player('Dealer', Hand([]), 22)])
+    ['Eric']
+    >>> find_winners([Player('Eric', Hand([]), 17),
+    ...                  Player('Dealer', Hand([]), 17)])
+    ['Eric', 'Dealer']
+    >>> find_winners([Player('Eric', Hand([]), 22),
+    ...                  Player('Dealer', Hand([]), 22)])
+    []
     """
     winning_point_amt = max([p.score if p.score <= 21 else 0 for p in players])
     return [p.name for p in players if p.score == winning_point_amt]
 
 
-def display_who_won(players):
+def display_who_won(winners):
     """Displays who won at the end of the game.
 
-    >>> display_who_won([Player('Eric', Hand([]), 17),
-    ...                  Player('Dealer', Hand([]), 18)])
+    >>> display_who_won(['Dealer'])
     Dealer wins this hand.
-    >>> display_who_won([Player('Eric', Hand([]), 17),
-    ...                  Player('Dealer', Hand([]), 22)])
+    >>> display_who_won(['Eric'])
     Eric wins this hand.
-    >>> display_who_won([Player('Eric', Hand([]), 17),
-    ...                  Player('Dealer', Hand([]), 17)])
+    >>> display_who_won(['Eric', 'Dealer'])
     Push.
-    >>> display_who_won([Player('Eric', Hand([]), 22),
-    ...                  Player('Dealer', Hand([]), 22)])
+    >>> display_who_won([])
     Nobody wins.
     """
-    winners = find_winners(players)
     if len(winners) == 0:
         print('Nobody wins.')
     elif len(winners) > 1:
@@ -121,7 +127,8 @@ def main():
     for plyr in players:
         play_round(card_deck, plyr)
         display_player_hand(plyr)
-    display_who_won(players)
+    winners = find_winners(players)
+    display_who_won(winners)
 
 
 if __name__ == '__main__':
