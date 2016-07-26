@@ -31,14 +31,14 @@ class Hand:
 
 
 def add_card_to_hand(card, hand):
-    """Adds a card to the hand.
+    """Adds a card to the hand, modifying it in-place.
 
-    >>> add_card_to_hand(Card('A', 'H'), Hand([Card('2', 'C'), Card('3', 'D')]))
+    >>> hand = Hand([Card('2', 'C'), Card('3', 'D')])
+    >>> add_card_to_hand(Card('A', 'H'), hand)
+    >>> hand
     Hand([Card('2', 'C'), Card('3', 'D'), Card('A', 'H')])
     """
     hand.card_list += [card]
-    return hand
-
 
 def return_score_of_hand(hand):
     """Calculates and returns the score of a hand.

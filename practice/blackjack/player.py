@@ -47,8 +47,4 @@ def initialize_players():
     >>> initialize_players()
     [Player('Eric', Hand([]), 0), Player('Dealer', Hand([]), 0)]
     """
-    players = []
-    for player_name in PLAYER_NAMES:
-        player = Player(player_name, Hand([]), 0)
-        players += [player]
-    return players
+    return [Player(name, Hand([]), 0) for name in PLAYER_NAMES]

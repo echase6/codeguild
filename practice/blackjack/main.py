@@ -1,9 +1,9 @@
 """Blackjack playing game."""
 
-from hand import *
-from deck import *
-from player import *
-from card import *
+from hand import Hand, return_score_of_hand, add_card_to_hand
+from deck import initialize_deck, shuffle_deck, draw_card
+from player import Player, initialize_players
+from card import Card
 
 
 def play_round(card_deck, plyr):
@@ -26,12 +26,21 @@ def play_round(card_deck, plyr):
             if response[0].lower() == 's':
                 return
         card = draw_card(card_deck)
-        plyr.hand = add_card_to_hand(card, plyr.hand)
+        add_card_to_hand(card, plyr.hand)
         plyr.score = return_score_of_hand(plyr.hand)
         if plyr.score > 21:
             print('{} busted!'.format(plyr.name))
             not_done = False
     return
+
+
+def find_winners(players):
+    """Find out who won and return list of their names.
+
+
+    """
+    winning_point_amt = max([p.score if p.score <= 21 else 0 for p in players])
+    return [p.name for p in players if p.score == winning_point_amt]
 
 
 def display_who_won(players):
@@ -50,8 +59,7 @@ def display_who_won(players):
     ...                  Player('Dealer', Hand([]), 22)])
     Nobody wins.
     """
-    winning_point_amt = max([p.score if p.score <= 21 else 0 for p in players])
-    winners = [p.name for p in players if p.score == winning_point_amt]
+    winners = find_winners(players)
     if len(winners) == 0:
         print('Nobody wins.')
     elif len(winners) > 1:
@@ -107,7 +115,7 @@ def main():
     for i in range(2):  # Deal the first two cards to everyone.
         for plyr in players:
             card = draw_card(card_deck)
-            plyr.hand = add_card_to_hand(card, plyr.hand)
+            add_card_to_hand(card, plyr.hand)
             plyr.score = return_score_of_hand(plyr.hand)
     display_hands(players)
     for plyr in players:
