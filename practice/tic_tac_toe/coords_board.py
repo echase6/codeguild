@@ -93,25 +93,23 @@ class CoordsTTTBoard:
                 return token
 
     def __str__(self):
-        """Return a pretty-printed picture of the board.
+        r"""Return a pretty-printed picture of the board.
 
         >>> board = CoordsTTTBoard()
         >>> board._list = [(0, 0, 'X'), (1, 0, 'X'), (2, 0, 'X'),
         ...                     (0, 2, 'O'), (2, 1, 'O')]
         >>> board.__str__()  # doctest: +NORMALIZE_WHITESPACE
-        X| |O
-        X| |
-        X|O|
+        'X|X|X\n | |O\nO| | \n'
         """
-        out_string = ''
+        row_string_list = []
         for y in range(3):
             cell_list = []
             for x in range(3):
                 if (x, y, 'X') in self._list:
-                    cell_list += ['X']
+                    cell_list += 'X'
                 elif (x, y, 'O') in self._list:
-                    cell_list += ['O']
+                    cell_list += 'O'
                 else:
-                    cell_list += [' ']
-            out_string += '|'.join(cell_list) + '\n'
-        return out_string
+                    cell_list += ' '
+            row_string_list += ['|'.join(cell_list)]
+        return '\n'.join(row_string_list) + '\n'

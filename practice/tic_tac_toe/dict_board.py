@@ -15,9 +15,9 @@ class DictTTTBoard:
     def __repr__(self):
         """Implement repr() function.
 
-        >>> DictTTTBoard()
-        DictTTTBoard {(0, 0): ' ', (1, 0): ' ', (2, 0): ' ', (0, 1): ' ', \
-(1, 1): ' ', (2, 1): ' ', (0, 2): ' ', (1, 2): ' ', (2, 2): ' '}
+        >>> sorted(DictTTTBoard()._dict.items())
+        [((0, 0), ' '), ((0, 1), ' '), ((0, 2), ' '), ((1, 0), ' '), \
+((1, 1), ' '), ((1, 2), ' '), ((2, 0), ' '), ((2, 1), ' '), ((2, 2), ' ')]
         """
         return 'DictTTTBoard {}'.format(self._dict)
 
@@ -87,17 +87,18 @@ class DictTTTBoard:
                 return token
 
     def __str__(self):
-        """Return a pretty-printed picture of the board.
+        r"""Return a pretty-printed picture of the board.
 
         >>> board = DictTTTBoard()
         >>> board._dict.update({(0, 0): 'X', (1, 0): 'X', (2, 0): 'X',
         ...                     (0, 2): 'O', (2, 1): 'O'})
         >>> board.__str__()  # doctest: +NORMALIZE_WHITESPACE
-        X|X|X
-         | |O
-        O| |
+        'X|X|X\n | |O\nO| | \n'
         """
-        out_string = ''
-        for y in range(3):
-            out_string += '|'.join([self._dict[(x, y)] for x in range(3)]) + '\n'
+        out_string = ('\n'.join(
+                     ['|'.join(
+                         [self._dict[(x, y)]
+                          for x in range(3)])
+                      for y in range(3)]
+                               ) + '\n')
         return out_string

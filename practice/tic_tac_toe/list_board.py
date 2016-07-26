@@ -91,16 +91,11 @@ class ListTTTBoard:
                 return token
 
     def __str__(self):
-        """Return a pretty-printed picture of the board.
+        r"""Return a pretty-printed picture of the board.
 
         >>> board = ListTTTBoard()
         >>> board._rows = [['X', ' ', 'O'], ['X', ' ', ' '], ['X', 'O', ' ']]
-        >>> board.__str__()  # doctest: +NORMALIZE_WHITESPACE
-        X| |O
-        X| |
-        X|O|
+        >>> board.__str__()
+        'X| |O\nX| | \nX|O| \n'
         """
-        out_string = ''
-        for row in self._rows:
-            out_string += '|'.join(row) + '\n'
-        return out_string
+        return '\n'.join(['|'.join(row) for row in self._rows]) + '\n'
