@@ -24,11 +24,10 @@ def display_board(board):
     for i in range(ORDER):
         for j in range(ORDER):
             board_row = board[i * ORDER + j]
-            line_string = ('|' + get_box_char(board[i * ORDER + j][0:ORDER]) + '|' +
-                           get_box_char(board[i * ORDER + j][ORDER:ORDER*2]) + '|' +
-                           get_box_char(board[i * ORDER + j][ORDER*2:ORDER*3]) + '|'
-                           )
-            print(line_string)
+            line_string = ''
+            for k in range(0, ORDER**2, ORDER):
+                line_string += get_box_char(board_row[k:k + ORDER]) + '|'
+            print('|' + line_string)
         print(border_string)
 
 
@@ -49,12 +48,12 @@ def exclude_cell_col(i, j, cell, board):
 
 def exclude_cell_box(i_index, j_index, cell, board):
     """Apply exclusionary rule to cell in box."""
-    box_row = i_index // 3
-    sub_row = i_index % 3
-    box_col = j_index // 3
-    sub_col = j_index % 3
-    for i, row in enumerate(board[box_row*3:box_row*3+3]):
-        for j, sub_cell in enumerate(row[box_col*3:box_col*3+3]):
+    box_row = i_index // ORDER
+    sub_row = i_index % ORDER
+    box_col = j_index // ORDER
+    sub_col = j_index % ORDER
+    for i, row in enumerate(board[box_row*ORDER:(box_row+1)*ORDER]):
+        for j, sub_cell in enumerate(row[box_col*ORDER:(box_col+1)*ORDER]):
             if not(i == sub_row and j == sub_col) and len(sub_cell.values) == 1:
                 cell.values = cell.values.difference(sub_cell.values)
 
@@ -79,16 +78,16 @@ def exclude_cell_pairs_col(i, j, cell, board):
 
 def exclude_cell_pairs_box(i_index, j_index, cell, board):
     """Apply exclusionary rule if two pairs exist in the box."""
-    box_row = i_index // 3
-    sub_row = i_index % 3
-    box_col = j_index // 3
-    sub_col = j_index % 3
+    box_row = i_index // ORDER
+    sub_row = i_index % ORDER
+    box_col = j_index // ORDER
+    sub_col = j_index % ORDER
     value_pair = cell.values
-    for i, row in enumerate(board[box_row*3:box_row*3+3]):
-        for j, sub_cell in enumerate(row[box_col*3:box_col*3+3]):
+    for i, row in enumerate(board[box_row*ORDER:(box_row+1)*ORDER]):
+        for j, sub_cell in enumerate(row[box_col*ORDER:(box_col+1)*ORDER]):
             if not(sub_row == i and sub_col == j) and sub_cell.values == value_pair:
-                for sub_row2, row2 in enumerate(board[box_row * 3:box_row * 3 + 3]):
-                    for sub_col2, cell2 in enumerate(row2[box_col * 3:box_col * 3 + 3]):
+                for sub_row2, row2 in enumerate(board[box_row * ORDER:(box_row+1)*ORDER]):
+                    for sub_col2, cell2 in enumerate(row2[box_col * ORDER:(box_col+1)*ORDER]):
                         if (not (sub_row == i and
                                 sub_col == j and
                                 sub_row2 == sub_row and
@@ -104,9 +103,9 @@ def fill_cells_exclude(board):
             exclude_cell_row(i, j, cell, board)
             exclude_cell_col(i, j, cell, board)
             exclude_cell_box(i, j, cell, board)
-            exclude_cell_pairs_row(i, j, cell, board)
-            exclude_cell_pairs_col(i, j, cell, board)
-            exclude_cell_pairs_box(i, j, cell, board)
+            # exclude_cell_pairs_row(i, j, cell, board)
+            # exclude_cell_pairs_col(i, j, cell, board)
+            # exclude_cell_pairs_box(i, j, cell, board)
 
 
 def include_row(i, board):
@@ -132,8 +131,8 @@ def include_col(j, board):
 def include_box(i, j, board):
     """Apply inclusion rule to box."""
     inclusion_list = {}
-    for box_row, row in enumerate(board[i*3:i*3+3]):
-        for box_col, sub_cell in enumerate(row[j*3:j*3+3]):
+    for box_row, row in enumerate(board[i*ORDER:(i+1)*ORDER]):
+        for box_col, sub_cell in enumerate(row[j*ORDER:(j+1)*ORDER]):
             for value in sub_cell.values:
                 if value not in inclusion_list:
                     inclusion_list[value] = []
@@ -141,7 +140,7 @@ def include_box(i, j, board):
     for num, qty in inclusion_list.items():
         if len(qty) == 1:
             row, col = qty[0]
-            board[i*3+row][j*3+col].values = {num}
+            board[i*ORDER+row][j*ORDER+col].values = {num}
 
 
 def fill_cells_include(board):
@@ -150,8 +149,8 @@ def fill_cells_include(board):
         for j, cell in enumerate(row):
             include_row(i, board)
             include_col(j, board)
-    for i in range(len(board) // 3):
-        for j in range(len(board[i]) // 3):
+    for i in range(len(board) // ORDER):
+        for j in range(len(board[i]) // ORDER):
             include_box(i, j, board)
 
 
@@ -165,7 +164,7 @@ def main():
     board = make_blank_board()
     board = add_filled_cells_from_file(board)
     display_board(board)
-    count = pow(9, 3)
+    count = pow(ORDER, 6)
     post_iter_count = count_choices_left(board)
     count_filled = count_filled_cells(board)
     print('Starting with {} cells filled, {} choices left'
@@ -178,7 +177,7 @@ def main():
         display_board(board)
         print('{} cells filled, {} choices left.'
               .format(count_filled, post_iter_count))
-        print(board[8][8])
+        print(board[-1][-1])
 
 
 if __name__ == '__main__':
