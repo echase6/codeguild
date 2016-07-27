@@ -1,11 +1,15 @@
 from cell import Cell
-from board import *
+from board import make_blank_board, add_filled_cells_from_file
+from board import count_choices_left, count_filled_cells
+from board import ORDER
 
 
 def get_box_char(cells):
-    """Return string representation of one row in a box.
+    r"""Return string representation of one row in a box.
 
-
+    >>> ORDER = 2
+    >>> get_box_char([Cell({'2', '9'}), Cell({'4'})])
+    '. 4'
     """
     output_string = ''
     for cell in cells:
@@ -31,31 +35,77 @@ def display_board(board):
         print(border_string)
 
 
-def exclude_cell_row(i, j, cell, board):
-    """Apply exclusionary rule to cell in row."""
-    row = board[i]
-    for col, sub_cell in enumerate(row):
-        if col != j and len(sub_cell.values) == 1:
-            cell.values = cell.values.difference(sub_cell.values)
-            # print(cell.values, sub_cell.values)
+def exclude_cell_row_col(i, j, cell, board):
+    """Apply exclusionary rule to cell in row.
+
+    >>> board = (
+    ... [[Cell({'1'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'1', '2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],
+    ...  [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
+    >>> exclude_cell_row_col(0, 0, Cell({'1'}), board)
+    >>> board
+    [[Cell({'1'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})], \
+[Cell({'2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})], \
+[Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})], \
+[Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]]
+    """
+
+    if len(cell.values) == 1:
+        for idx in range(ORDER**2):
+            if idx != i:
+                board[idx][j].values = board[idx][j].values.difference(cell.values)
+            if idx != j:
+                # print(idx, i, j, [cell.values], [board[i][idx].values])
+                board[i][idx].values = board[i][idx].values.difference(cell.values)
+
+    # row = board[i]
+    # for col, sub_cell in enumerate(row):
+    #     if col != j and len(cell.values) == 1:
+    #         sub_cell.values = sub_cell.values.difference(cell.values)
+    #         # print(cell.values, sub_cell.values)
 
 
-def exclude_cell_col(i, j, cell, board):
-    """Apply exclusionary rule to cell in column."""
-    board_transpose = [list(x) for x in zip(*board)]
-    exclude_cell_row(j, i, cell, board_transpose)
+# def exclude_cell_col(i, j, cell, board):
+#     """Apply exclusionary rule to cell in column.
+#
+#     >>> board = (
+#     ... [[Cell({'1'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
+#     >>> exclude_cell_row(0, 0, Cell({'1'}), board)
+#     >>> board
+#     [[Cell({'1'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})]
+#     """
+#     board_transpose = [list(x) for x in zip(*board)]
+#     exclude_cell_row(j, i, cell, board_transpose)
 
 
 def exclude_cell_box(i_index, j_index, cell, board):
-    """Apply exclusionary rule to cell in box."""
+    """Apply exclusionary rule to cell in box.
+
+    >>> board = (
+    ... [[Cell({'1'}), Cell({'2', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'1', '2'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],
+    ...  [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
+    >>> exclude_cell_box(0, 0, Cell({'1'}), board)
+    >>> board
+    [[Cell({'1'}), Cell({'2', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],\
+[Cell({'1', '2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})],\
+[Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],\
+[Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
+
+    """
     box_row = i_index // ORDER
     sub_row = i_index % ORDER
     box_col = j_index // ORDER
     sub_col = j_index % ORDER
-    for i, row in enumerate(board[box_row*ORDER:(box_row+1)*ORDER]):
-        for j, sub_cell in enumerate(row[box_col*ORDER:(box_col+1)*ORDER]):
-            if not(i == sub_row and j == sub_col) and len(sub_cell.values) == 1:
-                cell.values = cell.values.difference(sub_cell.values)
+    if len(cell.values) == 1:
+        return
+    for i in range(ORDER):
+        for j in range(ORDER):
+            if not(i == sub_row and j == sub_col):
+                sub_cell = board[box_row * ORDER + i][box_col * ORDER + j]
+                sub_cell.values = sub_cell.values.difference(cell.values)
 
 
 def exclude_cell_pairs_row(i, j, cell, board):
@@ -100,9 +150,9 @@ def fill_cells_exclude(board):
     """Use exclusionary rule to fill cells."""
     for i, row in enumerate(board):
         for j, cell in enumerate(row):
-            exclude_cell_row(i, j, cell, board)
-            exclude_cell_col(i, j, cell, board)
-            exclude_cell_box(i, j, cell, board)
+            exclude_cell_row_col(i, j, cell, board)
+            # exclude_cell_col(i, j, cell, board)
+            # exclude_cell_box(i, j, cell, board)
             # exclude_cell_pairs_row(i, j, cell, board)
             # exclude_cell_pairs_col(i, j, cell, board)
             # exclude_cell_pairs_box(i, j, cell, board)
@@ -157,7 +207,7 @@ def fill_cells_include(board):
 def fill_cells(board):
     """Fill cells."""
     fill_cells_exclude(board)
-    fill_cells_include(board)
+    # fill_cells_include(board)
 
 
 def main():
@@ -169,6 +219,8 @@ def main():
     count_filled = count_filled_cells(board)
     print('Starting with {} cells filled, {} choices left'
           .format(count_filled, post_iter_count))
+    print(board[0][0])
+
     while post_iter_count < count:
         fill_cells(board)
         count = post_iter_count
@@ -177,7 +229,7 @@ def main():
         display_board(board)
         print('{} cells filled, {} choices left.'
               .format(count_filled, post_iter_count))
-        print(board[-1][-1])
+        print(board[0][0])
 
 
 if __name__ == '__main__':

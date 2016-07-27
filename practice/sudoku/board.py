@@ -1,18 +1,18 @@
-from cell import *
+from cell import Cell
 
 
 INITIAL_SET4 = {'0', '1', '2', '3', '4', '5', '6', '7',
                 '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}
-INITIAL_SET3 = {1, 2, 3, 4, 5, 6, 7, 8, 9}
-INITIAL_SET2 = {1, 2, 3, 4}
-ORDER = 4
+INITIAL_SET3 = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
+INITIAL_SET2 = {'1', '2', '3', '4'}
+ORDER = 2
 
 
 def make_blank_board():
     """Create and un-filled board."""
     board = []
     for i in range(ORDER**2):
-        board += [[Cell(INITIAL_SET4) for i in range(ORDER**2)]]
+        board += [[Cell(INITIAL_SET2) for i in range(ORDER**2)]]
     return board
 
 
@@ -25,7 +25,7 @@ def add_filled_cells(board):
 
 def add_filled_cells_from_file(board):
     """Load the filled-in cells from a file."""
-    file = 'sudoku4.txt'
+    file = 'sudoku2.txt'
     with open(file) as f:
         contents = f.readlines()
     for i, line in enumerate(contents):
