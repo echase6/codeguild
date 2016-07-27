@@ -51,32 +51,13 @@ def exclude_cell_row_col(i, j, cell, board):
 [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]]
     """
 
-    if len(cell.values) == 1:
-        for idx in range(ORDER**2):
-            if idx != i:
-                board[idx][j].values = board[idx][j].values.difference(cell.values)
-            if idx != j:
-                # print(idx, i, j, [cell.values], [board[i][idx].values])
-                board[i][idx].values = board[i][idx].values.difference(cell.values)
-
-    # row = board[i]
-    # for col, sub_cell in enumerate(row):
-    #     if col != j and len(cell.values) == 1:
-    #         sub_cell.values = sub_cell.values.difference(cell.values)
-    #         # print(cell.values, sub_cell.values)
-
-
-# def exclude_cell_col(i, j, cell, board):
-#     """Apply exclusionary rule to cell in column.
-#
-#     >>> board = (
-#     ... [[Cell({'1'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
-#     >>> exclude_cell_row(0, 0, Cell({'1'}), board)
-#     >>> board
-#     [[Cell({'1'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})]
-#     """
-#     board_transpose = [list(x) for x in zip(*board)]
-#     exclude_cell_row(j, i, cell, board_transpose)
+    if len(cell.values) != 1:
+        return
+    for idx in range(ORDER**2):
+        if idx != i:
+            board[idx][j].values = board[idx][j].values.difference(cell.values)
+        if idx != j:
+            board[i][idx].values = board[i][idx].values.difference(cell.values)
 
 
 def exclude_cell_box(i_index, j_index, cell, board):
@@ -93,13 +74,12 @@ def exclude_cell_box(i_index, j_index, cell, board):
 [Cell({'1', '2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})],\
 [Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],\
 [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
-
     """
     box_row = i_index // ORDER
     sub_row = i_index % ORDER
     box_col = j_index // ORDER
     sub_col = j_index % ORDER
-    if len(cell.values) == 1:
+    if len(cell.values) != 1:
         return
     for i in range(ORDER):
         for j in range(ORDER):
@@ -108,42 +88,55 @@ def exclude_cell_box(i_index, j_index, cell, board):
                 sub_cell.values = sub_cell.values.difference(cell.values)
 
 
-def exclude_cell_pairs_row(i, j, cell, board):
-    """Apply exclusionary rule if two pairs exist in the row."""
-    if len(cell.values) == 2:
-        row = board[i]
-        value_pair = cell.values
-        for col, sub_cell in enumerate(row):
-            if col != j and sub_cell.values == value_pair:
-                for col2, cell2 in enumerate(row):
-                    if col2 != col and col2 != j:
-                        cell2.values = cell2.values.difference(value_pair)
-
-
-def exclude_cell_pairs_col(i, j, cell, board):
-    """Apply exclusionary rule if two pairs exist in the column."""
-    board_transpose = [list(x) for x in zip(*board)]
-    exclude_cell_pairs_row(j, i, cell, board_transpose)
+def exclude_cell_pairs_row_col(i, j, cell, board):
+    """Apply exclusionary rule if two pairs exist in the row or column."""
+    if len(cell.values) != 2:
+        return
+    for a in range(ORDER**2):
+        if a != i and board[a][j].values == cell.values:
+            for b in range(ORDER**2):
+                if b != a and b != i:
+                    board[b][j].values = board[b][j].values.difference(cell.values)
+                    print('pairs, row')
+        if a != j and board[i][a].values == cell.values:
+            for b in range(ORDER ** 2):
+                if b != a and b!= j:
+                    board[i][b].values = board[i][b].values.difference(cell.values)
+                    print('pairs, col')
 
 
 def exclude_cell_pairs_box(i_index, j_index, cell, board):
     """Apply exclusionary rule if two pairs exist in the box."""
-    box_row = i_index // ORDER
+    if len(cell.values) != 2:
+        return
+    box_row = ORDER * (i_index // ORDER)
     sub_row = i_index % ORDER
-    box_col = j_index // ORDER
+    box_col = ORDER * (j_index // ORDER)
     sub_col = j_index % ORDER
-    value_pair = cell.values
-    for i, row in enumerate(board[box_row*ORDER:(box_row+1)*ORDER]):
-        for j, sub_cell in enumerate(row[box_col*ORDER:(box_col+1)*ORDER]):
-            if not(sub_row == i and sub_col == j) and sub_cell.values == value_pair:
-                for sub_row2, row2 in enumerate(board[box_row * ORDER:(box_row+1)*ORDER]):
-                    for sub_col2, cell2 in enumerate(row2[box_col * ORDER:(box_col+1)*ORDER]):
-                        if (not (sub_row == i and
-                                sub_col == j and
-                                sub_row2 == sub_row and
-                                sub_col2 == sub_col)
-                           and cell2.values == value_pair):
-                                cell2.values = cell2.values.difference(value_pair)
+    for a in range(ORDER):
+        for b in range(ORDER):
+            dup_test = board[box_row + a][box_col + b]
+            if not (a == sub_row or b == sub_col) and dup_test.values == cell.values:
+                for c in range(ORDER):
+                    for d in range(ORDER):
+                        if not (c == box_row and d == box_col) and not (c == a and d == b):
+                            print('pairs, box')
+                            sub_cell = board[box_row + c][box_col + d]
+                            sub_cell.values = sub_cell.values.difference(cell.values)
+
+    #
+    #
+    # for a, row in enumerate(board[box_row*ORDER:(box_row+1)*ORDER]):
+    #     for b, sub_cell in enumerate(row[box_col*ORDER:(box_col+1)*ORDER]):
+    #         if not(sub_row == a and sub_col == b) and sub_cell.values == value_pair:
+    #             for sub_row2, row2 in enumerate(board[box_row * ORDER:(box_row+1)*ORDER]):
+    #                 for sub_col2, cell2 in enumerate(row2[box_col * ORDER:(box_col+1)*ORDER]):
+    #                     if (not (sub_row == a and
+    #                             sub_col == b and
+    #                             sub_row2 == sub_row and
+    #                             sub_col2 == sub_col)
+    #                        and cell2.values == value_pair):
+    #                             cell2.values = cell2.values.difference(value_pair)
 
 
 def fill_cells_exclude(board):
@@ -151,11 +144,9 @@ def fill_cells_exclude(board):
     for i, row in enumerate(board):
         for j, cell in enumerate(row):
             exclude_cell_row_col(i, j, cell, board)
-            # exclude_cell_col(i, j, cell, board)
-            # exclude_cell_box(i, j, cell, board)
-            # exclude_cell_pairs_row(i, j, cell, board)
-            # exclude_cell_pairs_col(i, j, cell, board)
-            # exclude_cell_pairs_box(i, j, cell, board)
+            exclude_cell_box(i, j, cell, board)
+            exclude_cell_pairs_row_col(i, j, cell, board)
+            exclude_cell_pairs_box(i, j, cell, board)
 
 
 def include_row(i, board):
@@ -207,7 +198,7 @@ def fill_cells_include(board):
 def fill_cells(board):
     """Fill cells."""
     fill_cells_exclude(board)
-    # fill_cells_include(board)
+    fill_cells_include(board)
 
 
 def main():
@@ -229,7 +220,7 @@ def main():
         display_board(board)
         print('{} cells filled, {} choices left.'
               .format(count_filled, post_iter_count))
-        print(board[0][0])
+        print(board[-1][-1])
 
 
 if __name__ == '__main__':
