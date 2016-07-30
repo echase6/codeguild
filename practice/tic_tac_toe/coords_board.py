@@ -1,4 +1,10 @@
-"""Implements Tic-Tac-Toe board using three-element tuples."""
+"""Implements Tic-Tac-Toe board using three-element tuples.
+
+Methods:
+    calc_winner(self) returns the token (as a string) if there is a winner.
+      it uses hidden functions _calc_winner_row_col() and _calc_winner_diag()
+    str(self) will return a string for pretty-printing the board.
+"""
 
 TOKENS = ['X', 'O']
 
