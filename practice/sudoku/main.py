@@ -1,3 +1,16 @@
+"""Sudoku solving program.
+
+Will handle 4x4, 9x9 and 16x16 puzzles.
+Puzzle comes from the file referenced in board.py (sudoku_.txt)
+
+Algorithm uses two methods:
+-- Exclusionary:  This eliminates choices based on members in the row, col, box.
+     This currently takes singles and pairs.
+-- Inclusion:  This ascertains what possibilities exist based on missing members
+     the other members of the row, col, box
+"""
+
+
 from cell import Cell
 from board import make_blank_board, add_filled_cells_from_file
 from board import count_choices_left, count_filled_cells
@@ -33,6 +46,32 @@ def display_board(board):
                 line_string += get_box_char(board_row[k:k + ORDER]) + '|'
             print('|' + line_string)
         print(border_string)
+
+
+def row_col_box_contents(i, j, board):
+    """Return lists of cells the referred cell is a member of.
+
+    >>> ORDER = 2
+    >>> board = (
+    ... [[Cell({'1'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'1', '2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    ...  [Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],
+    ...  [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
+    >>> row_col_box_contents(1, 1, board)
+    [[Cell({'1', '2'}), Cell({'3', '4'}), Cell({'3', '4'})],
+    [Cell({'1', '3'}), Cell({'1', '3'}), Cell({'1', '3'})],
+    [Cell({'1'}), Cell({'1', '3'}), Cell({'1', '2'})}}
+    """
+    row_list = [board[idx][j] for idx in range(ORDER**2) if idx != i]
+    col_list = [board[i][idx] for idx in range(ORDER**2) if idx != j]
+    box_row = i // ORDER
+    sub_row = i % ORDER
+    box_col = j // ORDER
+    sub_col = j % ORDER
+    m = sub_col + sub_row * ORDER
+    box_list = ([board[box_col + idx // ORDER][box_row + idx % ORDER]
+                 for idx in range(ORDER**2) if idx != m])
+    return [row_list, col_list, box_list]
 
 
 def exclude_cell_row_col(i, j, cell, board):
