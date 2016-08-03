@@ -5,7 +5,7 @@ INITIAL_SET4 = {'0', '1', '2', '3', '4', '5', '6', '7',
                 '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'}
 INITIAL_SET3 = {'1', '2', '3', '4', '5', '6', '7', '8', '9'}
 INITIAL_SET2 = {'1', '2', '3', '4'}
-ORDER = 3
+ORDER = 2
 
 
 def make_blank_board():
