@@ -1,0 +1,29 @@
+/*     */
+
+li {
+  list-style-type: none;
+}
+
+li:before {
+  content: "\261E";
+  padding-right: 10px;
+}
+
+body {
+  background-color: slategrey;
+  color: orange;
+}
+
+blockquote {
+  font-family: arial;
+}
+
+.photo {
+  border: 2px solid;
+  border-radius: 25px;
+}
+
+.link {
+  color: purple;
+  font-family: arial;
+}
