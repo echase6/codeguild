@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Food Preferences</title>
+</head>
+<body>
+    <header>
+        <h1>Food Preferences</h1>
+    </header>
+    <form>
+      <div>
+        <label>You had this for dinner: <input type="text" name="dinner"></label>
+      </div>
+      <div>
+        <fieldset>
+          <legend>Basics</legend>
+          <label>
+            <input type="checkbox" name="basics" value="meat">
+            Meat
+          </label>
+          <label>
+            <input type="checkbox" name="basics" value="potatoes">
+            Potatoes
+          </label>
+          <label>
+            <input type="checkbox" name="basics" value="broccoli">
+            Brocolli
+          </label>
+          <label>
+            <input type="checkbox" name="basics" value="cheese">
+            Cheese
+          </label>
+        </fieldset>
+      </div>
+      <div>
+        <fieldset>
+          <legend>Meat?</legend>
+          <label>
+            <input type="radio" name="vegan" value="vegetarian">
+            Vegan
+          </label>
+          <label>
+            <input type="radio" name="vegan" value="carnivor">
+            Non-vegan
+          </label>
+        </fieldset>
+      </div>
+      <div>
+        <fieldset>
+          <legend>Ice Cream Flavor</legend>
+          <select name="flavor">
+            <option value="Vanilla" selected>Vanilla</option>
+            <option value="Vanilla bean">Vanilla bean</option>
+            <option value="French vanilla">French vanilla</option>
+          </select>
+        </fieldset>
+      </div>
+      <div>
+        <legend>Your most memorable dinner</legend>
+        <textarea name="comments">tell us about it...</textarea>
+      </div>
+      <div>
+        <legend>Are you hungry?</legend>
+        <button type="button">
+          Press if hungry.
+        </button>
+      </div>
+      <div>
+        <legend>Submit Form</legend>
+        <input type="submit" name="submit" value="send">
+      </div>
+    </form>
+    <form>
+      <legend>Favorite Chopsticks image</legend>
+      <input type="file" name="pic_chopsticks" accept="imge/*">
+      <input type="submit">
+    </form>
+</body>
+</html>
