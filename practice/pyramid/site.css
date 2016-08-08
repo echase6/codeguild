@@ -31,12 +31,8 @@
 }
 
 .third-row-item {
-  flex: 1;
   margin: 10px;
-  flex-basis: 90px;
-  flex-grow: 0;
-  flex-shrink: 0;
   height: 78px;
-  /*width: 90px;*/
+  width: 90px;
   border: 1px solid black;
 }
