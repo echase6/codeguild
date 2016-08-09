@@ -1,0 +1,24 @@
+
+body {
+  display: flex;
+}
+
+nav {
+    flex: 1;
+}
+
+article {
+    flex: 4;
+}
+
+img {
+    width: 100%;
+}
+
+.third {
+    display: flex;
+}
+
+.third p {
+  flex: 1
+}
