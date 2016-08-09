@@ -3,35 +3,33 @@
   display: flex;
   border: 1px solid black;
   margin: 20px;
+  padding: 5px;
   justify-content: space-between;
 }
 
 .first-row-item {
   flex: 1;
-  margin: 10px;
+  margin: 5px;
   height: 78px;
   border: 1px solid black;
 }
 
 .second-row-item1 {
   flex: 4;
-  margin: 10px;
+  margin: 5px;
   height: 78px;
   border: 1px solid black;
 }
 
 .second-row-item2 {
   flex: 1;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  margin-left: 0;
-  margin-right: 10px;
+  margin: 5px;
   height: 78px;
   border: 1px solid black;
 }
 
 .third-row-item {
-  margin: 10px;
+  margin: 5px;
   height: 78px;
   width: 90px;
   border: 1px solid black;
