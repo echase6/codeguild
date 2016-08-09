@@ -53,5 +53,4 @@ textCompleter.selectCompletion('dolly');
 
 
 var matches = textCompleter.complete('dol');
-
 console.dir(matches);
