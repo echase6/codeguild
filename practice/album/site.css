@@ -1,0 +1,24 @@
+section > div {
+  display: flex;
+  width: 100%;
+  flex-wrap: wrap;
+}
+
+div > div {
+  display: flex;
+  /*width: 300px;*/
+  flex-direction: column;
+}
+
+div > img {
+  /*flex: 1;*/
+  height: 300px;
+  width: 300px;
+}
+
+a, button {
+  /*display: flex;*/
+  /*flex: 1;*/
+  width: 100px;
+  flex-direction: rtl;
+}
