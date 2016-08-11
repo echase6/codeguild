@@ -5,12 +5,8 @@ section > form {
 }
 
 form > div {
-  /*width: 200px;*/
-  padding: 2px;
   margin: 10px;
   display: flex;
-  flex-direction: row;
-  /*height: 20px;*/
 }
 
 .visible-warning {
@@ -19,24 +15,20 @@ form > div {
 
 h3 {
   height: 20px;
-  width: 25%;
-  padding:inherit;
-  margin:inherit;
+  flex: 2;
 }
 
 div > input {
   flex: 4;
-  /*width: 50px;*/
-  /*text-align: center;*/
   height: 20px;
-  margin-left: 50px;
   margin: 10px;
+  margin-left: 50px;
 }
 
 p {
-  flex: 4;
+  flex: 2;
   visibility: hidden;
-  color: red;
+  color: #cccc00;
   padding-left: 10px;
   height: 20px;
   margin: 10px;
@@ -48,4 +40,12 @@ form > input {
 
 .invalid {
   background-color: yellow;
+}
+
+.successful {
+  color: green;
+}
+
+.unsuccessful {
+  color: red;
 }

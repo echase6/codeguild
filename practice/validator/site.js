@@ -48,7 +48,7 @@ function runValidator(entryItem, regExp) {
 }
 
 /**
- * Main name validator, for the name entry on the form.
+ * Main Name validator, for the name entry on the form.
  */
 function runNameValidator() {
   var nameEntryItem = $('#name-input');
@@ -73,6 +73,56 @@ function runPhoneValidator() {
   var phoneRegExp = /^\d{0,3}$|^\d{3}-\d{0,3}$|^\d{3}-\d{3}-\d{0,4}$/;
   runValidator(phoneEntryItem, phoneRegExp);
 }
+
+/**
+ * runFinalNameChecker() checks to see if the entered name is valid.
+ * Returns boolean, true if name is valid.
+ */
+function runFinalNameChecker() {
+  var nameEntryItem = $('#name-input');
+  var nameRegExp = /^[a-z]+\s[a-z]+$/i;
+  var nameString = getFieldEntry(nameEntryItem);
+  return nameRegExp.test(nameString);
+}
+
+/**
+ * runFinalDobChecker() checks to see if the entered date is valid.
+ * Returns boolean, true if DoB is valid.
+ */
+function runFinalDobChecker() {
+  var dobEntryItem = $('#dob-input');
+  var dobRegExp = /^\d{4}-\d{2}-\d{2}$/;
+  var dobString = getFieldEntry(dobEntryItem);
+  return dobRegExp.test(dobString);
+}
+
+/**
+ * runFinalPhoneChecker() checks to see if the entered phone # is valid.
+ * Returns boolean, true if phone number is valid.
+ */
+function runFinalPhoneChecker() {
+  var phoneEntryItem = $('#phone-input');
+  var phoneRegExp = /^\d{3}-\d{3}-\d{4}$/;
+  var phoneString = getFieldEntry(phoneEntryItem);
+  return phoneRegExp.test(phoneString);
+}
+
+/**
+ * runFinalFormValidator() checks all entries in the form and displays
+ *   the appropriate banner.
+ */
+function runFinalFormValidator() {
+  if (runFinalNameChecker() &
+      runFinalDobChecker() &
+      runFinalPhoneChecker()) {
+    $('h2').text('Successful form submission!');
+    $('h2').attr('class', 'successful');
+  } else {
+    $('h2').text('Unsuccessful form submission!');
+    $('h2').attr('class', 'unsuccessful');
+  }
+}
+
 /**
  * Event Handler registrator.
  */
@@ -80,6 +130,10 @@ function registerEventHandlers() {
   $('#name-input').on('keyup', runNameValidator);
   $('#dob-input').on('keyup', runDobValidator);
   $('#phone-input').on('keyup', runPhoneValidator);
+  $('form').on('submit', function(event) {
+    event.preventDefault();
+    runFinalFormValidator();
+  });
 }
 
 $(document).ready(registerEventHandlers);
