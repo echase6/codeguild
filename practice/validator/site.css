@@ -1,3 +1,51 @@
+
+section > form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > div {
+  /*width: 200px;*/
+  padding: 2px;
+  margin: 10px;
+  display: flex;
+  flex-direction: row;
+  /*height: 20px;*/
+}
+
+.visible-warning {
+  visibility: visible;
+}
+
+h3 {
+  height: 20px;
+  width: 25%;
+  padding:inherit;
+  margin:inherit;
+}
+
+div > input {
+  flex: 4;
+  /*width: 50px;*/
+  /*text-align: center;*/
+  height: 20px;
+  margin-left: 50px;
+  margin: 10px;
+}
+
+p {
+  flex: 4;
+  visibility: hidden;
+  color: red;
+  padding-left: 10px;
+  height: 20px;
+  margin: 10px;
+}
+
+form > input {
+  width: 100px;
+}
+
 .invalid {
   background-color: yellow;
 }

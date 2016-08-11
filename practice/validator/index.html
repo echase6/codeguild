@@ -10,16 +10,24 @@
     </header>
     <section>
       <form id="form-submit">
-        Name
-        <input id="name-input" type="text" name="full-name">
-        Date Of Birth
-        <input id="dob-input" type="text" name="date-of-birth">
-        Phone Number
-        <input id="phone-input" type="text" name="phone-number">
+        <div>
+          <h3>Name:</h3>
+          <input id="name-input" type="text" name="full-name" placeholder="John Doe">
+          <p>Invalid Entry</p>
+        </div>
+        <div>
+          <h3>Date of Birth:</h3>
+          <input id="dob-input" type="text" name="date-of-birth" placeholder="YYYY-MM-DD">
+          <p>Invalid Entry</p>
+        </div>
+        <div>
+          <h3>Phone Number:</h3>
+          <input id="phone-input" type="text" name="phone-number" placeholder="555-55-5555">
+          <p>Invalid Entry</p>
+        </div>
         <input type="submit">
       </form>
     </section>
-    <script src="http://cdn.jsdelivr.net/lodash/4.11.2/lodash.js"></script>
     <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
     <link rel="stylesheet" href="site.css">
     <script src="site.js"></script>

@@ -19,16 +19,31 @@ function getFieldEntry(entryItem) {
 }
 
 /**
+ * displayInvalid() highlights the input box and un-hides the warning message.
+ */
+function displayInvalid(entryItem) {
+  entryItem.addClass('invalid');
+  $(entryItem).next().addClass('visible-warning');
+}
+
+/**
+* displayValid() un-highlights the input box and hides the warning message.
+ */
+function displayValid(entryItem) {
+  entryItem.removeClass();
+  $(entryItem).next().removeClass();
+}
+/**
  * Check whether the input string is a match and changes class to invalid if not
  * @param  {jQuery selector} entryItem The selector on the form for an input
  * @param  {reg exp} regExp            Regular expression to test the match
  */
 function runValidator(entryItem, regExp) {
   var entryString = getFieldEntry(entryItem);
-  if(!stringValidator(entryString, regExp)) {
-    entryItem.addClass('invalid');
+  if(stringValidator(entryString, regExp)) {
+    displayValid(entryItem);
   } else {
-    entryItem.removeClass();
+    displayInvalid(entryItem);
   }
 }
 
