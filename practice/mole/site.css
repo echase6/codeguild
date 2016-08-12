@@ -10,11 +10,9 @@ body {
 
 .row div {
   flex: 1;
-  /*height: 50px;*/
   border: 1px solid black;
 }
 
 input {
   height: 100px;
-  /*width: 100px;*/
 }

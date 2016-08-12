@@ -14,16 +14,14 @@ function createDivGrid() {
 }
 
 
-function getRandomInt(min, max) {
-  min = Math.ceil(min);
-  max = Math.floor(max);
-  return Math.floor(Math.random() * (max - min)) + min;
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
 }
 
 
 function setRandomMole() {
-  var i = getRandomInt(0, 5);
-  var j = getRandomInt(0, 4);
+  var i = getRandomInt(5);
+  var j = getRandomInt(4);
   var itemContainer = $('#' + i + j + ' > input');
   itemContainer.attr('src', './mole.jpg');
 }
@@ -32,6 +30,9 @@ function registerEventHandlers() {
   $('#form-submit').on('submit', function(event) {
     event.preventDefault();
     createDivGrid();
+  });
+  $('input').click(function() {
+    $(this).attr('src', './hole.jpg');
   });
 }
 
@@ -42,5 +43,9 @@ function myCallback() {
 var intervalID = window.setInterval(myCallback, 1000);
 
 createDivGrid();
+
+// $('input').click(function() {
+//   $(this).attr('src', './hole.jpg')
+// })
 
 $(document).ready(registerEventHandlers);
