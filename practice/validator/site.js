@@ -37,18 +37,23 @@ function displayValid(entryItem) {
  * Check whether the input string is a match and changes class to invalid if not
  * @param  {jQuery selector} entryItem The selector on the form for an input
  * @param  {reg exp} regExp            Regular expression to test the match
+ *         Return true if there is a match, false otherwise.
  */
 function runValidator(entryItem, regExp) {
   var entryString = getFieldEntry(entryItem);
   if(stringValidator(entryString, regExp)) {
     displayValid(entryItem);
+    return true;
   } else {
     displayInvalid(entryItem);
+    return false;
   }
 }
 
 /**
  * Main Name validator, for the name entry on the form.
+ *
+ * Matches only for strings that are correctly typed up to the last character.
  */
 function runNameValidator() {
   var nameEntryItem = $('#name-input');
@@ -58,6 +63,8 @@ function runNameValidator() {
 
 /**
  * Main Date of Birth validator, for the DoB entry on the form.
+ *
+ * Matches only for strings that are correctly typed up to the last character.
  */
 function runDobValidator() {
   var dobEntryItem = $('#dob-input');
@@ -67,6 +74,8 @@ function runDobValidator() {
 
 /**
  * Main Phone number validator, for the Phone Num entry on the form.
+ *
+ * Matches only for strings that are correctly typed up to the last character.
  */
 function runPhoneValidator() {
   var phoneEntryItem = $('#phone-input');
@@ -76,35 +85,36 @@ function runPhoneValidator() {
 
 /**
  * runFinalNameChecker() checks to see if the entered name is valid.
- * Returns boolean, true if name is valid.
+ *
+ * Returns boolean, true if entire name is valid.
  */
 function runFinalNameChecker() {
   var nameEntryItem = $('#name-input');
   var nameRegExp = /^[a-z]+\s[a-z]+$/i;
-  var nameString = getFieldEntry(nameEntryItem);
-  return nameRegExp.test(nameString);
+  return runValidator(nameEntryItem, nameRegExp);
+
 }
 
 /**
  * runFinalDobChecker() checks to see if the entered date is valid.
- * Returns boolean, true if DoB is valid.
+ *
+ * Returns boolean, true if entire DoB is valid.
  */
 function runFinalDobChecker() {
   var dobEntryItem = $('#dob-input');
   var dobRegExp = /^\d{4}-\d{2}-\d{2}$/;
-  var dobString = getFieldEntry(dobEntryItem);
-  return dobRegExp.test(dobString);
+  return runValidator(dobEntryItem, dobRegExp);
 }
 
 /**
  * runFinalPhoneChecker() checks to see if the entered phone # is valid.
- * Returns boolean, true if phone number is valid.
+ *
+ * Returns boolean, true if entire phone number is valid.
  */
 function runFinalPhoneChecker() {
   var phoneEntryItem = $('#phone-input');
   var phoneRegExp = /^\d{3}-\d{3}-\d{4}$/;
-  var phoneString = getFieldEntry(phoneEntryItem);
-  return phoneRegExp.test(phoneString);
+  return runValidator(phoneEntryItem, phoneRegExp);
 }
 
 /**
