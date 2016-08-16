@@ -1,6 +1,8 @@
 'use strict';
 
 var MS_IN_WK = 1000 * 60 * 60 * 24 * 7;
+var DOT_SCALE = 50000;  /// Good number is 50000
+var DOT_COLOR = '200, 128, 128';  ///'R, G, B'
 
 if (!window.ol) {
   var ol;
@@ -26,7 +28,6 @@ function createMap() {
   var mapBackground = new ol.layer.Tile({
     source: new ol.source.OSM()
   });
-
   var map = new ol.Map({
     layers: [mapBackground],
     target: 'map',
@@ -44,26 +45,11 @@ function createMap() {
 }
 
 /**
- * Creates the Icon Layer, from the collection of icons.
- * @param  {[o.Collection]} iconCollection [the collection of icons]
- * @return {[ol.layer]}     the layer to be added to the map.
- */
-function createIconLayer(iconCollection) {
-  var vectorSource = new ol.source.Vector({
-    features: iconCollection
-  });
-  var earthquakeLayer = new ol.layer.Vector({
-    source: vectorSource
-  });
-  return vectorSource, earthquakeLayer;
-}
-
-/**
  * Function to parse the JSON file and gather location, mag, and time/date
  * @param  {[JSON]} json [the data from the earthquake reporting service]
- * @return {[array]}      [array of arrays: [long, lat, mag, date]]
+ * @return {[array]}      [array of arrays: [long, lat, mag, UTC]]
  */
-function getEarthquakeData(json) {
+function scrapeEarthquakeData(json) {
   var data = _.map(json.features, function(feature) {
     return [feature.geometry.coordinates[0],
             feature.geometry.coordinates[1],
@@ -71,13 +57,12 @@ function getEarthquakeData(json) {
             feature.properties.time
           ];
   });
-  // console.log(data);
   return data;
 }
 
 /**
  * Function to create a collection of Icons.
- * @param {[array]} data [array of arrays:  [long, lat, mag, date]]
+ * @param {[array]} data [array of arrays:  [long, lat, mag, UTC]]
  */
 function addIcons(data) {
   var nowTime = Date.now();
@@ -85,12 +70,12 @@ function addIcons(data) {
   _.forEach(data, function(item) {
     var circle = new ol.geom.Circle(
                   ol.proj.fromLonLat([item[0], item[1]]),
-                  50000 * item[2],
+                  DOT_SCALE * item[2],
                   'XY'
                 );
     var circleFeature = new ol.Feature(circle);
-    var opacity = 1.0 - (nowTime - item[3]) / MS_IN_WK;
-    var colorString = 'rgba(128, 128, 128, ' + opacity + ' )';
+    var opacity = 1.0 - (nowTime - item[3]) / MS_IN_WK;  /// newer = opaquer
+    var colorString = 'rgba(' + DOT_COLOR + ',' + opacity + ' )';
     circleFeature.setStyle(new ol.style.Style({
       fill: new ol.style.Fill({color: colorString})
     }));
@@ -100,9 +85,20 @@ function addIcons(data) {
 }
 
 /**
+ * Creates the Icon Layer, from the collection of icons.
+ * @param  {[o.Collection]} iconCollection [the collection of icons]
+ * @return {[ol.layer]}     the layer to be added to the map.
+ */
+function createIconLayer(iconCollection) {
+  var vectorSource = new ol.source.Vector({features: iconCollection});
+  var earthquakeLayer = new ol.layer.Vector({source: vectorSource});
+  return earthquakeLayer;
+}
+
+/**
  * Display the earthquakes on the map by adding the Icon layer to it.
  * @param  {[ol.Map]} map  [The displayed map element; edits in-place]
- * @param  {[array]} data [array of arrays [long, lat, mag, date]]
+ * @param  {[array]} data [array of arrays [long, lat, mag, UTC]]
  */
 function displayEarthquakes(map, data) {
   var iconCollection = addIcons(data);
@@ -117,7 +113,7 @@ function displayEarthquakes(map, data) {
 function runDisplayEarthquakes(map) {
   getEarthquakeJSON().
     then(function(earthquakeJSON) {
-      var earthquakeData = getEarthquakeData(earthquakeJSON);
+      var earthquakeData = scrapeEarthquakeData(earthquakeJSON);
       displayEarthquakes(map, earthquakeData);
     }
   );

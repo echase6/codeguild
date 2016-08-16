@@ -7,6 +7,7 @@ a.skiplink {
   width: 1px;
   overflow: hidden;
 }
+
 a.skiplink:focus {
   clip: auto;
   height: auto;
@@ -14,6 +15,7 @@ a.skiplink:focus {
   background-color: #fff;
   padding: 0.3em;
 }
+
 #map:focus {
-  outline: #4A74A8 solid 0.15em;
+  outline: #4a74a8 solid 0.15em;
 }
