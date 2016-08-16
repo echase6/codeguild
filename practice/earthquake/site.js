@@ -1,6 +1,8 @@
 'use strict';
 
-if (!ol) {
+var MS_IN_WK = 1000 * 60 * 60 * 24 * 7;
+
+if (!window.ol) {
   var ol;
 }
 
@@ -65,8 +67,11 @@ function getEarthquakeData(json) {
   var data = _.map(json.features, function(feature) {
     return [feature.geometry.coordinates[0],
             feature.geometry.coordinates[1],
-            feature.properties.mag];
+            feature.properties.mag,
+            feature.properties.time
+          ];
   });
+  // console.log(data);
   return data;
 }
 
@@ -75,14 +80,21 @@ function getEarthquakeData(json) {
  * @param {[array]} data [array of arrays:  [long, lat, mag, date]]
  */
 function addIcons(data) {
+  var nowTime = Date.now();
   var iconCollection = new ol.Collection();
   _.forEach(data, function(item) {
     var circle = new ol.geom.Circle(
                   ol.proj.fromLonLat([item[0], item[1]]),
-                  20000 * item[2],
+                  50000 * item[2],
                   'XY'
                 );
-    iconCollection.push(new ol.Feature(circle));
+    var circleFeature = new ol.Feature(circle);
+    var opacity = 1.0 - (nowTime - item[3]) / MS_IN_WK;
+    var colorString = 'rgba(128, 128, 128, ' + opacity + ' )';
+    circleFeature.setStyle(new ol.style.Style({
+      fill: new ol.style.Fill({color: colorString})
+    }));
+    iconCollection.push(circleFeature);
   });
   return iconCollection;
 }
