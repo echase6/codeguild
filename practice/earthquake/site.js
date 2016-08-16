@@ -41,7 +41,20 @@ function createMap() {
       zoom: 2
     })
   });
+  $('#map').data('map', map);
   return map;
+}
+
+/**
+ * [createSource description]
+ * @param  {[type]} map [description]
+ * @return {[type]}     [description]
+ */
+function createSource(map) {
+  var vectorSource = new ol.source.Vector();
+  var earthquakeLayer = new ol.layer.Vector({source: vectorSource});
+  map.addLayer(earthquakeLayer);
+  return vectorSource;
 }
 
 /**
@@ -85,38 +98,36 @@ function addIcons(data) {
 }
 
 /**
- * Creates the Icon Layer, from the collection of icons.
- * @param  {[o.Collection]} iconCollection [the collection of icons]
- * @return {[ol.layer]}     the layer to be added to the map.
- */
-function createIconLayer(iconCollection) {
-  var vectorSource = new ol.source.Vector({features: iconCollection});
-  var earthquakeLayer = new ol.layer.Vector({source: vectorSource});
-  return earthquakeLayer;
-}
-
-/**
- * Display the earthquakes on the map by adding the Icon layer to it.
- * @param  {[ol.Map]} map  [The displayed map element; edits in-place]
+ * Display the earthquakes on the map by its features.
+ * @param  {[ol.Source]}   [The vector source element]
  * @param  {[array]} data [array of arrays [long, lat, mag, UTC]]
  */
-function displayEarthquakes(map, data) {
+function displayEarthquakes(source, data) {
   var iconCollection = addIcons(data);
-  var iconLayer = createIconLayer(iconCollection);
-  map.addLayer(iconLayer);
+  source.clear();
+  source.addFeatures(iconCollection.getArray());
 }
 
 /**
  * Overall function that gathers data and displays earthquake icons.
  * @param  {[ol.Map]} map [Displayed map element]
  */
-function runDisplayEarthquakes(map) {
+function runDisplayEarthquakes(source) {
   getEarthquakeJSON().
     then(function(earthquakeJSON) {
       var earthquakeData = scrapeEarthquakeData(earthquakeJSON);
-      displayEarthquakes(map, earthquakeData);
+      displayEarthquakes(source, earthquakeData);
     }
   );
+}
+
+/**
+ * [The call-back function that updates the already existing map.]
+*/
+function updateMap() {
+  var map = $('#map').data('map');
+  var source = map.getLayers().getArray()[1].getSource();
+  runDisplayEarthquakes(source);
 }
 
 /**
@@ -135,6 +146,7 @@ function registerMapEventHandlers(map) {
     var zoom = view.getZoom();
     view.setZoom(zoom + 1);
   };
+  var intervalID = window.setInterval(updateMap, 10000);
 }
 
 /**
@@ -142,8 +154,9 @@ function registerMapEventHandlers(map) {
  */
 function runInitPage() {
   var map = createMap();
+  var source = createSource(map);
   registerMapEventHandlers(map);
-  runDisplayEarthquakes(map);
+  runDisplayEarthquakes(source);
 }
 
 
