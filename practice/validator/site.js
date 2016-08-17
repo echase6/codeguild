@@ -23,7 +23,9 @@ function getFieldEntry(entryItem) {
  */
 function displayInvalid(entryItem) {
   entryItem.addClass('invalid');
-  $(entryItem).next().addClass('visible-warning');
+  var warningItem = $(entryItem).parents('p').children('.warningTag');
+  warningItem.removeClass('invisible-warning');
+  warningItem.addClass('visible-warning');
 }
 
 /**
@@ -31,7 +33,9 @@ function displayInvalid(entryItem) {
  */
 function displayValid(entryItem) {
   entryItem.removeClass();
-  $(entryItem).next().removeClass();
+  var warningItem = $(entryItem).parents('p').children('.warningTag');
+  warningItem.removeClass('visible-warning');
+  warningItem.addClass('invisible-warning');
 }
 /**
  * Check whether the input string is a match and changes class to invalid if not

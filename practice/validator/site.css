@@ -4,30 +4,26 @@ section > form {
   flex-direction: column;
 }
 
-form > div {
+form > p {
   margin: 10px;
   display: flex;
 }
 
-.visible-warning {
-  visibility: visible;
-}
-
-h3 {
-  height: 20px;
+label {
   flex: 2;
+  height: 20px;
+  padding-right: 10px;
 }
 
-div > input {
+p > input {
   flex: 4;
   height: 20px;
   margin: 10px;
   margin-left: 50px;
 }
 
-p {
+.warningTag {
   flex: 2;
-  visibility: hidden;
   color: #cccc00;
   padding-left: 10px;
   height: 20px;
@@ -36,6 +32,14 @@ p {
 
 form > input {
   width: 100px;
+}
+
+.visible-warning {
+  visibility: visible;
+}
+
+.invisible-warning {
+  visibility: hidden;
 }
 
 .invalid {
