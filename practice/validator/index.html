@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Input Validator</title>
+  </head>
+  <body>
+    <header>
+      <h1>Sign-Up Form</h1>
+    </header>
+    <section>
+      <h2></h2>
+      <form id="form-submit">
+        <p>
+          <label>Name:
+          <input id="name-input" type="text" name="full-name" placeholder="John Doe">
+        </label>
+        <label class="warningTag invisible-warning">
+          Invalid Entry
+        </label>
+      </p>
+        <p>
+          <label>Date of Birth:
+          <input id="dob-input" type="text" name="date-of-birth" placeholder="YYYY-MM-DD">
+        </label>
+        <label class="warningTag invisible-warning">
+          Invalid Entry
+        </label>
+      </p>
+        <p>
+          <label>Phone Number:
+          <input id="phone-input" type="text" name="phone-number" placeholder="555-55-5555">
+        </label>
+        <label class="warningTag invisible-warning">
+          Invalid Entry
+        </label>
+      </p>
+        <input type="submit">
+      </form>
+    </section>
+    <script src="http://code.jquery.com/jquery-2.2.3.js"></script>
+    <link rel="stylesheet" href="site.css">
+    <script src="site.js"></script>
+  </body>
+</html>

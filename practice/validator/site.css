@@ -1,0 +1,55 @@
+
+section > form {
+  display: flex;
+  flex-direction: column;
+}
+
+form > p {
+  margin: 10px;
+  display: flex;
+}
+
+label {
+  flex: 2;
+  height: 20px;
+  padding-right: 10px;
+}
+
+p > input {
+  flex: 4;
+  height: 20px;
+  margin: 10px;
+  margin-left: 50px;
+}
+
+.warningTag {
+  flex: 2;
+  color: #cccc00;
+  padding-left: 10px;
+  height: 20px;
+  margin: 10px;
+}
+
+form > input {
+  width: 100px;
+}
+
+.visible-warning {
+  visibility: visible;
+}
+
+.invisible-warning {
+  visibility: hidden;
+}
+
+.invalid {
+  background-color: yellow;
+}
+
+.successful {
+  color: green;
+}
+
+.unsuccessful {
+  color: red;
+}
