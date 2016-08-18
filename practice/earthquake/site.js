@@ -87,15 +87,17 @@ function scrapeEarthquakeData(json) {
  * @param  {array} data    Array holding [lon, lat, mag, time]
  * @return {ol.Feature}    The circle feature to be added to the collection.
  */
-function createDot(data) {
+function createDot(feature) {
   var nowTime = Date.now();
   var circle = new ol.geom.Circle(
-                ol.proj.fromLonLat([data[0], data[1]]),
-                DOT_SCALE * data[2],
+                ol.proj.fromLonLat([feature.geometry.coordinates[0],
+                                    feature.geometry.coordinates[1]]),
+                DOT_SCALE * feature.properties.mag,
                 'XY'
               );
   var circleFeature = new ol.Feature(circle);
-  var opacity = 1.0 - (nowTime - data[3]) / MS_IN_WK;  /// newer = opaquer
+  var utcTime = feature.properties.time;
+  var opacity = 1.0 - (nowTime - utcTime) / MS_IN_WK;  /// newer = opaquer
   var colorString = 'rgba(' + DOT_COLOR + ',' + opacity + ' )';
   circleFeature.setStyle(new ol.style.Style({
     fill: new ol.style.Fill({color: colorString})
@@ -110,7 +112,7 @@ function createDot(data) {
  */
 function addIcons(data) {
   var iconCollection = new ol.Collection();
-  _.forEach(data, function(item) {
+  _.forEach(data.features, function(item) {
     var circleFeature = createDot(item);
     iconCollection.push(circleFeature);
   });
@@ -137,8 +139,8 @@ function displayEarthquakes(source, data) {
 function runDisplayEarthquakes(source) {
   getEarthquakeJSON().
     then(function(earthquakeJSON) {
-      var earthquakeData = scrapeEarthquakeData(earthquakeJSON);
-      displayEarthquakes(source, earthquakeData);
+      // var earthquakeData = scrapeEarthquakeData(earthquakeJSON);
+      displayEarthquakes(source, earthquakeJSON);
     }
   );
 }
