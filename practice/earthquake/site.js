@@ -60,31 +60,12 @@ function createSource(map) {
   return vectorSource;
 }
 
-/**
- * Function to parse the JSON file and gather location, mag, and time/Date
- *   Filters out data with null values.
- * @param  {[JSON]}   The data from the earthquake reporting service
- * @return {[array]}  Array of arrays: [long, lat, mag, UTC]
- */
-function scrapeEarthquakeData(json) {
-  var data = _.map(json.features, function(feature) {
-    return [feature.geometry.coordinates[0],
-            feature.geometry.coordinates[1],
-            feature.properties.mag,
-            feature.properties.time
-          ];
-  });
-  data = _.filter(data, function(feature) {
-    return _.every(feature, function(item) {return item !== null;});
-  });
-  return data;
-}
 
 /**
  * Create an indiviual filled circle
  *    Radius is a function of the earthquake magnitude, larger = bigger.
  *    Opacity is a function of the age; new = more opaque.
- * @param  {array} data    Array holding [lon, lat, mag, time]
+ * @param  {JSON feaure}
  * @return {ol.Feature}    The circle feature to be added to the collection.
  */
 function createDot(feature) {
@@ -107,12 +88,12 @@ function createDot(feature) {
 
 /**
  * Function to create a collection of Icons.
- * @param {[array]}         Array of arrays:  [long, lat, mag, UTC]]
+ * @param {JSON}            JSON file holding the earthquake data.
  * @return {ol.Collection}  The collection element to be added to the source.
  */
-function addIcons(data) {
+function addIcons(json) {
   var iconCollection = new ol.Collection();
-  _.forEach(data.features, function(item) {
+  _.forEach(json.features, function(item) {
     var circleFeature = createDot(item);
     iconCollection.push(circleFeature);
   });
@@ -123,10 +104,10 @@ function addIcons(data) {
  * Display the earthquakes on the map by its features.
  *   Clear it first in case this is called as an update.
  * @param  {[ol.Source]}  The vector source element
- * @param  {[array]}      Array of arrays [long, lat, mag, UTC]
+ * @param  {json}         JSON file holding the earthquake data.
  */
-function displayEarthquakes(source, data) {
-  var iconCollection = addIcons(data);
+function displayEarthquakes(source, json) {
+  var iconCollection = addIcons(json);
   source.clear();
   source.addFeatures(iconCollection.getArray());
 }
@@ -139,7 +120,6 @@ function displayEarthquakes(source, data) {
 function runDisplayEarthquakes(source) {
   getEarthquakeJSON().
     then(function(earthquakeJSON) {
-      // var earthquakeData = scrapeEarthquakeData(earthquakeJSON);
       displayEarthquakes(source, earthquakeJSON);
     }
   );
