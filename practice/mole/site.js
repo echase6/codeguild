@@ -1,7 +1,9 @@
 'use strict';
 
 var score = 0;
-
+/**
+ * Creates a grid of holes, along with class tags.
+ */
 function createDivGrid() {
   var container = $('div');
   for (var i = 0; i < 5; i += 1) {
@@ -15,16 +17,28 @@ function createDivGrid() {
   }
 }
 
+/**
+ * Checks is all locations are filled with moles.
+ * @return {boolean} True if all filled.
+ */
 function checkAllFilled() {
   var inputIds = $('input');
-  return _.every(_.map(inputIds, function(e) {return $(e).attr('src') === './media/mole.jpg';}));
+  return _.every(_.map(inputIds, function(e) {
+    return $(e).attr('src') === './media/mole.jpg';
+  }));
 }
 
+/**
+ * Get and return a random integer.
+ */
 function getRandomInt(max) {
   return Math.floor(Math.random() * max);
 }
 
-
+/**
+ * Put a mole in a random location.
+ *   It seeks empty locations.  If all are filled, it silently ends.
+ */
 function setRandomMole() {
   var i = getRandomInt(5);
   var j = getRandomInt(4);
@@ -40,10 +54,10 @@ function setRandomMole() {
   moleAudioTag.play();
 }
 
-function updateScore() {
-}
-
-
+/**
+ * Callback routine for adding a mole.  If all are filled, it clears
+ *   the timing interval, although this is not permanent.
+ */
 function myCallback() {
   var that = this;
   if (checkAllFilled()) {
@@ -53,7 +67,11 @@ function myCallback() {
   }
 }
 
-
+/**
+ * Master interval, for decreasing the mole-placement interval.
+ *   Currently not working so it is not being called.
+ * @param  {integer} intervalID The interval to decrease the interval.
+ */
 function speedUp(intervalID) {
   // var moleIntervalMs = 1000;
   var that = this;
@@ -66,31 +84,57 @@ function speedUp(intervalID) {
   }
 }
 
-function registerEventHandlers() {
-  // var intervalID = window.setInterval(myCallback, 1000);
+/**
+ * Do this if mole is hit:
+ *   change image to hole
+ *   play a successful hit .mp3
+ *   increase the score
+ * @param  {holeTag} The tag of the sucessful hit.
+ */
+function toDoIfHit(holeTag) {
+  $(holeTag).attr('src', './media/hole.jpg');
+  var hitAudioTag = new Audio('./media/hit.mp3');
+  hitAudioTag.volume = 1.0;
+  hitAudioTag.play();
+  score += 100;
+  $('h2').text('Score: ' + score);
+}
+
+/**
+ * Set up the game grid and start the background music.
+ */
+function setUpGame() {
   createDivGrid();
   var bgAudioTag = new Audio('./media/background.mp3');
   bgAudioTag.loop = true;
   bgAudioTag.volume = .15;
   bgAudioTag.play();
-  var moleIntervalMs = 1000;
-  var speedUpIntervalMs = 2000;
+}
+
+/** Do this if user hit a hole, not a mole:
+ *    play a miss .mp3
+ *    decrease the score
+ *
+ */
+function toDoIfMiss() {
+  var missAudioTag = new Audio('./media/miss.mp3');
+  missAudioTag.volume = 1.0;
+  missAudioTag.play();
+  score -= 50;
+  $('h2').text('Score: ' + score);
+}
+
+function registerEventHandlers() {
+  // var intervalID = window.setInterval(myCallback, 1000);
+  setUpGame();
+  // var speedUpIntervalMs = 2000;
   var intervalID = window.setInterval(myCallback, 1000);
   // var speedUpIntervalID = window.setInterval(speedUp(intervalID), speedUpIntervalMs);
   $('input').click(function() {
     if ($(this).attr('src') === './media/mole.jpg') {
-      $(this).attr('src', './media/hole.jpg');
-      var hitAudioTag = new Audio('./media/hit.mp3');
-      hitAudioTag.volume = 1.0;
-      hitAudioTag.play();
-      score += 100;
-      $('h2').text('Score: ' + score)
+      toDoIfHit(this);
     } else {
-      var missAudioTag = new Audio('./media/miss.mp3');
-      missAudioTag.volume = 1.0;
-      missAudioTag.play();
-      score -= 50;
-      $('h2').text('Score: ' + score)
+      toDoIfMiss();
     }
   });
   // var gameOver = checkAllFilled();
@@ -100,24 +144,5 @@ function registerEventHandlers() {
   // clearInterval(speedUpIntervalID);
   // clearInterval(moleIntervalID);
 }
-
-function speedUp(intId, intMs) {
-  clearInterval(intId);
-  intMs = intMs * 0.9;
-  intId = window.setInterval(setRandomMole(), intMs);
-}
-
-//
-// var intervalID = window.setInterval(myCallback, 1000);
-// createDivGrid();
-// var bgAudioTag = new Audio('./background.mp3');
-// bgAudioTag.loop = true;
-// bgAudioTag.volume = .15;
-// bgAudioTag.play();
-
-
-// $('input').click(function() {
-//   $(this).attr('src', './hole.jpg')
-// })
 
 $(document).ready(registerEventHandlers);
