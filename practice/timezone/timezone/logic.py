@@ -21,7 +21,7 @@ def get_tz(input_string):
     lon_lat_list = input_string.split(',')
     if len(lon_lat_list) != 2:
         raise KeyError('not enough arguments for lat,lng')
-    tz = tzwhere.tzwhere()
+    tz = tzwhere.tzwhere(shapely=True)
     tz_sring = tz.tzNameAt(float(lon_lat_list[0]), float(lon_lat_list[1]))
     return tz_sring
 
