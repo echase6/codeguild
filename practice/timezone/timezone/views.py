@@ -1,5 +1,6 @@
 """timezone Views."""
 from . import logic
+import arrow
 
 from django.http import HttpResponse
 
@@ -9,38 +10,48 @@ def return_local_time(response):
     return HttpResponse('Local time is: ' + local_time_string)
 
 
-def return_tz_at_latlng(response, input_string):
+def return_tz_at_latlng(response, latlng):
     try:
-        tz_at_latlng = logic.get_tz(input_string)
-    except KeyError as error:
-        return HttpResponse('TimeZone is not as expected', status = 400)
-    response_string = 'TimeZone at {} is {}'.format(input_string, tz_at_latlng)
+        tz_at_latlng = logic.get_tz(latlng)
+    except IOError as error:
+        return HttpResponse(error, status=400)
+    except KeyError:
+        return HttpResponse('Time Zone does not exist there.', status=404)
+    response_string = 'TimeZone at {} is {}'.format(latlng, tz_at_latlng)
     return HttpResponse(response_string)
 
 
-def return_time_at_latlng(response, input_string):
+def return_time_at_latlng(response, latlng):
     try:
-        time_at_latlng = logic.get_time_at_latlng(input_string)
-    except KeyError as error:
-        return HttpResponse('TimeZone is not as expected', status = 400)
-    response_string = 'Time at {} is {}'.format(input_string, time_at_latlng)
+        time_at_latlng = logic.get_time_at_latlng(latlng)
+    except IOError as error:
+        return HttpResponse(error, status=400)
+    except KeyError:
+        return HttpResponse('Time Zone does not exist there.', status=400)
+    response_string = 'Time at {} is {}'.format(latlng, time_at_latlng)
     return HttpResponse(response_string)
 
 
-def return_converted_time(response, in_latlng_str, in_time_str, out_latlng_str):
+def return_converted_time(response, in_time, in_latlng, out_latlng):
     try:
-        in_tz = logic.get_tz(in_latlng_str)
-    except KeyError as error:
-        return HttpResponse('In TimeZone is not as expected', status = 400)
+        in_tz = logic.get_tz(in_latlng)
+    except IOError as error:
+        return HttpResponse('In time {}'.format(error), status=400)
+    except KeyError:
+        return HttpResponse('In Time Zone does not exist at {}'
+                            .format(in_latlng), status=400)
     try:
-        out_tz = logic.get_tz(out_latlng_str)
-    except KeyError as error:
-        return HttpResponse('Out TimeZone is not as expected', status = 400)
+        out_tz = logic.get_tz(out_latlng)
+    except IOError as error:
+        return HttpResponse('Out time {}'.format(error), status=400)
+    except KeyError:
+        return HttpResponse('Out Time Zone does not exist at {}'
+                            .format(out_latlng), status=400)
     try:
-        requested_time = logic.get_requested_time(in_time_str, in_tz)
-    except KeyError as error:
-        return HttpResponse('Time is not as expected', status = 400)
-    out_time = logic.get_formatted_conv_time(requested_time, out_tz)
-    response_string = 'When time is {} in {}, it is {} in {}'.format(
-        in_time_str, in_tz, out_time, out_tz)
+        requested_time = logic.get_requested_time(in_time, in_tz)
+    except arrow.parser.ParserError:
+        return HttpResponse('Time is not as expected', status=400)
+    out_time = logic.get_conv_time(requested_time, out_tz)
+    response_string = ('When time is {} in {}, it is {} in {}'
+                       .format(in_time, in_tz, out_time, out_tz))
     return HttpResponse(response_string)

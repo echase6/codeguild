@@ -1,13 +1,16 @@
 """timezone URL Configuration."""
 
 from django.conf.urls import url
-from django.contrib import admin
 from . import views
 
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
-    url(r'^time$', views.return_local_time),
-    url(r'^(.+)/tz$', views.return_tz_at_latlng),
-    url(r'^(.+)/time$', views.return_time_at_latlng),
-    url(r'^(.+)/(.+)/as/(.+)$', views.return_converted_time)
+    url(r'^time$', views.return_local_time,
+        name='return_local_time'),
+    url(r'^(?P<latlng>.+)/tz$', views.return_tz_at_latlng,
+        name='return_tz_at_latlng'),
+    url(r'^(?P<latlng>.+)/time$', views.return_time_at_latlng,
+        name='return_time_at_latlng'),
+    url(r'^(?P<in_time>.+)/(?P<in_latlng>.+)/at/(?P<out_latlng>.+)$',
+        views.return_converted_time,
+        name='return_converted_time')
 ]
