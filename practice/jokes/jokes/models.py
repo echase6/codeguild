@@ -23,13 +23,15 @@ _JOKES = []
 
 def get_all_jokes():
     """Return all of the jokes."""
-    return _JOKES
+    return [
+        [joke.setup, joke.punchline]
+        for joke in _JOKES
+    ]
 
 
 def add_joke(setup, punchline):
     """Add the entered joke to the list."""
-
-    if are_both_parts_entered(setup, punchline):
+    if _are_both_parts_entered(setup, punchline):
         new_joke = Joke(setup, punchline)
         _JOKES.append(new_joke)
         return new_joke
@@ -37,6 +39,6 @@ def add_joke(setup, punchline):
         raise ValueError('joke or punchline is invalid')
 
 
-def are_both_parts_entered(setup, punchline):
+def _are_both_parts_entered(setup, punchline):
     """Check to ensure there is both a setup and punchline."""
     return len(setup) != 0 and len(punchline) != 0

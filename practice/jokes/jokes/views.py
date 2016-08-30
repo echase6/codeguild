@@ -1,7 +1,6 @@
 """jokes Views."""
 
 from . import models
-from . import logic
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -13,11 +12,7 @@ def render_submission(request):
 
 def render_list(request):
     """Show the jokes list."""
-    jokes = models.get_all_jokes()
-    jokes_list = [
-        [joke.setup, joke.punchline]
-        for joke in jokes
-    ]
+    jokes_list = models.get_all_jokes()
     template_data = {
         'jokes': jokes_list
     }
