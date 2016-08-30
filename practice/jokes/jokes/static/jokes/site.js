@@ -4,19 +4,12 @@
 var setups = $('.setup');
 
 /**
- * Show the punchline.
+ * Add click handlers to each of the setups
  */
-function showPunchline() {
-    $(this).next().show();
-}
+var punchShow = _.map(setups, function(setup_tag) {
+  var click_handler = $(setup_tag).on('click', function() {
+    return $(this).next().show()
+  });
+})
 
-
-function registerEventHandlers() {
-  setups.on('click', showPunchline);
-}
-
-
-$(document).ready(function() {
-  registerEventHandlers();
-  setups.next().hide();
-});
+setups.append(punchShow)

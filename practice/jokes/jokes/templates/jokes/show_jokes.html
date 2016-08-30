@@ -7,14 +7,16 @@
     <link rel="stylesheet" href="{% static 'jokes/site.css'%}">
 </head>
 <body>
-    <h1>Get ready to laugh...</h1>
+    <h1>Jokes List</h1>
+    <h2>Click on joke to see the punchline...</h2>
     <ul>
     {% for joke in jokes %}
     <li><p class="setup">{{ joke.0 }}</p>
-      <p>{{  joke.1 }}</p></li>
+      <p style="display: none;">{{  joke.1 }}</p></li>
     {% endfor  %}
   </ul>
-    <p><a href="{% url 'submission' %}">Submit another vote?</a></p>
+    <p><a href="{% url 'submission' %}">Submit another joke?</a></p>
+    <script src="http://cdn.jsdelivr.net/lodash/4.11.2/lodash.js"></script>
     <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
     <script src="{% static 'jokes/site.js'%}"></script>
 </body>
