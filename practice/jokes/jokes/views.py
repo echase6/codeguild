@@ -32,7 +32,3 @@ def render_ack(request):
         return render(request, 'jokes/ack_fail.html')
     return render(request, 'jokes/ack.html')
 
-
-def render_ack_fail(request):
-    """Show the failed-acknowledgement page."""
-    return render(request, 'jokes/ack_fail.html')

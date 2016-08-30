@@ -19,7 +19,6 @@ from . import views
 urlpatterns = [
     url(r'^submission', views.render_submission, name="submission"),
     url(r'^list', views.render_list, name="list"),
-    url(r'^ack', views.render_ack, name="ack"),
-    url(r'^ack_fail', views.render_ack_fail, name="ack_fail")
+    url(r'^ack', views.render_ack, name="ack")
 ]
 
