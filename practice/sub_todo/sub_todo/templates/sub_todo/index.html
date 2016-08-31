@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Index</title>
+  </head>
+  <body>
+    <a href="{% url 'add_form' %}">Add a task.</a>
+      {% for mainitem in mainitems %}
+      <h2>{{mainitem.name}}<a href="{% url 'subitem_add_form' mainitem.id %}">+</a></h2>
+      <ul>
+        {% for subitem in mainitem.subitems %}
+        <li>
+          {{subitem.name}}
+          <a href="{% url 'delete' mainitem.id subitem.id %}">X</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endfor %}
+  </body>
+</html>

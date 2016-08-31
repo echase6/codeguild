@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Add Item Form</title>
+  </head>
+  <body>
+    <form action="{% url 'submit_ack' %}" method="post">
+      {% csrf_token %}
+      <label>What is your task?<input type="text" name="name">
+</label>
+    </form>
+  </body>
+</html>
