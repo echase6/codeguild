@@ -12,6 +12,7 @@
 
 
 from django.shortcuts import render
+from django.http import JsonResponse
 from . import logic
 from . import models
 
@@ -66,5 +67,10 @@ def render_subitem_submit_ack(request, main_item_id):
 
 def render_delete(request, main_item_id, sub_item_id):
     """  """
-    # logic.delete_subitem(sub_item_id, main_item_id)
+    logic.delete_subitem(sub_item_id, main_item_id)
     return render(request, 'sub_todo/delete.html')
+
+
+def return_delete(request, main_item_id, sub_item_id):
+    """ """
+    return JsonResponse()
