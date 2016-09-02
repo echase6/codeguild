@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Add Flutter Page</title>
+  </head>
+  <body>
+    <h1>Flutter entry page.</h1>
+     <form id="flutter-form" action="{% url 'submit_ack' %}" method="post">
+       {% csrf_token %}
+       <label>Flutter:
+         <textarea name="flutter_text"></textarea>
+         <input type="submit">
+       </label>
+     </form>
+   </body>
+</html>
