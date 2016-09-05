@@ -18,3 +18,10 @@ def get_queried_flutts(string):
         return None
     last_item = max(len(filtered_flutts), 10)
     return filtered_flutts[:last_item]
+
+
+def create_save_new_flutt(text, timestamp):
+    r"""Create a new Flutt, and save to the database."""
+    new_flutt = models.Flutt(text=text, timestamp=timestamp)
+    new_flutt.save()
+    return new_flutt

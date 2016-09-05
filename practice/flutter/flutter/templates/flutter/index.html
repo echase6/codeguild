@@ -19,7 +19,7 @@
     </nav>
     <ul>
       {% for flutt in flutts %}
-        <li><p>{{ flutt.text }}</p></li>
+        <li><p>{{ flutt.timestamp }} -- {{ flutt.text }}</p></li>
       {% endfor %}
     </ul>
   </body>

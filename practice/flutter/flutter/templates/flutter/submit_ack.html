@@ -5,9 +5,7 @@
     <title>Flutter</title>
   </head>
   <body>
-    <ul>
-        <li><p>{{ flutt }}</p></li>
-    </ul>
+    <p>On: {{ flutt.timestamp }} You wrote: {{ flutt.text }}</p>
     <nav>
       <p>
         <a href="{% url 'index' %}">Go to flutt list...</a>

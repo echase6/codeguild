@@ -17,7 +17,3 @@ class Flutt(models.Model):
 
     def __repr__(self):
         return 'Flutt(text:{!r}, date: {!r})'.format(self.text, self.timestamp)
-
-
-def _flutt_encode(flutt):
-    return {'text': flutt.text, 'timestamp': flutt.timestamp}

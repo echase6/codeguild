@@ -1,11 +1,9 @@
 """flutter Views."""
 
 from django.shortcuts import render
-from django.http import JsonResponse
+from django.utils import timezone
 from . import logic
 from . import models
-import datetime
-import pytz
 
 
 def render_index(request):
@@ -33,12 +31,15 @@ def render_submit(request):
 
 
 def render_submit_ack(request):
-    post_time = datetime.datetime.now(pytz.utc)
+    """Render the submission acknowledgement page.
+
+    This is going to show the Flutter and adds the time/date stamp.
+    """
+    post_time = timezone.now()
     post_text = request.POST['flutter_text']
-    new_flutt = models.Flutt(text=post_text, timestamp=post_time)
-    new_flutt.save()
+    new_flutt = logic.create_save_new_flutt(post_text, post_time)
     template_args = {
-        'flutt': post_text
+        'flutt': new_flutt
     }
     return render(request, 'flutter/submit_ack.html', template_args)
 
