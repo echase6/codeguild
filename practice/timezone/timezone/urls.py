@@ -10,7 +10,7 @@ urlpatterns = [
         name='return_tz_at_latlng'),
     url(r'^(?P<latlng>.+)/time$', views.return_time_at_latlng,
         name='return_time_at_latlng'),
-    url(r'^(?P<in_time>.+)/(?P<in_latlng>.+)/at/(?P<out_latlng>.+)$',
+    url(r'^(?P<in_time>.+)/at/(?P<out_latlng>.+)$',
         views.return_converted_time,
         name='return_converted_time')
 ]

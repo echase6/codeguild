@@ -5,6 +5,17 @@ import arrow
 from django.http import HttpResponse
 
 
+def get_qualified_tz(latlng_string):
+    """Check the requested lat, lng for validity."""
+    lat_lng_list = latlng_string.split(',')
+    if len(lat_lng_list) != 2:
+        raise KeyError()
+    tz_at_latlng = logic.get_tz(lat_lng_list)
+    if tz_at_latlng is None:
+        raise IOError()
+    return tz_at_latlng
+
+
 def return_local_time(response):
     local_time_string = logic.get_time_at_tz('US/Pacific')
     return HttpResponse('Local time is: ' + local_time_string)
@@ -12,10 +23,10 @@ def return_local_time(response):
 
 def return_tz_at_latlng(response, latlng):
     try:
-        tz_at_latlng = logic.get_tz(latlng)
-    except IOError as error:
-        return HttpResponse(error, status=400)
+        tz_at_latlng = get_qualified_tz(latlng)
     except KeyError:
+        return HttpResponse('Need two values', status=400)
+    except IOError:
         return HttpResponse('Time Zone does not exist there.', status=404)
     response_string = 'TimeZone at {} is {}'.format(latlng, tz_at_latlng)
     return HttpResponse(response_string)
@@ -23,35 +34,28 @@ def return_tz_at_latlng(response, latlng):
 
 def return_time_at_latlng(response, latlng):
     try:
-        time_at_latlng = logic.get_time_at_latlng(latlng)
-    except IOError as error:
-        return HttpResponse(error, status=400)
+        tz_at_latlng = get_qualified_tz(latlng)
     except KeyError:
-        return HttpResponse('Time Zone does not exist there.', status=400)
+        return HttpResponse(error, status=400)
+    except IOError:
+        return HttpResponse('Time Zone does not exist there.', status=404)
+    time_at_latlng = logic.get_time_at_latlng(tz_at_latlng)
     response_string = 'Time at {} is {}'.format(latlng, time_at_latlng)
     return HttpResponse(response_string)
 
 
-def return_converted_time(response, in_time, in_latlng, out_latlng):
+def return_converted_time(response, in_time, out_latlng):
     try:
-        in_tz = logic.get_tz(in_latlng)
-    except IOError as error:
-        return HttpResponse('In time {}'.format(error), status=400)
+        tz_at_latlng = get_qualified_tz(out_latlng)
     except KeyError:
-        return HttpResponse('In Time Zone does not exist at {}'
-                            .format(in_latlng), status=400)
+        return HttpResponse(error, status=400)
+    except IOError:
+        return HttpResponse('Time Zone does not exist there.', status=404)
     try:
-        out_tz = logic.get_tz(out_latlng)
-    except IOError as error:
-        return HttpResponse('Out time {}'.format(error), status=400)
-    except KeyError:
-        return HttpResponse('Out Time Zone does not exist at {}'
-                            .format(out_latlng), status=400)
-    try:
-        requested_time = logic.get_requested_time(in_time, in_tz)
+        requested_time = logic.get_requested_time(in_time)
     except arrow.parser.ParserError:
         return HttpResponse('Time is not as expected', status=400)
-    out_time = logic.get_conv_time(requested_time, out_tz)
-    response_string = ('When time is {} in {}, it is {} in {}'
-                       .format(in_time, in_tz, out_time, out_tz))
+    out_time = logic.get_conv_time(requested_time, tz_at_latlng)
+    response_string = ('When time is {}, it is {} in {}'
+                       .format(in_time, out_time, tz_at_latlng))
     return HttpResponse(response_string)
