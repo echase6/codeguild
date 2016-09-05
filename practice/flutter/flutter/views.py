@@ -3,11 +3,10 @@
 from django.shortcuts import render
 from django.utils import timezone
 from . import logic
-from . import models
 
 
 def render_index(request):
-    """  Render the flutt listing page."""
+    """Render the flutt listing page."""
     flutts = logic.get_flutts()
     template_args = {
         'flutts': flutts
@@ -33,7 +32,7 @@ def render_submit(request):
 def render_submit_ack(request):
     """Render the submission acknowledgement page.
 
-    This is going to show the Flutter and adds the time/date stamp.
+    This is going to show the Flutter with a time/date stamp.
     """
     post_time = timezone.now()
     post_text = request.POST['flutter_text']

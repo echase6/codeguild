@@ -5,10 +5,16 @@
     <title>Add Flutter Page</title>
   </head>
   <body>
-    <h1>Flutter entry page.</h1>
+    <h1>Flutter Entry Page</h1>
+    <h2>Actions</h2>
+    <nav>
+      <p>
+        <a href="{% url 'index' %}">Go back to main page</a>
+      </p>
+    </nav>
      <form id="flutter-form" action="{% url 'submit_ack' %}" method="post">
        {% csrf_token %}
-       <label>Flutter:
+       <label>Enter Flutter:
          <textarea name="flutter_text"></textarea>
          <input type="submit">
        </label>

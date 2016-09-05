@@ -5,11 +5,17 @@
     <title>Flutter</title>
   </head>
   <body>
-    <p>On: {{ flutt.timestamp }} You wrote: {{ flutt.text }}</p>
+    <h1>Flutter</h1>
+    <h2>Actions</h2>
     <nav>
       <p>
-        <a href="{% url 'index' %}">Go to flutt list...</a>
+        <a href="{% url 'index' %}">Go back to main page</a>
+      </p>
+      <p>
+        <a href="{% url 'submit' %}">Add a new Flutt</a>
       </p>
     </nav>
+    <h2>Most Recent Flutt</h2>
+    <p>On: {{ flutt.timestamp }} You wrote: {{ flutt.text }}</p>
   </body>
 </html>
