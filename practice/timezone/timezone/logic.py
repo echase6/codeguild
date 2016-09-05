@@ -14,7 +14,7 @@ def get_time_at_tz(tz_string):
 def get_tz(lat_lng_list):
     r"""Return the time zone given lat, long.
 
-    >>> get_tz('45,45')
+    >>> get_tz([45,45])
     'Europe/Moscow'
     """
     tz = tzwhere.tzwhere()
@@ -23,7 +23,7 @@ def get_tz(lat_lng_list):
 
 
 def get_time_at_latlng(tz_string):
-    """Return the time at a given lat, long."""
+    """Return the current time at a given lat, long."""
     return get_time_at_tz(tz_string)
 
 
