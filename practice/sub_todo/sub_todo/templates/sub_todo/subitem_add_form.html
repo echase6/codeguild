@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>SUbItem Add Item Form</title>
+  </head>
+  <body>
+    <form action="{% url 'subitem_submit_ack' main_item_id %}" method="post">
+      {% csrf_token %}
+      <label>What is your sub-task?<input type="text" name="name">
+</label>
+    </form>
+  </body>
+</html>

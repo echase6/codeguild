@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Flutter</title>
+  </head>
+  <body>
+    <form id="query-form" action="{% url 'query' %}" method="get">
+      {% csrf_token %}
+      <label>Query text:
+        <input type="text" name="query">
+        <button type="submit" value="Submit Query">Submit Query</button>
+      </label>
+    </form>
+    <nav>
+      <p>
+        <a href="{% url 'submit' %}">Add a new Flutt</a>
+      </p>
+    </nav>
+    <ul>
+      {% for flutt in flutts %}
+        <li><p>{{ flutt.text }}</p></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

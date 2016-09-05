@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Index</title>
+  </head>
+  <body>
+    {% csrf_token %}
+
+    <a href="{% url 'add_form' %}">Add a task.</a>
+      {% for mainitem in mainitems %}
+      <h2>{{mainitem.name}}<a href="{% url 'subitem_add_form' mainitem.id %}">+</a></h2>
+      <ul>
+        {% for subitem in mainitem.subitems %}
+        <li>
+          {{subitem.name}}
+          <a class="deleteTarget" href="{% url 'delete' mainitem.id subitem.id %}">X</a>
+        </li>
+        {% endfor %}
+      </ul>
+      {% endfor %}
+      <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
+      <script src="{% static 'sub_todo/ajax_csrf_setup.js' %}"></script>
+      <script src="{% static 'sub_todo/delete.js' %}"></script>
+  </body>
+</html>
