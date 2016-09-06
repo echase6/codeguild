@@ -6,7 +6,7 @@ from . import logic
 
 
 def render_index(request):
-    """Render the flutt listing page."""
+    """Render the Flutt listing page."""
     flutts = logic.get_flutts()
     template_args = {
         'flutts': flutts
@@ -41,4 +41,3 @@ def render_submit_ack(request):
         'flutt': new_flutt
     }
     return render(request, 'flutter/submit_ack.html', template_args)
-
