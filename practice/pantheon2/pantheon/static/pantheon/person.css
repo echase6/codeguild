@@ -1,0 +1,12 @@
+.Male {
+background-color: DodgerBlue;
+}
+
+.Female {
+    background-color: Fuchsia;
+}
+
+#map {
+    width: 100%;
+    height: 360px;
+}

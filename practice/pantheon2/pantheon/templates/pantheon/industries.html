@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pantheon</title>
+  </head>
+  <body>
+    <ul>
+      {%for industry in industries %}
+      <li>
+        <!--<a href="/country/{{code}}/industry/{{industry}}">{{industry}}</a>-->
+        <a href="{% url 'people_in_industry' code industry %}">{{industry}}</a>
+      </li>
+      {%endfor%}
+    </ul>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pantheon</title>
+  </head>
+  <body>c
+    <ul>
+      {%for code, name in countries.items %}
+      <li>
+        <a href="{% url 'industries' code %}">{{name}}</a>
+      </li>
+      {%endfor%}
+    </ul>
+  </body>
+</html>

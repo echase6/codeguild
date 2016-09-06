@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pantheon</title>
+    <link rel="stylesheet" href="{% static 'pantheon/person.css' %}">
+</style>
+  </head>
+  <body class="{{person.gender}}">
+    <ul>
+      <li>
+        {{person.name}}
+      </li>
+      <li>
+        {{person.birthyear}}
+      </li>
+      <li>
+        {{person.countryName|default:"n/a"}}
+      </li>
+      <li>
+        {{person.occupation}}
+      </li>
+    </ul>
+    <div id="map"></div>
+    <script type="text/javascript">
+    var LAT = {{person.LAT}};
+    var LNG = {{person.LON}};
+    </script>
+    <script src="{% static 'pantheon/person.js' %}"></script>
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB9Md4nrJLJ19InJqc0CdDKNF39UYNUcIk&callback=initMap"
+    ></script>
+  </body>
+</html>

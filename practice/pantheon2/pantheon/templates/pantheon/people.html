@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Pantheon</title>
+  </head>
+  <body>
+    <ul>
+      {%for person in people %}
+      <li>
+        <a href="{% url 'people' person.en_curid %}">{{person.name}}</a>
+      </li>
+      {%endfor%}
+      <p>Total: {{people|length}}</p>
+    </ul>
+  </body>
+</html>
