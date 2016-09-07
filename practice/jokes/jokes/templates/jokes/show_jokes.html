@@ -11,8 +11,8 @@
     <h2>Click on joke to see the punchline...</h2>
     <ul>
     {% for joke in jokes %}
-    <li><p class="setup">{{ joke.0 }}</p>
-      <p style="display: none;">{{  joke.1 }}</p></li>
+    <li><p class="setup">{{ joke.setup }}</p>
+      <p style="display: none;">{{  joke.punchline }}</p></li>
     {% endfor  %}
   </ul>
     <p><a href="{% url 'submission' %}">Submit another joke?</a></p>

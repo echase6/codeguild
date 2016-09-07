@@ -34,9 +34,9 @@ class Joke:
         r""" Magic repr function.
 
         >>> Joke('knock-knock', 'who dat?')
-        Joke(knock-knock, who dat?)
+        Joke('knock-knock', 'who dat?')
         """
-        return 'Joke({}, {})'.format(self.setup, self.punchline)
+        return 'Joke({!r}, {!r})'.format(self.setup, self.punchline)
 
 
 _JOKES = []
@@ -48,10 +48,11 @@ def get_all_jokes():
     >>> get_all_jokes()
     [['knock-knock', 'who 2 dat?'], ['bahbah', 'blacksheep']]
     """
-    return [
-        [joke.setup, joke.punchline]
-        for joke in _JOKES
-    ]
+    # return [
+    #     [joke.setup, joke.punchline]
+    #     for joke in _JOKES
+    # ]
+    return _JOKES
 
 
 def add_joke(setup, punchline):

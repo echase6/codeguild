@@ -12,9 +12,9 @@ def render_submission(request):
 
 def render_list(request):
     """Show the jokes list."""
-    jokes_list = models.get_all_jokes()
+    jokes_item = models.get_all_jokes()
     template_data = {
-        'jokes': jokes_list
+        'jokes': jokes_item
     }
     return render(request, 'jokes/show_jokes.html', template_data)
 
