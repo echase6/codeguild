@@ -3,6 +3,7 @@
 from tzwhere import tzwhere
 import arrow
 
+tz = tzwhere.tzwhere()
 
 def get_time_at_tz(tz_string):
     """Return the current time (as a string) at a given timezone."""
@@ -11,25 +12,21 @@ def get_time_at_tz(tz_string):
     return time_string
 
 
-def get_tz(lat_lng_list):
+def get_tz(lat, lng):
     r"""Return the time zone given lat, long.
 
-    >>> get_tz([45,45])
+    >>> get_tz(45,45)
     'Europe/Moscow'
+    >>> get_tz(45,-125)
+    Traceback (most recent call last):
+    ...
+    KeyError: Time Zone does not exist there.
     """
-    tz = tzwhere.tzwhere()
-    tz_string = tz.tzNameAt(float(lat_lng_list[0]), float(lat_lng_list[1]))
+    # tz = tzwhere.tzwhere()
+    tz_string = tz.tzNameAt(lat, lng)
+    if tz_string is None:
+        raise ValueError('Time Zone does not exist there.')
     return tz_string
-
-
-def get_time_at_latlng(tz_string):
-    """Return the current time at a given lat, long."""
-    return get_time_at_tz(tz_string)
-
-
-def get_requested_time(time_string):
-    """Return an arrow object with a given time and time zone."""
-    return arrow.get(time_string)
 
 
 def get_conv_time(arrow_time, time_zone):
