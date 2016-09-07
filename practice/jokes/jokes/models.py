@@ -46,12 +46,8 @@ def get_all_jokes():
     r"""Return all of the jokes.
 
     >>> get_all_jokes()
-    [['knock-knock', 'who 2 dat?'], ['bahbah', 'blacksheep']]
+    [Joke('knock-knock', 'who 2 dat?'), Joke('bahbah', 'blacksheep')]
     """
-    # return [
-    #     [joke.setup, joke.punchline]
-    #     for joke in _JOKES
-    # ]
     return _JOKES
 
 
@@ -59,11 +55,11 @@ def add_joke(setup, punchline):
     r"""Add the entered joke to the list.
 
     >>> add_joke('knock-knock', 'who 2 dat?')
-    Joke(knock-knock, who 2 dat?)
+    Joke('knock-knock', 'who 2 dat?')
     >>> add_joke('bahbah', 'blacksheep')
-    Joke(bahbah, blacksheep)
+    Joke('bahbah', 'blacksheep')
     >>> _JOKES
-    [Joke(knock-knock, who 2 dat?), Joke(bahbah, blacksheep)]
+    [Joke('knock-knock', 'who 2 dat?'), Joke('bahbah', 'blacksheep')]
     >>> add_joke('', '')
     Traceback (most recent call last):
     ...
