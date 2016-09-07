@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Jokes</title>
+    <link rel="stylesheet" href="{% static 'jokes/site.css'%}">
+</head>
+<body>
+    <h1>Jokes List</h1>
+    <h2>Click on joke to see the punchline...</h2>
+    <ul>
+    {% for joke in jokes %}
+    <li><p class="setup">{{ joke.setup }}</p>
+      <p style="display: none;">{{  joke.punchline }}</p></li>
+    {% endfor  %}
+  </ul>
+    <p><a href="{% url 'submission' %}">Submit another joke?</a></p>
+    <script src="http://cdn.jsdelivr.net/lodash/4.11.2/lodash.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.3.js"></script>
+    <script src="{% static 'jokes/site.js'%}"></script>
+</body>
+</html>
