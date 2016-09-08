@@ -19,6 +19,6 @@ class Flutt(models.Model):
         """Magic repr Function.
 
         >>> repr(Flutt(text='Hello', timestamp='2016-09-05T11:00'))
-        "Flutt(text:'Hello', date:'2016-09-05T11:00')"
+        "Flutt(text='Hello', date='2016-09-05T11:00')"
         """
-        return 'Flutt(text:{!r}, date:{!r})'.format(self.text, self.timestamp)
+        return 'Flutt(text={!r}, date={!r})'.format(self.text, self.timestamp)

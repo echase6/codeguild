@@ -13,8 +13,7 @@ def get_flutts():
     Flutt(text:'He', date:datetime.datetime(2016, 9, 5, 17, 0, tzinfo=<UTC>))]
     """
     flutt_list = models.Flutt.objects.all().order_by('-timestamp')
-    last_item = min(len(flutt_list), 10)
-    return flutt_list[:last_item]
+    return flutt_list[:10]
 
 
 def get_queried_flutts(string):
@@ -27,10 +26,7 @@ def get_queried_flutts(string):
     """
     flutt_list = models.Flutt.objects.all().order_by('-timestamp')
     filtered_flutts = flutt_list.filter(text__contains=string)
-    if len(filtered_flutts) == 0:
-        return None
-    last_item = min(len(filtered_flutts), 10)
-    return filtered_flutts[:last_item]
+    return filtered_flutts[:10]
 
 
 def create_save_new_flutt(text, timestamp):
