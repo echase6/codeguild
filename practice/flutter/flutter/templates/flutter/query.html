@@ -3,19 +3,24 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Flutter</title>
+    <title>Flutter Query Results</title>
   </head>
   <body>
-    {% csrf_token %}
-    <ul>
-      {% for flutt in flutts %}
-        <li><p>{{flutt.text}}</p></li>
-      {% endfor %}
-    </ul>
+    <h1>Flutter</h1>
+    <h2>Actions</h2>
     <nav>
       <p>
-        <a href="{% url 'index' %}">Go back to summary</a>
+        <a href="{% url 'index' %}">Go back to main page</a>
+      </p>
+      <p>
+        <a href="{% url 'submit' %}">Add a new Flutt</a>
       </p>
     </nav>
+    <h2>Requested Flutts</h2>
+    <ul>
+      {% for flutt in flutts %}
+        <li><p>{{ flutt.timestamp }} -- {{ flutt.text }}</p></li>
+      {% endfor %}
+    </ul>
   </body>
 </html>

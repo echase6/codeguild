@@ -7,13 +7,18 @@ class Flutt(models.Model):
     text = models.TextField()
     timestamp = models.DateTimeField()
 
-    #
-    # def __init__(self, text, timestamp):
-    #     self.text = text
-    #     self.timestamp = timestamp
-
     def __str__(self):
+        """String Function.
+
+        >>> str(Flutt(text='Hello', timestamp='2016-09-05T11:00'))
+        'Hello'
+        """
         return self.text
 
     def __repr__(self):
-        return 'Flutt(text:{!r}, date: {!r})'.format(self.text, self.timestamp)
+        """Magic repr Function.
+
+        >>> repr(Flutt(text='Hello', timestamp='2016-09-05T11:00'))
+        "Flutt(text='Hello', date='2016-09-05T11:00')"
+        """
+        return 'Flutt(text={!r}, date={!r})'.format(self.text, self.timestamp)
