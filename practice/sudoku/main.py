@@ -13,65 +13,8 @@ Algorithm uses two methods:
 
 from cell import Cell
 from board import make_blank_board, add_filled_cells_from_file
-from board import count_choices_left, count_filled_cells
-from board import ORDER
-
-
-def get_box_char(cells):
-    r"""Return string representation of one row in a box.
-
-    >>> ORDER = 2
-    >>> get_box_char([Cell({'2', '9'}), Cell({'4'})])
-    '. 4'
-    """
-    output_string = ''
-    for cell in cells:
-        if len(cell.values) == 1:
-            output_string += str(list(cell.values)[0])
-        else:
-            output_string += '.'
-        output_string += ' '
-    return output_string[0:ORDER * 2 - 1]
-
-
-def display_board(board):
-    """Display the board, with filled-in squares."""
-    border_string = ('+' + '-' * (ORDER*2-1)) * ORDER + '+'
-    print(border_string)
-    for i in range(ORDER):
-        for j in range(ORDER):
-            board_row = board[i * ORDER + j]
-            line_string = ''
-            for k in range(0, ORDER**2, ORDER):
-                line_string += get_box_char(board_row[k:k + ORDER]) + '|'
-            print('|' + line_string)
-        print(border_string)
-
-
-def row_col_box_contents(i, j, board):
-    """Return lists of cells the referred cell is a member of.
-
-    >>> ORDER = 2
-    >>> board = (
-    ... [[Cell({'1'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})],
-    ...  [Cell({'1', '2'}), Cell({'3'}), Cell({'3', '4'}), Cell({'3', '4'})],
-    ...  [Cell({'2'}), Cell({'1', '3'}), Cell({'4'}), Cell({'3', '4'})],
-    ...  [Cell({'4'}), Cell({'1', '3'}), Cell({'3', '4'}), Cell({'3', '4'})]])
-    >>> row_col_box_contents(1, 1, board)
-    [[Cell({'1', '2'}), Cell({'3', '4'}), Cell({'3', '4'})],
-    [Cell({'1', '3'}), Cell({'1', '3'}), Cell({'1', '3'})],
-    [Cell({'1'}), Cell({'1', '3'}), Cell({'1', '2'})]]
-    """
-    row_list = [board[idx][j] for idx in range(ORDER**2) if idx != i]
-    col_list = [board[i][idx] for idx in range(ORDER**2) if idx != j]
-    box_row = i // ORDER
-    sub_row = i % ORDER
-    box_col = j // ORDER
-    sub_col = j % ORDER
-    m = sub_col + sub_row * ORDER
-    box_list = ([board[box_col + idx // ORDER][box_row + idx % ORDER]
-                 for idx in range(ORDER**2) if idx != m])
-    return [row_list, col_list, box_list]
+from board import count_choices_left, count_filled_cells, make_lists
+from board import ORDER, display_board
 
 
 def exclude_cell_all(cell, cell_list):
@@ -151,24 +94,24 @@ def fill_cells(board):
 
 def main():
     board = make_blank_board()
-    board = add_filled_cells_from_file(board)
-    display_board(board)
-    count = pow(ORDER, 6)
+    row_list, col_list, box_list, num_list = make_lists(board)
+    add_filled_cells_from_file(row_list)
+    display_board(row_list)
+    count = ORDER ** 6
     post_iter_count = count_choices_left(board)
-    count_filled = count_filled_cells(board)
+    count_filled = count_filled_cells(row_list)
     print('Starting with {} cells filled, {} choices left'
           .format(count_filled, post_iter_count))
-    print(board[0][0])
 
-    while post_iter_count < count:
-        fill_cells(board)
-        count = post_iter_count
-        post_iter_count = count_choices_left(board)
-        count_filled = count_filled_cells(board)
-        display_board(board)
-        print('{} cells filled, {} choices left.'
-              .format(count_filled, post_iter_count))
-        print(board[-1][-1])
+    # while post_iter_count < count:
+    #     fill_cells(board)
+    #     count = post_iter_count
+    #     post_iter_count = count_choices_left(board)
+    #     count_filled = count_filled_cells(board)
+    #     display_board(board)
+    #     print('{} cells filled, {} choices left.'
+    #           .format(count_filled, post_iter_count))
+    #     print(board[-1][-1])
 
 
 if __name__ == '__main__':
