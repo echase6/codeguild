@@ -12,7 +12,7 @@ TEST_BOARD_FILES = {
     3: 'sudoku3.txt',
     2: 'sudoku2.txt'
 }
-ORDER = 2
+ORDER = 3
 
 
 def make_blank_board():
@@ -127,11 +127,11 @@ def make_lists(board):
     perm_list = []
     for perm in permutations(['row', 'col', 'num']):
         perm_list += [[get_cell_list(board, perm[0], i, perm[1])
-                      for i in range(ORDER ** 2)]]
+                       for i in range(ORDER ** 2)]]
     perm_list += [[get_cell_list(board, 'box', i, 'num')
-                  for i in range(ORDER ** 2)]]
+                   for i in range(ORDER ** 2)]]
     perm_list += [[get_box_cell_list(board, i)
-                  for i in range(ORDER ** 2)]]
+                   for i in range(ORDER ** 2)]]
     return perm_list
 
 
@@ -183,6 +183,34 @@ def display_board(board):
             print('| ', end='')
         print(get_box_char(board[i: i + ORDER ** 2]), end='')
     print('|')
+    print(border_string)
+
+
+def display_3d_board(board):
+    """Display the board, with filled-in squares.
+
+    >>> ORDER = 2
+    >>> from test_board_loader import test_board_loader
+    >>> board = test_board_loader()
+    >>> display_3d_board(board)  # doctest: +NORMALIZE_WHITESPACE
+    +---------+ +---------+ +---------+ +---------+
+    | T T T T | | T T T T | | T T T T | | T T T T |
+    | . . T T | | T T T T | | T T T T | | . . T T |
+    | T T . T | | T T . T | | T T . T | | T T T T |
+    | T T T T | | T T T T | | T T T T | | T T T T |
+    +---------+ +---------+ +---------+ +---------+
+    """
+    border_string = (('+' + '-' * (2 * ORDER ** 2 + 1)) + '+ ') * ORDER ** 2
+    print(border_string)
+    blank_string = ('|' + (' .' * ORDER ** 2 + ' | ')) * ORDER ** 2
+    string_list = blank_string.split()
+    for i in range(0, ORDER ** 6, ORDER ** 2):
+        j = (i // ORDER ** 2) % ORDER ** 2
+        for k in range(ORDER ** 2):
+            string_list[j + 1 + k * (2 + ORDER ** 2)] = 'T' if board[i + k].filled else '.'
+        if (i + ORDER ** 2) % ORDER ** 4 == 0:
+            print(' '.join(string_list))
+            string_list = blank_string.split()
     print(border_string)
 
 

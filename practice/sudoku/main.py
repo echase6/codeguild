@@ -20,7 +20,7 @@ Passes are continued until no progress is made on eliminating choices.
 from itertools import combinations
 from board import make_blank_board, add_filled_cells_from_file
 from board import count_choices_left, count_filled_cells, make_lists
-from board import ORDER, display_board
+from board import ORDER, display_3d_board
 
 
 def get_rows_trial(check_len, test_slice):
@@ -190,10 +190,12 @@ def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
 
 def show_status(board, post_iter_count):
     """Showing status function."""
-    display_board(board)
+    display_3d_board(board)
     count_filled = count_filled_cells(board)
+    choices_left = count_choices_left(board)
     print('{} cells filled, {} choices left.'
-          .format(count_filled, post_iter_count))
+          .format(count_filled, choices_left))
+    inp = input('press any key')
 
 
 def main_test_loop():
@@ -223,18 +225,12 @@ def main_test_loop():
     post_iter_count = count_choices_left(board)
     show_status(board, post_iter_count)
     while post_iter_count < count:
-        print('top while loop')
-        for test_list in slice_list:  # slice_list len = 8
-            print('second for loop')
-            for test_slice in test_list:  # test_slice len = ORDER^2
+        for itl, test_list in enumerate(slice_list):  # slice_list len = 8
+            for its, test_slice in enumerate(test_list):  # test_slice len = ORDER^2
                 test_slice_copy = test_slice.copy()  # copy len = 0 - ORDER^2
-                print('third for loop, len test_slice: {}'.format(
-                    test_slice_copy))
                 check_len = 1
                 while check_len <= len(test_slice_copy) and check_len <= ORDER:
-                    print('fourth while loop')
                     rows_trial = get_rows_trial(check_len, test_slice_copy)  # rows_trial len 0 - ORDER^2
-                    print('len rows_trial: {}'.format(len(rows_trial)))
                     if len(rows_trial) < check_len:
                         check_len += 1
                     else:
@@ -245,6 +241,11 @@ def main_test_loop():
                                            test_slice_copy, test_slice)
                         else:
                             check_len += 1
+                    show_status(board, post_iter_count)
+                    print('check_len: {}'.format(check_len))
+                print('test_slice {} finished'.format(its))
+            print('test_list {} finished'.format(itl))
+        print('post_iter_count {} finished'.format(post_iter_count))
         count = post_iter_count
         post_iter_count = count_choices_left(board)
         show_status(board, post_iter_count)
