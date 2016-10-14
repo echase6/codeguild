@@ -166,14 +166,13 @@ def get_box_char(cell_list):
     return output_string + ' '
 
 
-def display_board(row_list):
+def display_board(board):
     """Display the board, with filled-in squares.
 
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> display_board(row_list)
+    >>> display_board(board)
     +-----+-----+
     | . . | . . |
     | . . | . . |
@@ -184,15 +183,18 @@ def display_board(row_list):
 
     """
     border_string = ('+' + '-' * (ORDER * 2 + 1)) * ORDER + '+'
-    for row_index, row in enumerate(row_list):
-        if row_index % ORDER == 0:
+    for i in range(0, ORDER ** 6, ORDER ** 2):
+        if i % ORDER ** 5 == 0:
+            if i != 0:
+                print('|')
             print(border_string)
-        line_string = ''
-        for col_index, cell_list in enumerate(row):
-            if col_index % ORDER == 0:
-                line_string += '| '
-            line_string += get_box_char(cell_list)
-        print(line_string + '|')
+            print('| ', end='')
+        elif i % ORDER ** 4 == 0:
+            print('|\n| ', end='')
+        elif i % ORDER ** 3 == 0:
+            print('| ', end='')
+        print(get_box_char(board[i: i + ORDER ** 2]), end='')
+    print('|')
     print(border_string)
 
 

@@ -3,11 +3,18 @@
 Will handle 4x4, 9x9 and 16x16 puzzles.
 Puzzle comes from the file referenced in board.py (sudoku_.txt)
 
-Algorithm uses two methods:
--- Exclusionary:  This eliminates choices based on members in the row, col, box.
-     This currently takes singles and pairs.
--- Inclusion:  This ascertains what possibilities exist based on missing members
-     the other members of the row, col, box
+Algorithm comes from considering the board in a 3-D space, with the 3rd
+  dimension being cell contents.  In this manner, the puzzle is solved
+  when only one cell-cube is filled when looking at the puzzle-cube from
+  each of the 3 sides.
+
+In this manner, each pass though the solving algorithm takes slices of
+  the puzzle cube in rows, columns, boxes, and numbers and uses the same
+  solver for each slice:
+  -- if there are n-slivers holding n unique values, those values can be
+     eliminated from all the other slivers in the slice.
+
+Passes are continued until no progress is made on eliminating choices.
 """
 
 from itertools import combinations
@@ -44,8 +51,10 @@ def get_rows_trial(check_len, test_slice):
     """
     rows_trial = []
     for list in test_slice:
-        if len([i for i in range(ORDER ** 2) if list[i].filled]) <= check_len:
-            rows_trial.append(list)
+        if list != []:
+            if len([i for i in range(ORDER ** 2) if
+                    list[i].filled]) <= check_len:
+                rows_trial.append(list)
     return rows_trial
 
 
@@ -155,7 +164,6 @@ def remove_values(values_block, test_list):
         if value:
             for row in test_list:
                 row[i].filled = False
-    pass
 
 
 def remove_rows(rows_block, test_slice):
@@ -199,10 +207,10 @@ def remove_rows(rows_block, test_slice):
             pass
 
 
-def show_status(board, post_iter_count):
+def show_status(board, row_list, post_iter_count):
     """Showing status function."""
     display_board(board)
-    count_filled = count_filled_cells(board)
+    count_filled = count_filled_cells(row_list)
     print('{} cells filled, {} choices left.'
           .format(count_filled, post_iter_count))
 
@@ -213,13 +221,15 @@ def main_test_loop():
     The algorithm is:
     -- For each row/col/box/num list:
         -- Set check_len = 1
+        -- Make a copy of the list, since parts will be removed
         -- Loop until check_len > # rows left (or some arbitrary ending value)
             -- Set rows_trial equal to the rows with filled_count <= check_len
             -- If # rows_trial < check_len, skip to next check_len
             -- Test all combinations of rows_trial for #values <= check_len
             -- True:
-                -- remove successful values from remainder of rows
-                -- remove successful combinations from rows_total
+                -- remove successful values from the other rows in master
+                -- remove successful values from the other rows in the copy
+                -- remove successful combinations from the copy
             -- False:
                 -- increment check_len
             -- go back to beginning of loop
@@ -230,25 +240,40 @@ def main_test_loop():
     add_filled_cells_from_file(row_list)
     count = ORDER ** 6  # total choices for a 'blank' board
     post_iter_count = count_choices_left(board)
-    show_status(board, post_iter_count)
+    show_status(board, row_list, post_iter_count)
     while post_iter_count < count:
-        check_len = 1
+        print('top while loop')
         for test_list in [row_list, col_list, box_list, num_list]:
+            print(
+                'lens, row: {}, col: {}, box: {}, num: {}'.format(len(row_list),
+                                                                  len(col_list),
+                                                                  len(box_list),
+                                                                  len(
+                                                                      num_list)))
+            print('second for loop')
             for test_slice in test_list:
-                while check_len <= len(test_slice)and check_len < 4:
-                    rows_trial = get_rows_trial(check_len, test_slice)
+                test_slice_copy = test_slice.copy()
+                print('third for loop, len test_slice: {}'.format(
+                    test_slice_copy))
+                check_len = 1
+                while check_len <= len(test_slice_copy) and check_len < 4:
+                    print('fourth while loop')
+                    rows_trial = get_rows_trial(check_len, test_slice_copy)
+                    print('len rows_trial: {}'.format(len(rows_trial)))
                     if len(rows_trial) < check_len:
                         check_len += 1
-                        continue
-                    rows_block, values_block = test_combos(check_len, rows_trial)
-                    if len(rows_block) > 0:
-                        remove_rows(rows_block, test_slice)
-                        remove_values(values_block, test_slice)
                     else:
-                        check_len += 1
+                        rows_block, values_block = test_combos(check_len,
+                                                               rows_trial)
+                        if len(rows_block) > 0:
+                            remove_rows(rows_block, test_slice_copy)
+                            remove_values(values_block, test_slice_copy)
+                            remove_values(values_block, test_slice)
+                        else:
+                            check_len += 1
         count = post_iter_count
         post_iter_count = count_choices_left(board)
-        show_status(board, post_iter_count)
+        show_status(board, row_list, post_iter_count)
 
 
 def main():
