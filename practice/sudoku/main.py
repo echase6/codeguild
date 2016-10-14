@@ -132,21 +132,23 @@ def test_combos(check_len, rows_trial):
     return [[]], []
 
 
-def remove_values(values_block, test_list):
-    """Remove the values in values_block from the test_list
-    The successful rows should have already been removed from the test_list
-    Edits test_list in-place
+def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
+    """Removal:
+         rows_block from test_slice copy
+         values from all the other rows in test_slice_copy
+         values from all the other rows in test_slice
+    Modifies everything in-place.
 
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
     >>> slice_list = make_lists(board)
     >>> test_slice = slice_list[0][2]
+    >>> test_slice_copy = test_slice.copy()
     >>> rows_trial = get_rows_trial(1, test_slice)
     >>> rows_block, values_block = test_combos(1, rows_trial)
-    >>> remove_rows(rows_block, test_slice)
-    >>> remove_values(values_block, test_slice)
-    >>> test_slice  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    >>> remove_row_val(rows_block, values_block, test_slice_copy, test_slice)
+    >>> test_slice_copy  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     [[Cell(row: 2, col: 0, box: 2, num: 0, filled: True),
     Cell(row: 2, col: 0, box: 2, num: 1, filled: True),
     Cell(row: 2, col: 0, box: 2, num: 2, filled: True),
@@ -159,52 +161,31 @@ def remove_values(values_block, test_list):
     Cell(row: 2, col: 3, box: 3, num: 1, filled: True),
     Cell(row: 2, col: 3, box: 3, num: 2, filled: True),
     Cell(row: 2, col: 3, box: 3, num: 3, filled: False)]]
-    """
-    for i, value in enumerate(values_block):
-        if value:
-            for row in test_list:
-                row[i].filled = False
-
-
-def remove_rows(rows_block, test_slice):
-    """Remove the rows in rows_block from rows_trial
-    Edits rows_trial in-place.
-
-    >>> ORDER = 2
-    >>> from test_board_loader import test_board_loader
-    >>> board = test_board_loader()
-    >>> slice_list = make_lists(board)
-    >>> test_slice = slice_list[0][2]
-    >>> rows_trial = get_rows_trial(1, test_slice)
-    >>> rows_block, foo = test_combos(1, rows_trial)
-    >>> remove_rows([], test_slice)
-    >>> test_slice  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [[Cell(row: 2, col: 0, box: 2, num: 0, filled: True),
-    Cell(row: 2, col: 0, box: 2, num: 1, filled: True),
-    Cell(row: 2, col: 0, box: 2, num: 2, filled: True),
-    ...
-    Cell(row: 2, col: 3, box: 3, num: 2, filled: True),
-    Cell(row: 2, col: 3, box: 3, num: 3, filled: True)]]
-    >>> remove_rows(rows_block, test_slice)
-    >>> test_slice  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [[Cell(row: 2, col: 0, box: 2, num: 0, filled: True),
-    Cell(row: 2, col: 0, box: 2, num: 1, filled: True),
-    Cell(row: 2, col: 0, box: 2, num: 2, filled: True),
-    Cell(row: 2, col: 0, box: 2, num: 3, filled: True)],
-    [Cell(row: 2, col: 1, box: 2, num: 0, filled: True),
-    Cell(row: 2, col: 1, box: 2, num: 1, filled: True),
-    Cell(row: 2, col: 1, box: 2, num: 2, filled: True),
-    Cell(row: 2, col: 1, box: 2, num: 3, filled: True)],
-    [Cell(row: 2, col: 3, box: 3, num: 0, filled: True),
-    Cell(row: 2, col: 3, box: 3, num: 1, filled: True),
-    Cell(row: 2, col: 3, box: 3, num: 2, filled: True),
-    Cell(row: 2, col: 3, box: 3, num: 3, filled: True)]]
+    >>> test_slice = slice_list[0][1]
+    >>> test_slice_copy = test_slice.copy()
+    >>> rows_trial = get_rows_trial(2, test_slice)
+    >>> rows_block, values_block = test_combos(2, rows_trial)
+    >>> remove_row_val(rows_block, values_block, test_slice_copy, test_slice)
+    >>> test_slice_copy  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
+    [[Cell(row: 1, col: 2, box: 1, num: 0, filled: True),
+    Cell(row: 1, col: 2, box: 1, num: 1, filled: False),
+    Cell(row: 1, col: 2, box: 1, num: 2, filled: False),
+    Cell(row: 1, col: 2, box: 1, num: 3, filled: True)],
+    [Cell(row: 1, col: 3, box: 1, num: 0, filled: True),
+    Cell(row: 1, col: 3, box: 1, num: 1, filled: False),
+    Cell(row: 1, col: 3, box: 1, num: 2, filled: False),
+    Cell(row: 1, col: 3, box: 1, num: 3, filled: True)]]
     """
     for row_block in rows_block:
-        try:
-            test_slice.remove(row_block)
-        except ValueError:
-            pass
+        test_slice_copy.remove(row_block)
+        loc = test_slice.index(row_block)
+        for i, value in enumerate(values_block):
+            if value:
+                for row in test_slice_copy:
+                    row[i].filled = False
+                for j, row in enumerate(test_slice_copy):
+                    if j != loc:
+                        row[i].filled = False
 
 
 def show_status(board, post_iter_count):
@@ -243,16 +224,16 @@ def main_test_loop():
     show_status(board, post_iter_count)
     while post_iter_count < count:
         print('top while loop')
-        for test_list in slice_list:
+        for test_list in slice_list:  # slice_list len = 8
             print('second for loop')
-            for test_slice in test_list:
-                test_slice_copy = test_slice.copy()
+            for test_slice in test_list:  # test_slice len = ORDER^2
+                test_slice_copy = test_slice.copy()  # copy len = 0 - ORDER^2
                 print('third for loop, len test_slice: {}'.format(
                     test_slice_copy))
                 check_len = 1
-                while check_len <= len(test_slice_copy) and check_len < 4:
+                while check_len <= len(test_slice_copy) and check_len <= ORDER:
                     print('fourth while loop')
-                    rows_trial = get_rows_trial(check_len, test_slice_copy)
+                    rows_trial = get_rows_trial(check_len, test_slice_copy)  # rows_trial len 0 - ORDER^2
                     print('len rows_trial: {}'.format(len(rows_trial)))
                     if len(rows_trial) < check_len:
                         check_len += 1
@@ -260,9 +241,8 @@ def main_test_loop():
                         rows_block, values_block = test_combos(check_len,
                                                                rows_trial)
                         if len(rows_block) > 0:
-                            remove_rows(rows_block, test_slice_copy)
-                            remove_values(values_block, test_slice_copy)
-                            remove_values(values_block, test_slice)
+                            remove_row_val(rows_block, values_block,
+                                           test_slice_copy, test_slice)
                         else:
                             check_len += 1
         count = post_iter_count
