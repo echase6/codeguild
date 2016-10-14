@@ -132,7 +132,7 @@ def deplete_cells(row_list, col_list, box_list, num_list):
     Cell(row: 0, col: 1, box: 0, num: 0, filled: True),
     Cell(row: 0, col: 2, box: 1, num: 0, filled: True),
     Cell(row: 0, col: 3, box: 1, num: 0, filled: True)],
-    [Cell(row: 1, col: 0, box: 0, num: 0, filled: True),
+    [Cell(row: 1, col: 0, box: 0, num: 0, filled: False),
     ...
     Cell(row: 3, col: 2, box: 3, num: 3, filled: True),
     Cell(row: 3, col: 3, box: 3, num: 3, filled: False)]]]
@@ -238,7 +238,7 @@ def count_choices_left(board):
     >>> board = test_board_loader()
     >>> row_list, col_list, box_list, num_list = make_lists(board)
     >>> count_choices_left(board)
-    61
+    57
     """
     return len([1 for cell in board if cell.filled])
 
