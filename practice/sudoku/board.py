@@ -1,5 +1,6 @@
 from cell import Cell
 from operator import attrgetter
+from itertools import permutations
 
 INITIAL_SET = {
     4: ['0', '1', '2', '3', '4', '5', '6', '7',
@@ -68,6 +69,24 @@ def get_cell_list(board, selector, value, by_selector):
     return cell_list
 
 
+def box_num_to_rc_iter(value):
+    """Return iterable for rows, cols based on box number.
+
+    >>> ORDER = 2
+    >>> for row, col in box_num_to_rc_iter(1):
+    ...  print(row, col)
+    0 2
+    0 3
+    1 2
+    1 3
+    """
+    row_root = (value // ORDER) * ORDER
+    col_root = (value % ORDER) * ORDER
+    for row in range(row_root, row_root + ORDER):
+        for col in range(col_root, col_root + ORDER):
+            yield row, col
+
+
 def get_box_cell_list(board, value):
     """Cell getter, based on row, col, num.
 
@@ -93,64 +112,33 @@ def get_box_cell_list(board, value):
     Cell(row: 3, col: 1, box: 2, num: 3, filled: True)]]
     """
     cell_list = []
-    row_root = (value // ORDER) * ORDER
-    col_root = (value % ORDER) * ORDER
-    for i in range(row_root, row_root + ORDER):
-        for j in range(col_root, col_root + ORDER):
-            cell_list += [[cell for cell in board
-                           if cell.box == value and
-                           cell.row == i and
-                           cell.col == j
-                           ]]
+    for row, col in box_num_to_rc_iter(value):
+        cell_list += [[cell for cell in board
+                       if cell.row == row and cell.col == col]]
     return cell_list
 
 
 def make_lists(board):
-    """Populate lists."""
-    row_list = []
-    col_list = []
-    box_list = []
-    num_list = []
-    for i in range(ORDER ** 2):
-        row_list += [get_cell_list(board, 'row', i, 'col')]
-        col_list += [get_cell_list(board, 'col', i, 'row')]
-        box_list += [get_box_cell_list(board, i)]
-        num_list += [get_cell_list(board, 'num', i, 'row')]
-    return row_list, col_list, box_list, num_list
+    """Populate lists.  Returns a list of lists, which are slices to be parsed.
 
-
-def deplete_cells(row_list, col_list, box_list, num_list):
-    """Cell depleter, for testing purposes.
-
-    >>> ORDER = 2
-    >>> from test_board_loader import test_board_loader
-    >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> deplete_cells(row_list, col_list, box_list, num_list)
-    >>> num_list  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
-    [[[Cell(row: 0, col: 0, box: 0, num: 0, filled: False),
-    Cell(row: 0, col: 1, box: 0, num: 0, filled: True),
-    Cell(row: 0, col: 2, box: 1, num: 0, filled: True),
-    Cell(row: 0, col: 3, box: 1, num: 0, filled: True)],
-    [Cell(row: 1, col: 0, box: 0, num: 0, filled: False),
-    ...
-    Cell(row: 3, col: 2, box: 3, num: 3, filled: True),
-    Cell(row: 3, col: 3, box: 3, num: 3, filled: False)]]]
+    There should be 8, representing the 8 different ways a slice can be taken
+      and parsed:  r/c/n, r/n/c, c/r/n, c/n/r, n/r/c, n/c/r, b/n/i, b/i/n
     """
-    for i in range(ORDER ** 2):
-        row_list[i][i][i].filled = False
-        col_list[i][i][i].filled = False
-        box_list[i][i][i].filled = False
-        num_list[i][i][i].filled = False
+    perm_list = []
+    for perm in permutations(['row', 'col', 'num']):
+        perm_list += [[get_cell_list(board, perm[0], i, perm[1])
+                      for i in range(ORDER ** 2)]]
+    perm_list += [[get_cell_list(board, 'box', i, 'num')
+                  for i in range(ORDER ** 2)]]
+    perm_list += [[get_box_cell_list(board, i)
+                  for i in range(ORDER ** 2)]]
+    return perm_list
 
 
 def get_box_char(cell_list):
     r"""Return string representation of one cell in the board.
 
     >>> ORDER = 2
-    >>> from test_board_loader import test_board_loader
-    >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
     >>> get_box_char([Cell(2, 2, 2, 0, False), Cell(2, 2, 2, 1, False),
     ... Cell(2, 2, 3, 2, False), Cell(2, 2, 3, 3, True)])
     '4 '
@@ -214,21 +202,19 @@ def add_filled_cells_from_file(row_list):
                 row_list[i][j][k].filled = True
 
 
-def count_filled_cells(row_list):
+def count_filled_cells(board):
     """Return the number of filled cells.
 
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> count_filled_cells(row_list)
+    >>> count_filled_cells(board)
     1
     """
     count = 0
-    for row in row_list:
-        for cell in row:
-            if len([i for i in range(ORDER ** 2) if cell[i].filled]) == 1:
-                count += 1
+    for i in range(0, ORDER ** 6, ORDER ** 2):
+        if len([1 for cell in board[i: i + ORDER ** 2] if cell.filled]) == 1:
+            count += 1
     return count
 
 
@@ -238,7 +224,6 @@ def count_choices_left(board):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
     >>> count_choices_left(board)
     57
     """
@@ -248,9 +233,9 @@ def count_choices_left(board):
 def main():
     """Main function."""
     board = make_blank_board()
-    row_list, col_list, box_list, num_list = make_lists(board)
-    add_filled_cells_from_file(row_list)
-    display_board(row_list)
+    slice_list = make_lists(board)
+    add_filled_cells_from_file(slice_list[0])
+    display_board(board)
 
 
 if __name__ == '__main__':

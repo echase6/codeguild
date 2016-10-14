@@ -29,14 +29,14 @@ def get_rows_trial(check_len, test_slice):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> test_slice = row_list[2]
+    >>> slice_list = make_lists(board)
+    >>> test_slice = slice_list[0][2]
     >>> get_rows_trial(1, test_slice)  # doctest: +NORMALIZE_WHITESPACE
     [[Cell(row: 2, col: 2, box: 3, num: 0, filled: False),
     Cell(row: 2, col: 2, box: 3, num: 1, filled: False),
     Cell(row: 2, col: 2, box: 3, num: 2, filled: False),
     Cell(row: 2, col: 2, box: 3, num: 3, filled: True)]]
-    >>> test_slice = row_list[1]
+    >>> test_slice = slice_list[0][1]
     >>> get_rows_trial(2, test_slice)  # doctest: +NORMALIZE_WHITESPACE
     [[Cell(row: 1, col: 0, box: 0, num: 0, filled: False),
     Cell(row: 1, col: 0, box: 0, num: 1, filled: True),
@@ -78,12 +78,12 @@ def get_values_block(combo):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> test_slice = row_list[2]
+    >>> slice_list = make_lists(board)
+    >>> test_slice = slice_list[0][2]
     >>> rows_trial = get_rows_trial(1, test_slice)
     >>> get_values_block(rows_trial)
     [False, False, False, True]
-    >>> test_slice = row_list[1]
+    >>> test_slice = slice_list[0][1]
     >>> rows_trial = get_rows_trial(2, test_slice)
     >>> get_values_block(rows_trial)
     [False, True, True, False]
@@ -102,8 +102,8 @@ def test_combos(check_len, rows_trial):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> test_slice = row_list[2]
+    >>> slice_list = make_lists(board)
+    >>> test_slice = slice_list[0][2]
     >>> rows_trial = get_rows_trial(1, test_slice)
     >>> test_combos(1, rows_trial)  # doctest: +NORMALIZE_WHITESPACE
     ([[Cell(row: 2, col: 2, box: 3, num: 0, filled: False),
@@ -111,7 +111,7 @@ def test_combos(check_len, rows_trial):
     Cell(row: 2, col: 2, box: 3, num: 2, filled: False),
     Cell(row: 2, col: 2, box: 3, num: 3, filled: True)]],
     [False, False, False, True])
-    >>> test_slice = row_list[1]
+    >>> test_slice = slice_list[0][1]
     >>> rows_trial = get_rows_trial(2, test_slice)
     >>> test_combos(2, rows_trial)  # doctest: +NORMALIZE_WHITESPACE
     ([[Cell(row: 1, col: 0, box: 0, num: 0, filled: False),
@@ -140,8 +140,8 @@ def remove_values(values_block, test_list):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> test_slice = row_list[2]
+    >>> slice_list = make_lists(board)
+    >>> test_slice = slice_list[0][2]
     >>> rows_trial = get_rows_trial(1, test_slice)
     >>> rows_block, values_block = test_combos(1, rows_trial)
     >>> remove_rows(rows_block, test_slice)
@@ -173,8 +173,8 @@ def remove_rows(rows_block, test_slice):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> row_list, col_list, box_list, num_list = make_lists(board)
-    >>> test_slice = row_list[2]
+    >>> slice_list = make_lists(board)
+    >>> test_slice = slice_list[0][2]
     >>> rows_trial = get_rows_trial(1, test_slice)
     >>> rows_block, foo = test_combos(1, rows_trial)
     >>> remove_rows([], test_slice)
@@ -207,10 +207,10 @@ def remove_rows(rows_block, test_slice):
             pass
 
 
-def show_status(board, row_list, post_iter_count):
+def show_status(board, post_iter_count):
     """Showing status function."""
     display_board(board)
-    count_filled = count_filled_cells(row_list)
+    count_filled = count_filled_cells(board)
     print('{} cells filled, {} choices left.'
           .format(count_filled, post_iter_count))
 
@@ -236,20 +236,14 @@ def main_test_loop():
     -- Check for progress in filling cells; if any was made, start over.
     """
     board = make_blank_board()
-    row_list, col_list, box_list, num_list = make_lists(board)
-    add_filled_cells_from_file(row_list)
+    slice_list = make_lists(board)
+    add_filled_cells_from_file(slice_list[0])
     count = ORDER ** 6  # total choices for a 'blank' board
     post_iter_count = count_choices_left(board)
-    show_status(board, row_list, post_iter_count)
+    show_status(board, post_iter_count)
     while post_iter_count < count:
         print('top while loop')
-        for test_list in [row_list, col_list, box_list, num_list]:
-            print(
-                'lens, row: {}, col: {}, box: {}, num: {}'.format(len(row_list),
-                                                                  len(col_list),
-                                                                  len(box_list),
-                                                                  len(
-                                                                      num_list)))
+        for test_list in slice_list:
             print('second for loop')
             for test_slice in test_list:
                 test_slice_copy = test_slice.copy()
@@ -273,7 +267,7 @@ def main_test_loop():
                             check_len += 1
         count = post_iter_count
         post_iter_count = count_choices_left(board)
-        show_status(board, row_list, post_iter_count)
+        show_status(board, post_iter_count)
 
 
 def main():
