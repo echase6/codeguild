@@ -20,7 +20,7 @@ Passes are continued until no progress is made on eliminating choices.
 from itertools import combinations
 from board import make_blank_board, add_filled_cells_from_file
 from board import count_choices_left, count_filled_cells, make_lists
-from board import ORDER, display_3d_board
+from board import ORDER, display_3d_board, display_board
 
 
 def get_rows_trial(check_len, test_slice):
@@ -190,12 +190,11 @@ def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
 
 def show_status(board, post_iter_count):
     """Showing status function."""
-    display_3d_board(board)
+    display_board(board)
     count_filled = count_filled_cells(board)
     choices_left = count_choices_left(board)
     print('{} cells filled, {} choices left.'
           .format(count_filled, choices_left))
-    inp = input('press any key')
 
 
 def main_test_loop():
@@ -225,26 +224,36 @@ def main_test_loop():
     post_iter_count = count_choices_left(board)
     show_status(board, post_iter_count)
     while post_iter_count < count:
+        # print('post_iter_count {} starting'.format(post_iter_count))
         for itl, test_list in enumerate(slice_list):  # slice_list len = 8
-            for its, test_slice in enumerate(test_list):  # test_slice len = ORDER^2
+            # print('test_list {} starting'.format(itl))
+            for its, test_slice in enumerate(
+                    test_list):  # test_slice len = ORDER^2
+                # print('test_slice {} starting'.format(its))
                 test_slice_copy = test_slice.copy()  # copy len = 0 - ORDER^2
                 check_len = 1
-                while check_len <= len(test_slice_copy) and check_len <= ORDER:
-                    rows_trial = get_rows_trial(check_len, test_slice_copy)  # rows_trial len 0 - ORDER^2
+                while check_len <= len(test_slice_copy) and check_len <= 1:
+                    # print('check_len {} starting'.format(check_len))
+
+                    rows_trial = get_rows_trial(check_len,
+                                                test_slice_copy)  # rows_trial len 0 - ORDER^2
                     if len(rows_trial) < check_len:
                         check_len += 1
                     else:
                         rows_block, values_block = test_combos(check_len,
                                                                rows_trial)
+
                         if len(rows_block) > 0:
                             remove_row_val(rows_block, values_block,
                                            test_slice_copy, test_slice)
                         else:
                             check_len += 1
-                    show_status(board, post_iter_count)
-                    print('check_len: {}'.format(check_len))
-                print('test_slice {} finished'.format(its))
-            print('test_list {} finished'.format(itl))
+                    if count_choices_left(board) == ORDER ** 4:
+                        break
+            #         print('check_len {} finished'.format(check_len))
+            #     print('test_slice {} finished'.format(its))
+            # print('test_list {} finished'.format(itl))
+            show_status(board, post_iter_count)
         print('post_iter_count {} finished'.format(post_iter_count))
         count = post_iter_count
         post_iter_count = count_choices_left(board)

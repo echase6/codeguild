@@ -12,7 +12,7 @@ TEST_BOARD_FILES = {
     3: 'sudoku3.txt',
     2: 'sudoku2.txt'
 }
-ORDER = 3
+ORDER = 4
 
 
 def make_blank_board():
@@ -22,13 +22,23 @@ def make_blank_board():
     >>> make_blank_board()  # doctest: +NORMALIZE_WHITESPACE, +ELLIPSIS
     [Cell(row: 0, col: 0, box: 0, num: 0, filled: True),
     Cell(row: 0, col: 0, box: 0, num: 1, filled: True),
+    Cell(row: 0, col: 0, box: 0, num: 2, filled: True),
+    Cell(row: 0, col: 0, box: 0, num: 3, filled: True),
+    Cell(row: 0, col: 1, box: 0, num: 0, filled: True),
+    Cell(row: 0, col: 1, box: 0, num: 1, filled: True),
+    Cell(row: 0, col: 1, box: 0, num: 2, filled: True),
+    Cell(row: 0, col: 1, box: 0, num: 3, filled: True),
+    Cell(row: 0, col: 2, box: 1, num: 0, filled: True),
+    Cell(row: 0, col: 2, box: 1, num: 1, filled: True),
+    Cell(row: 0, col: 2, box: 1, num: 2, filled: True),
+    Cell(row: 0, col: 2, box: 1, num: 3, filled: True),
     ...
     Cell(row: 3, col: 3, box: 3, num: 3, filled: True)]
     """
     board = []
     for i in range(ORDER ** 2):
         for j in range(ORDER ** 2):
-            b = j % ORDER + (i // ORDER) * ORDER
+            b = j // ORDER + (i // ORDER) * ORDER
             for k in range(ORDER ** 2):
                 cell = Cell(i, j, b, k, True)
                 board.append(cell)
@@ -121,8 +131,8 @@ def get_box_cell_list(board, value):
 def make_lists(board):
     """Populate lists.  Returns a list of lists, which are slices to be parsed.
 
-    There should be 8, representing the 8 different ways a slice can be taken
-      and parsed:  r/c/n, r/n/c, c/r/n, c/n/r, n/r/c, n/c/r, b/n/i, b/i/n
+    There are 8 different ways a slice can be taken and parsed:
+        r/c/n, r/n/c, c/r/n, c/n/r, n/r/c, n/c/r, b/n/i, b/i/n
     """
     perm_list = []
     for perm in permutations(['row', 'col', 'num']):
@@ -194,10 +204,10 @@ def display_3d_board(board):
     >>> board = test_board_loader()
     >>> display_3d_board(board)  # doctest: +NORMALIZE_WHITESPACE
     +---------+ +---------+ +---------+ +---------+
-    | T T T T | | T T T T | | T T T T | | T T T T |
-    | . . T T | | T T T T | | T T T T | | . . T T |
-    | T T . T | | T T . T | | T T . T | | T T T T |
-    | T T T T | | T T T T | | T T T T | | T T T T |
+    | 1 1 1 1 | | 2 2 2 2 | | 3 3 3 3 | | 4 4 4 4 |
+    | . . 1 1 | | 2 2 2 2 | | 3 3 3 3 | | . . 4 4 |
+    | 1 1 . 1 | | 2 2 . 2 | | 3 3 . 3 | | 4 4 4 4 |
+    | 1 1 1 1 | | 2 2 2 2 | | 3 3 3 3 | | 4 4 4 4 |
     +---------+ +---------+ +---------+ +---------+
     """
     border_string = (('+' + '-' * (2 * ORDER ** 2 + 1)) + '+ ') * ORDER ** 2
@@ -207,7 +217,8 @@ def display_3d_board(board):
     for i in range(0, ORDER ** 6, ORDER ** 2):
         j = (i // ORDER ** 2) % ORDER ** 2
         for k in range(ORDER ** 2):
-            string_list[j + 1 + k * (2 + ORDER ** 2)] = 'T' if board[i + k].filled else '.'
+            string_list[j + 1 + k * (2 + ORDER ** 2)] = INITIAL_SET[ORDER][k] if board[
+                i + k].filled else '.'
         if (i + ORDER ** 2) % ORDER ** 4 == 0:
             print(' '.join(string_list))
             string_list = blank_string.split()
