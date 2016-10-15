@@ -9,10 +9,10 @@ INITIAL_SET = {
     2: ['1', '2', '3', '4']}
 TEST_BOARD_FILES = {
     4: 'sudoku4.txt',
-    3: 'sudoku3.txt',
-    2: 'sudoku2.txt'
+    3: 'sudoku1_3.txt',
+    2: 'sudoku1_2.txt'
 }
-ORDER = 4
+ORDER = 3
 
 
 def make_blank_board():
@@ -48,6 +48,7 @@ def make_blank_board():
 def get_cell_list(board, selector, value, by_selector):
     """Cell getter, based on row, col, num.
 
+    >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
     >>> get_cell_list(board, 'num', 2, 'row')
@@ -100,6 +101,7 @@ def box_num_to_rc_iter(value):
 def get_box_cell_list(board, value):
     """Cell getter, based on row, col, num.
 
+    >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
     >>> get_box_cell_list(board, 2)
@@ -136,6 +138,7 @@ def make_lists(board):
     """
     perm_list = []
     for perm in permutations(['row', 'col', 'num']):
+        print('.')
         perm_list += [[get_cell_list(board, perm[0], i, perm[1])
                        for i in range(ORDER ** 2)]]
     perm_list += [[get_cell_list(board, 'box', i, 'num')
@@ -241,6 +244,18 @@ def add_filled_cells_from_file(row_list):
                 row_list[i][j][k].filled = True
 
 
+def is_board_invalid(board):
+    """Return the number of filled cells.
+
+    >>> ORDER = 2
+    >>> from test_board_loader import test_board_loader
+    >>> board = test_board_loader()
+    >>> is_board_valid(board)
+    True
+    """
+    return count_filled_cells_to_qty(board, 0) != 0
+
+
 def count_filled_cells(board):
     """Return the number of filled cells.
 
@@ -250,9 +265,23 @@ def count_filled_cells(board):
     >>> count_filled_cells(board)
     1
     """
+    return count_filled_cells_to_qty(board, 1)
+
+
+def count_filled_cells_to_qty(board, qty):
+    """Return the number of filled cells.
+
+    >>> ORDER = 2
+    >>> from test_board_loader import test_board_loader
+    >>> board = test_board_loader()
+    >>> count_filled_cells_to_qty(board, 1)
+    1
+    >>> count_filled_cells_to_qty(board, 2)
+    2
+    """
     count = 0
     for i in range(0, ORDER ** 6, ORDER ** 2):
-        if len([1 for cell in board[i: i + ORDER ** 2] if cell.filled]) == 1:
+        if len([1 for cell in board[i: i + ORDER ** 2] if cell.filled]) == qty:
             count += 1
     return count
 

@@ -20,7 +20,8 @@ Passes are continued until no progress is made on eliminating choices.
 from itertools import combinations
 from board import make_blank_board, add_filled_cells_from_file
 from board import count_choices_left, count_filled_cells, make_lists
-from board import ORDER, display_3d_board, display_board
+from board import ORDER, display_3d_board, display_board, is_board_invalid
+import os
 
 
 def get_rows_trial(check_len, test_slice):
@@ -176,20 +177,22 @@ def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
     Cell(row: 1, col: 3, box: 1, num: 2, filled: False),
     Cell(row: 1, col: 3, box: 1, num: 3, filled: True)]]
     """
+    loc_list = []
     for row_block in rows_block:
         test_slice_copy.remove(row_block)
-        loc = test_slice.index(row_block)
-        for i, value in enumerate(values_block):
-            if value:
-                for row in test_slice_copy:
+        loc_list.append(test_slice.index(row_block))
+    for i, value in enumerate(values_block):
+        if value:
+            for row in test_slice_copy:
+                row[i].filled = False
+            for j, row in enumerate(test_slice):
+                if j not in loc_list:
                     row[i].filled = False
-                for j, row in enumerate(test_slice_copy):
-                    if j != loc:
-                        row[i].filled = False
 
 
 def show_status(board, post_iter_count):
     """Showing status function."""
+    _ = os.system('cls')
     display_board(board)
     count_filled = count_filled_cells(board)
     choices_left = count_choices_left(board)
@@ -217,13 +220,18 @@ def main_test_loop():
             -- go back to beginning of loop
     -- Check for progress in filling cells; if any was made, start over.
     """
+    print('making board...')
     board = make_blank_board()
+    print('making lists.')
     slice_list = make_lists(board)
+    print('loading puzzle...')
     add_filled_cells_from_file(slice_list[0])
     count = ORDER ** 6  # total choices for a 'blank' board
     post_iter_count = count_choices_left(board)
     show_status(board, post_iter_count)
-    while post_iter_count < count:
+    pass_num = 0
+    done = False
+    while post_iter_count < count and not done:
         # print('post_iter_count {} starting'.format(post_iter_count))
         for itl, test_list in enumerate(slice_list):  # slice_list len = 8
             # print('test_list {} starting'.format(itl))
@@ -232,8 +240,9 @@ def main_test_loop():
                 # print('test_slice {} starting'.format(its))
                 test_slice_copy = test_slice.copy()  # copy len = 0 - ORDER^2
                 check_len = 1
-                while check_len <= len(test_slice_copy) and check_len <= 1:
-                    # print('check_len {} starting'.format(check_len))
+                while check_len <= len(test_slice_copy) and check_len <= 2 and not done:
+                    pass_num += 1
+                    print('pass #: {}, test_list: {}, test_slice: {}, check_len: {}'.format(pass_num, itl, its, check_len))
 
                     rows_trial = get_rows_trial(check_len,
                                                 test_slice_copy)  # rows_trial len 0 - ORDER^2
@@ -243,17 +252,21 @@ def main_test_loop():
                         rows_block, values_block = test_combos(check_len,
                                                                rows_trial)
 
-                        if len(rows_block) > 0:
+                        if len(values_block) > 0:
                             remove_row_val(rows_block, values_block,
                                            test_slice_copy, test_slice)
                         else:
                             check_len += 1
+                    show_status(board, post_iter_count)
                     if count_choices_left(board) == ORDER ** 4:
+                        pass_total = pass_num
                         break
-            #         print('check_len {} finished'.format(check_len))
-            #     print('test_slice {} finished'.format(its))
-            # print('test_list {} finished'.format(itl))
-            show_status(board, post_iter_count)
+                    if is_board_invalid(board):
+                        raise ValueError('Board just went invalid!')
+            if done:
+                break
+        if done:
+            break
         print('post_iter_count {} finished'.format(post_iter_count))
         count = post_iter_count
         post_iter_count = count_choices_left(board)
