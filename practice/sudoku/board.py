@@ -1,6 +1,7 @@
 from cell import Cell
 from operator import attrgetter
 from itertools import permutations
+import sys
 
 INITIAL_SET = {
     4: ['0', '1', '2', '3', '4', '5', '6', '7',
@@ -12,7 +13,7 @@ TEST_BOARD_FILES = {
     3: 'sudoku1_3.txt',
     2: 'sudoku1_2.txt'
 }
-ORDER = 3
+ORDER = 4
 
 
 def make_blank_board():
@@ -137,14 +138,21 @@ def make_lists(board):
         r/c/n, r/n/c, c/r/n, c/n/r, n/r/c, n/c/r, b/n/i, b/i/n
     """
     perm_list = []
+    print('making lists.', end='')
+    sys.stdout.flush()
     for perm in permutations(['row', 'col', 'num']):
-        print('.')
+        print('.', end='')
+        sys.stdout.flush()
         perm_list += [[get_cell_list(board, perm[0], i, perm[1])
                        for i in range(ORDER ** 2)]]
     perm_list += [[get_cell_list(board, 'box', i, 'num')
                    for i in range(ORDER ** 2)]]
+    print('.', end='')
+    sys.stdout.flush()
     perm_list += [[get_box_cell_list(board, i)
                    for i in range(ORDER ** 2)]]
+    print('.done')
+    sys.stdout.flush()
     return perm_list
 
 
@@ -220,8 +228,8 @@ def display_3d_board(board):
     for i in range(0, ORDER ** 6, ORDER ** 2):
         j = (i // ORDER ** 2) % ORDER ** 2
         for k in range(ORDER ** 2):
-            string_list[j + 1 + k * (2 + ORDER ** 2)] = INITIAL_SET[ORDER][k] if board[
-                i + k].filled else '.'
+            string_list[j + 1 + k * (2 + ORDER ** 2)] = \
+                INITIAL_SET[ORDER][k] if board[i + k].filled else '.'
         if (i + ORDER ** 2) % ORDER ** 4 == 0:
             print(' '.join(string_list))
             string_list = blank_string.split()
@@ -250,7 +258,7 @@ def is_board_invalid(board):
     >>> ORDER = 2
     >>> from test_board_loader import test_board_loader
     >>> board = test_board_loader()
-    >>> is_board_valid(board)
+    >>> is_board_invalid(board)
     True
     """
     return count_filled_cells_to_qty(board, 0) != 0

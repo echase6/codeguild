@@ -24,6 +24,7 @@ from board import ORDER, display_3d_board, display_board, is_board_invalid
 import os
 
 
+
 def get_rows_trial(check_len, test_slice):
     """Return the trial rows, which are all the ones with # trues <= check_len.
 
@@ -51,11 +52,11 @@ def get_rows_trial(check_len, test_slice):
     []
     """
     rows_trial = []
-    for list in test_slice:
-        if list != []:
+    for slice_list in test_slice:
+        if slice_list != []:
             if len([i for i in range(ORDER ** 2) if
-                    list[i].filled]) <= check_len:
-                rows_trial.append(list)
+                    slice_list[i].filled]) <= check_len:
+                rows_trial.append(slice_list)
     return rows_trial
 
 
@@ -190,14 +191,33 @@ def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
                     row[i].filled = False
 
 
-def show_status(board, post_iter_count):
+def show_status(board):
     """Showing status function."""
     _ = os.system('cls')
     display_board(board)
     count_filled = count_filled_cells(board)
     choices_left = count_choices_left(board)
-    print('{} cells filled, {} choices left.'
-          .format(count_filled, choices_left))
+    print('{} cells unfilled, {} extra choices left.'
+          .format(ORDER ** 4 - count_filled, choices_left - ORDER ** 4))
+
+
+def process_slice(board, tslice, tslice_copy, check_len):
+    """Process a single tslice in the test_slices, for a given # of choices.
+
+    Returns the new check length.
+    """
+    rows_trial = get_rows_trial(check_len, tslice_copy)
+    if len(rows_trial) < check_len:
+        check_len += 1
+    else:
+        rows_block, values_block = test_combos(check_len, rows_trial)
+        if len(values_block) > 0:
+            remove_row_val(rows_block, values_block, tslice_copy, tslice)
+        else:
+            check_len += 1
+    if is_board_invalid(board):
+        raise ValueError('Board just went invalid!')
+    return check_len
 
 
 def main_test_loop():
@@ -220,57 +240,36 @@ def main_test_loop():
             -- go back to beginning of loop
     -- Check for progress in filling cells; if any was made, start over.
     """
-    print('making board...')
     board = make_blank_board()
-    print('making lists.')
     slice_list = make_lists(board)
-    print('loading puzzle...')
     add_filled_cells_from_file(slice_list[0])
     count = ORDER ** 6  # total choices for a 'blank' board
     post_iter_count = count_choices_left(board)
-    show_status(board, post_iter_count)
+    show_status(board)
     pass_num = 0
     done = False
     while post_iter_count < count and not done:
-        # print('post_iter_count {} starting'.format(post_iter_count))
         for itl, test_list in enumerate(slice_list):  # slice_list len = 8
-            # print('test_list {} starting'.format(itl))
-            for its, test_slice in enumerate(
-                    test_list):  # test_slice len = ORDER^2
-                # print('test_slice {} starting'.format(its))
-                test_slice_copy = test_slice.copy()  # copy len = 0 - ORDER^2
+            for its, tslice in enumerate(test_list):
+                tslice_copy = tslice.copy()
                 check_len = 1
-                while check_len <= len(test_slice_copy) and check_len <= 2 and not done:
+                while (check_len <= len(tslice_copy) and
+                       check_len <= 2 and not done):
+                    check_len = process_slice(board, tslice,
+                                              tslice_copy, check_len)
+                    done = count_choices_left(board) == ORDER ** 4
                     pass_num += 1
-                    print('pass #: {}, test_list: {}, test_slice: {}, check_len: {}'.format(pass_num, itl, its, check_len))
-
-                    rows_trial = get_rows_trial(check_len,
-                                                test_slice_copy)  # rows_trial len 0 - ORDER^2
-                    if len(rows_trial) < check_len:
-                        check_len += 1
-                    else:
-                        rows_block, values_block = test_combos(check_len,
-                                                               rows_trial)
-
-                        if len(values_block) > 0:
-                            remove_row_val(rows_block, values_block,
-                                           test_slice_copy, test_slice)
-                        else:
-                            check_len += 1
-                    show_status(board, post_iter_count)
-                    if count_choices_left(board) == ORDER ** 4:
-                        pass_total = pass_num
-                        break
-                    if is_board_invalid(board):
-                        raise ValueError('Board just went invalid!')
+                    print('pass #: {}, test_list: {}, '
+                          'test_slice: {}, check_len: {}'.
+                          format(pass_num, itl, its, check_len))
+                    show_status(board)
             if done:
                 break
         if done:
             break
-        print('post_iter_count {} finished'.format(post_iter_count))
         count = post_iter_count
         post_iter_count = count_choices_left(board)
-        show_status(board, post_iter_count)
+    print('Total passes: {}'.format(pass_num))
 
 
 def main():
