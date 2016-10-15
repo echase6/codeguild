@@ -193,11 +193,12 @@ def remove_row_val(rows_block, values_block, test_slice_copy, test_slice):
 
 def show_status(board):
     """Showing status function."""
-    _ = os.system('cls')
+    print('\033[0;0H')  # Move cursor to top of screen
+    print('\033[?25l')    # Remove the cursor
     display_board(board)
     count_filled = count_filled_cells(board)
     choices_left = count_choices_left(board)
-    print('{} cells unfilled, {} extra choices left.'
+    print('{} cells unfilled, {} extra choices left\033[K'
           .format(ORDER ** 4 - count_filled, choices_left - ORDER ** 4))
 
 
@@ -245,6 +246,7 @@ def main_test_loop():
     add_filled_cells_from_file(slice_list[0])
     count = ORDER ** 6  # total choices for a 'blank' board
     post_iter_count = count_choices_left(board)
+    print('\033[2J')  # Clear the screen
     show_status(board)
     pass_num = 0
     done = False
@@ -259,10 +261,10 @@ def main_test_loop():
                                               tslice_copy, check_len)
                     done = count_choices_left(board) == ORDER ** 4
                     pass_num += 1
-                    print('pass #: {}, test_list: {}, '
-                          'test_slice: {}, check_len: {}'.
-                          format(pass_num, itl, its, check_len))
                     show_status(board)
+                    print('pass #: {}, test_list: {}, '
+                          'test_slice: {}, check_len: {}\033[K'.
+                          format(pass_num, itl, its, check_len))
             if done:
                 break
         if done:
@@ -270,6 +272,8 @@ def main_test_loop():
         count = post_iter_count
         post_iter_count = count_choices_left(board)
     print('Total passes: {}'.format(pass_num))
+    print('\033[?25h')    # Return the cursor
+
 
 
 def main():
