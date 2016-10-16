@@ -10,10 +10,11 @@ INITIAL_SET = {
     2: ['1', '2', '3', '4']}
 TEST_BOARD_FILES = {
     4: 'sudoku4.txt',
-    3: 'sudoku1_3.txt',
+    3: 'sudoku9_3.txt',
     2: 'sudoku1_2.txt'
 }
-ORDER = 4
+ORDER = 3
+MAX_COMBO = 9
 
 
 def make_blank_board():

@@ -15,14 +15,16 @@ In this manner, each pass though the solving algorithm takes slices of
      eliminated from all the other slivers in the slice.
 
 Passes are continued until no progress is made on eliminating choices.
+
+Testing shows that it will handle 5-star puzzles, but cannot solve the
+  10-star variety, i.e. from Arto Inkala.
 """
 
 from itertools import combinations
 from board import make_blank_board, add_filled_cells_from_file
 from board import count_choices_left, count_filled_cells, make_lists
 from board import ORDER, display_3d_board, display_board, is_board_invalid
-import os
-
+from board import MAX_COMBO
 
 
 def get_rows_trial(check_len, test_slice):
@@ -256,7 +258,7 @@ def main_test_loop():
                 tslice_copy = tslice.copy()
                 check_len = 1
                 while (check_len <= len(tslice_copy) and
-                       check_len <= 2 and not done):
+                       check_len <= MAX_COMBO and not done):
                     check_len = process_slice(board, tslice,
                                               tslice_copy, check_len)
                     done = count_choices_left(board) == ORDER ** 4
@@ -273,11 +275,6 @@ def main_test_loop():
         post_iter_count = count_choices_left(board)
     print('Total passes: {}'.format(pass_num))
     print('\033[?25h')    # Return the cursor
-
-
-
-def main():
-    pass
 
 
 if __name__ == '__main__':
